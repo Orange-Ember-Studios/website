@@ -1,6 +1,6 @@
 # US-05: Contact Form
 
-**Status:** ⚪ `todo` (Options: `todo`, `in-progress`, `done`)
+**Status:** 🟢 `done` (Options: `todo`, `in-progress`, `done`)
 
 ## Description
 As a potential client, I want to be able to easily get in touch with Orange Ember Studios, so that I can inquire about services or start a conversation regarding a new project.

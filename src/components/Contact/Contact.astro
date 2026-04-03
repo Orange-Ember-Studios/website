@@ -1,0 +1,48 @@
+---
+// src/components/Contact/Contact.astro
+// US-05: Contact Form Section
+import ContactForm from './ContactForm.vue';
+---
+
+<section id="contact" aria-label="Contact Us" class="py-24 bg-[#0b0f19] border-t border-white/5 relative overflow-hidden">
+  
+  {/* Ambient glowing shield backdrop */}
+  <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-4xl bg-studio-shield/20 rounded-full blur-[200px] pointer-events-none"></div>
+
+  <div class="max-w-5xl mx-auto px-6 relative z-10">
+    <div class="text-center mb-16 relative">
+      <span class="text-studio-flame-light font-semibold tracking-[0.3em] uppercase text-sm md:text-base block mb-4">
+        Ready to Build?
+      </span>
+      <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-6">
+        Let's <span class="text-transparent bg-clip-text bg-gradient-to-r from-studio-shield via-studio-flame-mid to-studio-flame-light">Connect</span>
+      </h2>
+      <p class="text-gray-400 max-w-2xl mx-auto text-lg md:text-xl leading-relaxed">
+        Whether you have a game prototype, an app idea, or just want to say hi, we're all ears. Drop us a message below.
+      </p>
+    </div>
+
+    <div class="bg-[#13141a] border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl relative max-w-4xl mx-auto">
+       {/* High-end decorative corner accents */}
+       <div class="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-studio-flame-mid/50 rounded-tl-3xl pointer-events-none"></div>
+       <div class="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-studio-flame-light/50 rounded-br-3xl pointer-events-none"></div>
+       
+       {/* Our highly interactive Vue Form component */}
+       <ContactForm client:visible />
+    </div>
+
+    {/* Social links / alternative contact (Optional but good for completeness) */}
+    <div class="mt-16 flex flex-col md:flex-row justify-center items-center gap-8 text-gray-400">
+      <a href="mailto:hello@orangeember.com" class="hover:text-studio-flame-light transition-colors flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+        hello@orangeember.com
+      </a>
+      <div class="hidden md:block w-1.5 h-1.5 rounded-full bg-white/20"></div>
+      <a href="#" class="hover:text-studio-flame-light transition-colors flex items-center gap-2">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+        @OrangeEmber
+      </a>
+    </div>
+
+  </div>
+</section>

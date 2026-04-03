@@ -1,6 +1,6 @@
 # US-04: About Us
 
-**Status:** 🟡 `in-progress` (Options: `todo`, `in-progress`, `done`)
+**Status:** 🟢 `done` (Options: `todo`, `in-progress`, `done`)
 
 ## Description
 As a potential client, I want to learn about the team, the vision, and the story behind Orange Ember Studios, so that I can build trust and feel a personal connection with the brand.
