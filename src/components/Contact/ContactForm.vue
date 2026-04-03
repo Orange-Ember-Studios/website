@@ -1,105 +1,169 @@
 <template>
-  <form @submit.prevent="submitForm" class="flex flex-col gap-6 w-full max-w-2xl mx-auto relative z-10">
-    {/* Honeypot field - Bots will see this, Humans won't */}
-    <input type="text" name="_honey" v-model="_honey" class="hidden" tabindex="-1" autocomplete="off" />
+  <form
+    @submit.prevent="submitForm"
+    class="flex flex-col gap-6 w-full max-w-2xl mx-auto relative z-10"
+  >
+    <input
+      type="text"
+      name="_honey"
+      v-model="_honey"
+      class="hidden"
+      tabindex="-1"
+      autocomplete="off"
+    />
     <div class="flex flex-col md:flex-row gap-6">
       <div class="flex-1 group">
-        <label for="name" class="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-studio-flame-light transition-colors">Name</label>
-        <input 
-          id="name" 
+        <label
+          for="name"
+          class="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-studio-flame-light transition-colors"
+          >Name</label
+        >
+        <input
+          id="name"
           name="name"
           v-model="form.name"
           :class="[
             'w-full bg-[#18191f] border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300',
-            errors.name ? 'border-red-500 focus:ring-red-500/50' : 'border-white/10 focus:border-studio-flame-light focus:ring-studio-flame-light/30 hover:border-white/30'
+            errors.name
+              ? 'border-red-500 focus:ring-red-500/50'
+              : 'border-white/10 focus:border-studio-flame-light focus:ring-studio-flame-light/30 hover:border-white/30',
           ]"
           placeholder="Jane Doe"
+        />
+        <span
+          v-if="errors.name"
+          class="text-red-500 text-xs mt-2 block tracking-wide"
+          >● Name is required</span
         >
-        <span v-if="errors.name" class="text-red-500 text-xs mt-2 block tracking-wide">● Name is required</span>
       </div>
-      
+
       <div class="flex-1 group">
-        <label for="email" class="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-studio-flame-light transition-colors">Email</label>
-        <input 
-          id="email" 
+        <label
+          for="email"
+          class="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-studio-flame-light transition-colors"
+          >Email</label
+        >
+        <input
+          id="email"
           name="email"
           type="email"
           v-model="form.email"
           :class="[
             'w-full bg-[#18191f] border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300',
-            errors.email ? 'border-red-500 focus:ring-red-500/50' : 'border-white/10 focus:border-studio-flame-light focus:ring-studio-flame-light/30 hover:border-white/30'
+            errors.email
+              ? 'border-red-500 focus:ring-red-500/50'
+              : 'border-white/10 focus:border-studio-flame-light focus:ring-studio-flame-light/30 hover:border-white/30',
           ]"
           placeholder="jane@example.com"
+        />
+        <span
+          v-if="errors.email"
+          class="text-red-500 text-xs mt-2 block tracking-wide"
+          >● Email is required</span
         >
-        <span v-if="errors.email" class="text-red-500 text-xs mt-2 block tracking-wide">● Email is required</span>
       </div>
     </div>
 
     <div class="group">
-      <label for="subject" class="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-studio-flame-light transition-colors">Subject</label>
-      <input 
-        id="subject" 
+      <label
+        for="subject"
+        class="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-studio-flame-light transition-colors"
+        >Subject</label
+      >
+      <input
+        id="subject"
         name="subject"
         v-model="form.subject"
         :class="[
           'w-full bg-[#18191f] border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300',
-          errors.subject ? 'border-red-500 focus:ring-red-500/50' : 'border-white/10 focus:border-studio-flame-light focus:ring-studio-flame-light/30 hover:border-white/30'
+          errors.subject
+            ? 'border-red-500 focus:ring-red-500/50'
+            : 'border-white/10 focus:border-studio-flame-light focus:ring-studio-flame-light/30 hover:border-white/30',
         ]"
         placeholder="Game Partnership Inquiry"
+      />
+      <span
+        v-if="errors.subject"
+        class="text-red-500 text-xs mt-2 block tracking-wide"
+        >● Subject is required</span
       >
-      <span v-if="errors.subject" class="text-red-500 text-xs mt-2 block tracking-wide">● Subject is required</span>
     </div>
 
     <div class="group">
-      <label for="message" class="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-studio-flame-light transition-colors">Message</label>
-      <textarea 
-        id="message" 
+      <label
+        for="message"
+        class="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-studio-flame-light transition-colors"
+        >Message</label
+      >
+      <textarea
+        id="message"
         name="message"
         rows="5"
         v-model="form.message"
         :class="[
           'w-full bg-[#18191f] border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300 resize-none',
-          errors.message ? 'border-red-500 focus:ring-red-500/50' : 'border-white/10 focus:border-studio-flame-light focus:ring-studio-flame-light/30 hover:border-white/30'
+          errors.message
+            ? 'border-red-500 focus:ring-red-500/50'
+            : 'border-white/10 focus:border-studio-flame-light focus:ring-studio-flame-light/30 hover:border-white/30',
         ]"
         placeholder="Tell us about your next big idea..."
       ></textarea>
-      <span v-if="errors.message" class="text-red-500 text-xs mt-2 block tracking-wide">● Message is required</span>
+      <span
+        v-if="errors.message"
+        class="text-red-500 text-xs mt-2 block tracking-wide"
+        >● Message is required</span
+      >
     </div>
 
-    <button 
+    <button
       type="submit"
       class="w-full md:w-auto px-10 py-4 bg-gradient-to-r from-studio-flame-mid to-studio-flame-dark hover:from-studio-flame-light hover:to-studio-flame-mid text-white font-bold rounded-xl transition-all duration-400 transform hover:scale-[1.02] shadow-[0_0_20px_rgba(255,91,13,0.3)] hover:shadow-[0_0_35px_rgba(255,91,13,0.5)] mt-4 flex items-center justify-center gap-3 mx-auto"
     >
       <span class="tracking-widest uppercase text-sm">Ignite Conversation</span>
-      <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+      <svg
+        class="w-5 h-5 transition-transform group-hover:translate-x-1"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M14 5l7 7m0 0l-7 7m7-7H3"
+        ></path>
+      </svg>
     </button>
-    
-    <div v-if="successMsg" class="mt-4 p-4 rounded-xl bg-green-500/10 border border-green-500/30 text-green-400 text-center font-medium shadow-lg animate-fade-in">
+
+    <div
+      v-if="successMsg"
+      class="mt-4 p-4 rounded-xl bg-green-500/10 border border-green-500/30 text-green-400 text-center font-medium shadow-lg animate-fade-in"
+    >
       {{ successMsg }}
     </div>
   </form>
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue';
+import { reactive, ref } from "vue";
 
-const _honey = ref('');
+const _honey = ref("");
 
 const form = reactive({
-  name: '',
-  email: '',
-  subject: '',
-  message: ''
+  name: "",
+  email: "",
+  subject: "",
+  message: "",
 });
 
 const errors = reactive({
   name: false,
   email: false,
   subject: false,
-  message: false
+  message: false,
 });
 
-const successMsg = ref('');
+const successMsg = ref("");
 
 const validate = () => {
   let isValid = true;
@@ -116,19 +180,21 @@ const validate = () => {
 
 const submitForm = () => {
   // Silent HoneyPot verification (if bot fills it, act as success but don't process)
-  if (_honey.value !== '') {
+  if (_honey.value !== "") {
     console.warn("Bot detected via Honeypot trap.");
-    Object.keys(form).forEach(k => form[k] = '');
-    _honey.value = '';
+    Object.keys(form).forEach((k) => (form[k] = ""));
+    _honey.value = "";
     return;
   }
 
   if (validate()) {
-    console.log('Form Submitted!', { ...form });
+    console.log("Form Submitted!", { ...form });
     successMsg.value = "Your spark has been sent! We'll be in touch soon.";
-    
-    Object.keys(form).forEach(k => form[k] = '');
-    setTimeout(() => { successMsg.value = ''; }, 5000);
+
+    Object.keys(form).forEach((k) => (form[k] = ""));
+    setTimeout(() => {
+      successMsg.value = "";
+    }, 5000);
   }
 };
 </script>
@@ -139,7 +205,13 @@ const submitForm = () => {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
