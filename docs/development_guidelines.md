@@ -60,7 +60,11 @@ According to the official [Tailwind CSS documentation](https://tailwindcss.com/d
 - **Unique IDs:** Ensure all interactive elements have unique IDs for testing and accessibility linking.
 - **Alt Text:** All images must include descriptive `alt` attributes.
 
-## 6. Development Workflow
+## 6. Security Practices (Cloudflare & Frontend)
+- **Security Headers (`_headers`):** Serve strong Content-Security-Policy (CSP), Strict-Transport-Security (HSTS), X-Frame-Options, and X-Content-Type-Options.
+- **Form Anti-Spam:** Since we don't have a backend CAPTCHA, implement "Honeypot" fields in Vue-based forms (e.g., `<input name="_honey" type="text" style="display:none" />`). The form should silently drop the submission if this field is filled.
+
+## 7. Development Workflow
 1. Look at the `docs/planning/00-Index.md` board to pick up the next `.md` User Story.
 2. Move the story's status to 🟡 `in-progress`.
 3. Follow the strict Red-Green-Refactor cycle from `TDD_Guidelines.md`.

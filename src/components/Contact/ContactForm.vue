@@ -1,5 +1,7 @@
 <template>
   <form @submit.prevent="submitForm" class="flex flex-col gap-6 w-full max-w-2xl mx-auto relative z-10">
+    {/* Honeypot field - Bots will see this, Humans won't */}
+    <input type="text" name="_honey" v-model="_honey" class="hidden" tabindex="-1" autocomplete="off" />
     <div class="flex flex-col md:flex-row gap-6">
       <div class="flex-1 group">
         <label for="name" class="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-studio-flame-light transition-colors">Name</label>
@@ -81,6 +83,8 @@
 <script setup>
 import { reactive, ref } from 'vue';
 
+const _honey = ref('');
+
 const form = reactive({
   name: '',
   email: '',
@@ -111,6 +115,14 @@ const validate = () => {
 };
 
 const submitForm = () => {
+  // Silent HoneyPot verification (if bot fills it, act as success but don't process)
+  if (_honey.value !== '') {
+    console.warn("Bot detected via Honeypot trap.");
+    Object.keys(form).forEach(k => form[k] = '');
+    _honey.value = '';
+    return;
+  }
+
   if (validate()) {
     console.log('Form Submitted!', { ...form });
     successMsg.value = "Your spark has been sent! We'll be in touch soon.";

@@ -21,4 +21,26 @@ describe('Contact Form Vue Component (US-05)', () => {
     // We expect some form of validation error class or text to appear
     expect(wrapper.text()).toContain('required');
   });
+
+  it('rejects form silently if honeypot is filled (Anti-Bot)', async () => {
+    const wrapper = mount(ContactForm);
+    
+    // We expect a hidden honeypot field
+    const honeypot = wrapper.find('input[name="_honey"]');
+    expect(honeypot.exists()).toBe(true);
+    
+    // Fill the honeypot acting as a bot
+    await honeypot.setValue('bot-spam-content');
+    
+    // Fill valid form fields
+    await wrapper.find('input[name="name"]').setValue('John');
+    await wrapper.find('input[name="email"]').setValue('john@example.com');
+    await wrapper.find('input[name="subject"]').setValue('Hello');
+    await wrapper.find('textarea[name="message"]').setValue('World');
+    
+    await wrapper.find('form').trigger('submit.prevent');
+    
+    // The success message should NOT appear if it's a bot
+    expect(wrapper.text()).not.toContain('Your spark has been sent!');
+  });
 });
