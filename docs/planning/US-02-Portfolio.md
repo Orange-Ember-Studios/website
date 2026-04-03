@@ -1,6 +1,6 @@
 # US-02: Portfolio Gallery
 
-**Status:** ⚪ `todo` (Options: `todo`, `in-progress`, `done`)
+**Status:** 🟢 `done` (Options: `todo`, `in-progress`, `done`)
 
 ## Description
 As a visitor, I want to browse a highly visual gallery of past projects, so that I can evaluate the studio's design aesthetic, capabilities, and past successes.

@@ -1,6 +1,6 @@
 # US-03: Services Section
 
-**Status:** ⚪ `todo` (Options: `todo`, `in-progress`, `done`)
+**Status:** 🟢 `done` (Options: `todo`, `in-progress`, `done`)
 
 ## Description
 As a potential client, I want to see a clear and structured list of services offered by Orange Ember Studios, so that I can immediately know if the agency can help me with my specific needs.
