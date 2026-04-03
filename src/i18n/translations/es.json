@@ -1,0 +1,82 @@
+{
+  "nav": {
+    "portfolio": "Portafolio",
+    "services": "Servicios",
+    "about": "Nosotros",
+    "workWithUs": "Trabaja con nosotros"
+  },
+  "hero": {
+    "tagline": "Crea. Enciende. Juega.",
+    "studioName": "Orange Ember",
+    "studioSuffix": "Studios",
+    "description": "Creando experiencias digitales extraordinarias. Forjamos videojuegos premium, aplicaciones web y móviles.",
+    "viewPortfolio": "Ver Portafolio",
+    "contactUs": "Contáctanos"
+  },
+  "portfolio": {
+    "title": "Nuestras",
+    "titleHighlight": "Obras Maestras",
+    "description": "Explora una selección curada de nuestros juegos de escritorio más ambiciosos, experiencias móviles y aplicaciones web de última generación.",
+    "statusAvailable": "Disponible Ahora",
+    "statusComingSoon": "Próximamente",
+    "statusInDev": "En Desarrollo",
+    "statusPublishing": "Publicando",
+    "categoryDesktopGame": "Juego de Escritorio",
+    "categoryMobileGame": "Juego Móvil",
+    "categoryWebApp": "Aplicación Web",
+    "categoryMobileApp": "App Móvil",
+    "projectUnannounced": "Título Sin Anunciar",
+    "projectTaxiBogotano": "Taxi Bogotano Rush",
+    "projectEasyFlags": "Easy Flags",
+    "projectBubbleLevel": "Bubble Level"
+  },
+  "services": {
+    "tagline": "Experiencia",
+    "title": "Lo Que",
+    "titleHighlight": "Forjamos",
+    "description": "Nos especializamos en crear experiencias interactivas de primer nivel. Desde la adrenalina de los videojuegos hasta la utilidad fluida de las apps modernas.",
+    "desktopGamesTitle": "Videojuegos de Escritorio",
+    "desktopGamesDesc": "Experiencias de juego envolventes diseñadas específicamente para lanzamientos en PC y Steam, dando vida a mundos creativos y pulidos.",
+    "mobileGamesTitle": "Juegos Móviles",
+    "mobileGamesDesc": "Juegos móviles altamente optimizados para cautivar jugadores en dispositivos Android. (Compatibilidad con iOS próximamente).",
+    "webAppsTitle": "Aplicaciones Web",
+    "webAppsDesc": "Plataformas web responsivas de última generación construidas con frameworks modernos para experiencias de usuario excepcionales.",
+    "mobileAppsTitle": "Apps Móviles",
+    "mobileAppsDesc": "Aplicaciones móviles híbridas multiplataforma elaboradas meticulosamente con Flutter y React Native / Expo para escalar tu negocio."
+  },
+  "about": {
+    "tagline": "Nuestra Historia",
+    "titlePrefix": "Forjando el",
+    "titleHighlight": "Futuro del Juego",
+    "paragraph1": "En Orange Ember Studios, creemos que el gran software y los grandes juegos nacen de la misma chispa: una dedicación obsesiva a la artesanía y la experiencia del usuario.",
+    "paragraph2": "Nuestra misión es cerrar la brecha entre el desarrollo de juegos de alta gama y las aplicaciones web/móviles premium. Ya sea que estemos optimizando un motor para un RPG de escritorio o diseñando un dashboard empresarial robusto, nuestra brasa de creatividad nunca se apaga.",
+    "gamesPublished": "Juegos Publicados",
+    "appsDelivered": "Apps Entregadas",
+    "ignitingIdeas": "Encendiendo Ideas",
+    "sinceDay1": "Desde el Primer Día"
+  },
+  "contact": {
+    "tagline": "¿Listo para Construir?",
+    "title": "Vamos a",
+    "titleHighlight": "Conectar",
+    "description": "Ya sea que tengas un prototipo de juego, una idea de app, o simplemente quieras saludar, estamos atentos. Envíanos un mensaje abajo.",
+    "labelName": "Nombre",
+    "labelEmail": "Correo",
+    "labelSubject": "Asunto",
+    "labelMessage": "Mensaje",
+    "placeholderName": "Juan Pérez",
+    "placeholderEmail": "juan@ejemplo.com",
+    "placeholderSubject": "Consulta de Asociación para Juego",
+    "placeholderMessage": "Cuéntanos sobre tu próxima gran idea...",
+    "errorName": "● El nombre es obligatorio",
+    "errorEmail": "● El correo es obligatorio",
+    "errorSubject": "● El asunto es obligatorio",
+    "errorMessage": "● El mensaje es obligatorio",
+    "submitButton": "Iniciar Conversación",
+    "successMessage": "¡Tu chispa ha sido enviada! Nos pondremos en contacto pronto."
+  },
+  "meta": {
+    "title": "Orange Ember - Estudio de Juegos y Aplicaciones",
+    "description": "Orange Ember Studios. Creando experiencias digitales extraordinarias. Forjamos videojuegos premium, aplicaciones web y móviles."
+  }
+}

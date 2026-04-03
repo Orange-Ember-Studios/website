@@ -6,33 +6,45 @@ const projects = [
   {
     id: 1,
     title: "Unannounced Title",
+    titleKey: "portfolio.projectUnannounced",
     category: "Desktop Game",
+    categoryKey: "portfolio.categoryDesktopGame",
     image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop",
     status: "Coming Soon",
+    statusKey: "portfolio.statusComingSoon",
     link: null
   },
   {
     id: 2,
     title: "Taxi Bogotano Rush",
+    titleKey: "portfolio.projectTaxiBogotano",
     category: "Mobile Game",
+    categoryKey: "portfolio.categoryMobileGame",
     image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=2071&auto=format&fit=crop",
     status: "Available Now",
+    statusKey: "portfolio.statusAvailable",
     link: "https://play.google.com/store/apps/details?id=com.ces.taxibogotanorush"
   },
   {
     id: 3,
     title: "Easy Flags",
+    titleKey: "portfolio.projectEasyFlags",
     category: "Web Application",
+    categoryKey: "portfolio.categoryWebApp",
     image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=2070&auto=format&fit=crop",
     status: "In Development",
+    statusKey: "portfolio.statusInDev",
     link: "https://easy-flags.orangeember.com/"
   },
   {
     id: 4,
     title: "Bubble Level",
+    titleKey: "portfolio.projectBubbleLevel",
     category: "Mobile App",
+    categoryKey: "portfolio.categoryMobileApp",
     image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=2070&auto=format&fit=crop",
     status: "Publishing",
+    statusKey: "portfolio.statusPublishing",
     link: "https://play.google.com/store/apps/details?id=com.orangeemberstudios.bubblelevel"
   }
 ];
@@ -45,10 +57,10 @@ const projects = [
   <div class="max-w-7xl mx-auto px-6 relative z-10">
     <div class="mb-16">
       <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4">
-        Our <span class="text-transparent bg-clip-text bg-gradient-to-r from-studio-flame-light to-studio-flame-mid">Masterpieces</span>
+        <span data-i18n="portfolio.title">Our</span> <span data-i18n="portfolio.titleHighlight" class="text-transparent bg-clip-text bg-gradient-to-r from-studio-flame-light to-studio-flame-mid">Masterpieces</span>
       </h2>
       <div class="w-24 h-1 bg-gradient-to-r from-studio-flame-mid to-studio-flame-dark mb-6 rounded-full"></div>
-      <p class="text-gray-400 max-w-2xl text-lg md:text-xl">
+      <p data-i18n="portfolio.description" class="text-gray-400 max-w-2xl text-lg md:text-xl">
         Explore a curated selection of our most ambitious desktop games, mobile experiences, and state-of-the-art web applications.
       </p>
     </div>
@@ -66,6 +78,8 @@ const projects = [
           <img 
             src={project.image} 
             alt={`Project: ${project.title}`} 
+            data-i18n-attr="alt"
+            data-i18n={project.titleKey}
             class="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110 opacity-60 group-hover:opacity-100 mix-blend-luminosity group-hover:mix-blend-normal"
           />
 
@@ -74,7 +88,9 @@ const projects = [
           
           {/* Status Badge */}
           <div class="absolute top-6 right-6">
-            <span class={`px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase shadow-lg border backdrop-blur-md
+            <span 
+              data-i18n={project.statusKey}
+              class={`px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase shadow-lg border backdrop-blur-md
               ${project.status === 'Available Now' ? 'bg-green-500/20 text-green-300 border-green-500/30' : ''}
               ${project.status === 'Coming Soon' || project.status === 'Publishing' ? 'bg-orange-500/20 text-orange-300 border-orange-500/30' : ''}
               ${project.status === 'In Development' ? 'bg-blue-500/20 text-blue-300 border-blue-500/30' : ''}
@@ -86,14 +102,14 @@ const projects = [
           {/* Text Content */}
           <div class="absolute bottom-0 left-0 p-8 lg:p-10 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out">
             <span class="text-studio-flame-light font-semibold tracking-[0.2em] uppercase text-xs md:text-sm mb-3 block flex items-center gap-2">
-              {project.category}
+              <span data-i18n={project.categoryKey}>{project.category}</span>
               {project.link && (
                 <svg class="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity -translate-x-2 group-hover:translate-x-0 duration-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
               )}
             </span>
-            <h3 class="text-3xl md:text-4xl font-bold text-white mb-2">{project.title}</h3>
+            <h3 data-i18n={project.titleKey} class="text-3xl md:text-4xl font-bold text-white mb-2">{project.title}</h3>
           </div>
 
           {/* Hover interaction glow ring inside the card */}

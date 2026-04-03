@@ -1,0 +1,82 @@
+{
+  "nav": {
+    "portfolio": "Portfolio",
+    "services": "Services",
+    "about": "About",
+    "workWithUs": "Work with us"
+  },
+  "hero": {
+    "tagline": "Create. Ignite. Play.",
+    "studioName": "Orange Ember",
+    "studioSuffix": "Studios",
+    "description": "Crafting extraordinary digital experiences. We forge premium video games, web, and mobile applications.",
+    "viewPortfolio": "View Portfolio",
+    "contactUs": "Contact Us"
+  },
+  "portfolio": {
+    "title": "Our",
+    "titleHighlight": "Masterpieces",
+    "description": "Explore a curated selection of our most ambitious desktop games, mobile experiences, and state-of-the-art web applications.",
+    "statusAvailable": "Available Now",
+    "statusComingSoon": "Coming Soon",
+    "statusInDev": "In Development",
+    "statusPublishing": "Publishing",
+    "categoryDesktopGame": "Desktop Game",
+    "categoryMobileGame": "Mobile Game",
+    "categoryWebApp": "Web Application",
+    "categoryMobileApp": "Mobile App",
+    "projectUnannounced": "Unannounced Title",
+    "projectTaxiBogotano": "Taxi Bogotano Rush",
+    "projectEasyFlags": "Easy Flags",
+    "projectBubbleLevel": "Bubble Level"
+  },
+  "services": {
+    "tagline": "Expertise",
+    "title": "What We",
+    "titleHighlight": "Forge",
+    "description": "We specialize in creating top-tier interactive experiences. From the adrenaline of gaming to the seamless utility of modern apps.",
+    "desktopGamesTitle": "Desktop Video Games",
+    "desktopGamesDesc": "Engaging gameplay experiences designed specifically for PC and Steam releases, bringing polished, creative worlds to life.",
+    "mobileGamesTitle": "Mobile Games",
+    "mobileGamesDesc": "Highly optimized mobile games tailored to captivate players on Android devices. (iOS compatibility coming soon).",
+    "webAppsTitle": "Web Applications",
+    "webAppsDesc": "State-of-the-art, responsive web platforms built with modern frameworks for exceptional user experiences.",
+    "mobileAppsTitle": "Mobile Apps",
+    "mobileAppsDesc": "Cross-platform hybrid mobile applications crafted meticulously with Flutter and React Native / Expo to scale your business."
+  },
+  "about": {
+    "tagline": "Our Story",
+    "titlePrefix": "Forging the",
+    "titleHighlight": "Future of Play",
+    "paragraph1": "At Orange Ember Studios, we believe that great software and great games are born from the same spark: an obsessive dedication to craftsmanship and user experience.",
+    "paragraph2": "Our mission is to bridge the gap between high-end game development and premium web/mobile applications. Whether we're optimizing an engine for a desktop RPG or architecting a robust enterprise dashboard, our glowing ember of creativity never dims.",
+    "gamesPublished": "Games Published",
+    "appsDelivered": "Apps Delivered",
+    "ignitingIdeas": "Igniting Ideas",
+    "sinceDay1": "Since Day One"
+  },
+  "contact": {
+    "tagline": "Ready to Build?",
+    "title": "Let's",
+    "titleHighlight": "Connect",
+    "description": "Whether you have a game prototype, an app idea, or just want to say hi, we're all ears. Drop us a message below.",
+    "labelName": "Name",
+    "labelEmail": "Email",
+    "labelSubject": "Subject",
+    "labelMessage": "Message",
+    "placeholderName": "Jane Doe",
+    "placeholderEmail": "jane@example.com",
+    "placeholderSubject": "Game Partnership Inquiry",
+    "placeholderMessage": "Tell us about your next big idea...",
+    "errorName": "● Name is required",
+    "errorEmail": "● Email is required",
+    "errorSubject": "● Subject is required",
+    "errorMessage": "● Message is required",
+    "submitButton": "Ignite Conversation",
+    "successMessage": "Your spark has been sent! We'll be in touch soon."
+  },
+  "meta": {
+    "title": "Orange Ember - Game & App Studios",
+    "description": "Orange Ember Studios. Crafting extraordinary digital experiences. We forge premium video games, web, and mobile applications."
+  }
+}

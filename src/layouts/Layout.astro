@@ -18,38 +18,69 @@ const {
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content={description} />
+    <meta 
+      name="description" 
+      content={description} 
+      data-i18n="meta.description"
+      data-i18n-attr="content"
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="theme-color" content="#18191f" />
-    <title>{title}</title>
+    <title data-i18n="meta.title">{title}</title>
 
-    {/* Open Graph / Facebook / WhatsApp */}
+    <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://orangeember.com/" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta 
+      property="og:title" 
+      content={title} 
+      data-i18n="meta.title"
+      data-i18n-attr="content"
+    />
+    <meta 
+      property="og:description" 
+      content={description} 
+      data-i18n="meta.description"
+      data-i18n-attr="content"
+    />
     <meta property="og:image" content={new URL(image, "https://orangeember.com")} />
     <meta property="og:site_name" content="Orange Ember Studios" />
     <meta property="og:logo" content="https://orangeember.com/favicon.svg" />
 
-    {/* Twitter / X */}
+    <!-- Twitter / X -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://orangeember.com/" />
-    <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
+    <meta 
+      property="twitter:title" 
+      content={title} 
+      data-i18n="meta.title"
+      data-i18n-attr="content"
+    />
+    <meta 
+      property="twitter:description" 
+      content={description} 
+      data-i18n="meta.description"
+      data-i18n-attr="content"
+    />
     <meta
       property="twitter:image"
       content={new URL(image, "https://orangeember.com")}
     />
 
-    {/* Load Google Fonts (e.g. Outfit or Inter for a modern look) */}
+    <!-- Load Google Fonts (e.g. Outfit or Inter for a modern look) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Initialize i18n -->
+    <script>
+      import { initI18n } from "../i18n/i18n";
+      initI18n();
+    </script>
   </head>
   <body
     class="bg-[#0b0f19] text-[#f3f4f6] font-['Outfit',_sans-serif] antialiased selection:bg-orange-500/30 selection:text-orange-200"

@@ -15,6 +15,7 @@
       <div class="flex-1 group">
         <label
           for="name"
+          data-i18n="contact.labelName"
           class="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-studio-flame-light transition-colors"
           >Name</label
         >
@@ -22,6 +23,8 @@
           id="name"
           name="name"
           v-model="form.name"
+          data-i18n="contact.placeholderName"
+          data-i18n-attr="placeholder"
           :class="[
             'w-full bg-[#18191f] border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300',
             errors.name
@@ -32,6 +35,7 @@
         />
         <span
           v-if="errors.name"
+          data-i18n="contact.errorName"
           class="text-red-500 text-xs mt-2 block tracking-wide"
           >● Name is required</span
         >
@@ -40,6 +44,7 @@
       <div class="flex-1 group">
         <label
           for="email"
+          data-i18n="contact.labelEmail"
           class="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-studio-flame-light transition-colors"
           >Email</label
         >
@@ -48,6 +53,8 @@
           name="email"
           type="email"
           v-model="form.email"
+          data-i18n="contact.placeholderEmail"
+          data-i18n-attr="placeholder"
           :class="[
             'w-full bg-[#18191f] border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300',
             errors.email
@@ -58,6 +65,7 @@
         />
         <span
           v-if="errors.email"
+          data-i18n="contact.errorEmail"
           class="text-red-500 text-xs mt-2 block tracking-wide"
           >● Email is required</span
         >
@@ -67,6 +75,7 @@
     <div class="group">
       <label
         for="subject"
+        data-i18n="contact.labelSubject"
         class="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-studio-flame-light transition-colors"
         >Subject</label
       >
@@ -74,6 +83,8 @@
         id="subject"
         name="subject"
         v-model="form.subject"
+        data-i18n="contact.placeholderSubject"
+        data-i18n-attr="placeholder"
         :class="[
           'w-full bg-[#18191f] border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300',
           errors.subject
@@ -84,6 +95,7 @@
       />
       <span
         v-if="errors.subject"
+        data-i18n="contact.errorSubject"
         class="text-red-500 text-xs mt-2 block tracking-wide"
         >● Subject is required</span
       >
@@ -92,6 +104,7 @@
     <div class="group">
       <label
         for="message"
+        data-i18n="contact.labelMessage"
         class="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-studio-flame-light transition-colors"
         >Message</label
       >
@@ -100,6 +113,8 @@
         name="message"
         rows="5"
         v-model="form.message"
+        data-i18n="contact.placeholderMessage"
+        data-i18n-attr="placeholder"
         :class="[
           'w-full bg-[#18191f] border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300 resize-none',
           errors.message
@@ -110,6 +125,7 @@
       ></textarea>
       <span
         v-if="errors.message"
+        data-i18n="contact.errorMessage"
         class="text-red-500 text-xs mt-2 block tracking-wide"
         >● Message is required</span
       >
@@ -119,7 +135,7 @@
       type="submit"
       class="w-full md:w-auto px-10 py-4 bg-gradient-to-r from-studio-flame-mid to-studio-flame-dark hover:from-studio-flame-light hover:to-studio-flame-mid text-white font-bold rounded-xl transition-all duration-400 transform hover:scale-[1.02] shadow-[0_0_20px_rgba(255,91,13,0.3)] hover:shadow-[0_0_35px_rgba(255,91,13,0.5)] mt-4 flex items-center justify-center gap-3 mx-auto"
     >
-      <span class="tracking-widest uppercase text-sm">Ignite Conversation</span>
+      <span data-i18n="contact.submitButton" class="tracking-widest uppercase text-sm">Ignite Conversation</span>
       <svg
         class="w-5 h-5 transition-transform group-hover:translate-x-1"
         fill="none"
@@ -137,6 +153,7 @@
 
     <div
       v-if="successMsg"
+      data-i18n="contact.successMessage"
       class="mt-4 p-4 rounded-xl bg-green-500/10 border border-green-500/30 text-green-400 text-center font-medium shadow-lg animate-fade-in"
     >
       {{ successMsg }}

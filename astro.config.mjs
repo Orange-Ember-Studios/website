@@ -13,5 +13,5 @@ export default defineConfig({
   },
 
   integrations: [vue()],
-  adapter: cloudflare(),
+  adapter: process.env.VITEST ? undefined : cloudflare(),
 });
