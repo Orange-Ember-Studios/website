@@ -1,0 +1,44 @@
+---
+// Hero.astro
+// US-01: Landing Page Hero Section
+---
+
+<section 
+  class="relative w-full h-screen min-h-[600px] flex items-center justify-center text-white overflow-hidden"
+>
+  {/* Dark gradient overlay for a premium feel */}
+  <div class="absolute inset-0 bg-gradient-to-b from-transparent to-studio-bg/90 z-0 pointer-events-none"></div>
+  
+  {/* Flowing Ember Glow honoring the Shield and Flame */}
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-studio-flame-mid/20 rounded-full blur-[100px] md:blur-[150px] animate-pulse z-0 pointer-events-none"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] md:w-[300px] h-[200px] md:h-[300px] bg-studio-shield/30 rounded-full blur-[80px] md:blur-[120px] animate-pulse delay-700 z-0 pointer-events-none"></div>
+
+  <div class="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto">
+    <span class="text-studio-flame-light font-semibold tracking-[0.3em] uppercase mb-4 text-sm md:text-base">
+      Create. Ignite. Play.
+    </span>
+
+    <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6">
+      <span class="text-transparent bg-clip-text bg-gradient-to-br from-studio-flame-light via-studio-flame-mid to-studio-flame-dark">Orange Ember</span> Studios
+    </h1>
+    
+    <p class="text-lg md:text-2xl text-gray-300 mb-10 max-w-3xl leading-relaxed">
+      Crafting extraordinary digital experiences. We forge premium video games, web, and mobile applications.
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+      <a 
+        href="/portfolio" 
+        class="px-8 py-4 bg-gradient-to-r from-studio-flame-mid to-studio-flame-dark hover:from-studio-flame-light hover:to-studio-flame-mid text-white font-semibold rounded-full transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_30px_rgba(255,91,13,0.4)] min-w-[200px]"
+      >
+        View Portfolio
+      </a>
+      <a 
+        href="/contact" 
+        class="px-8 py-4 bg-transparent border border-studio-shield hover:border-studio-flame-light text-gray-300 hover:text-white font-semibold rounded-full transition-all duration-300 hover:bg-studio-shield/20 min-w-[200px]"
+      >
+        Contact Us
+      </a>
+    </div>
+  </div>
+</section>

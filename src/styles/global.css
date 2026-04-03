@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+@theme {
+  /* Colors extracted from the branding image */
+  --color-studio-bg: #18191f; /* The dark dotted background */
+  --color-studio-shield: #2d2b64; /* Deep purple/indigo shield border */
+  --color-studio-flame-light: #ff9c2a; /* Top flame tip */
+  --color-studio-flame-mid: #ff5b0d; /* Mid flame */
+  --color-studio-flame-dark: #b01b11; /* Base flame red */
+}
+
+/* Orange Ember Global Variables and Resets */
+:root {
+  --bg-color: var(--color-studio-bg);
+  --text-main: #f3f4f6;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  /* The default font will be handled by Tailwind, but let's ensure smooth rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Adding a subtle gradient to mimic the premium backdrop of the image */
+  background-image: radial-gradient(circle at center, #242631 0%, var(--color-studio-bg) 100%);
+  background-attachment: fixed;
+}
