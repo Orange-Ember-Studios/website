@@ -3,14 +3,16 @@
     @submit.prevent="submitForm"
     class="flex flex-col gap-6 w-full max-w-2xl mx-auto relative z-10"
   >
-    <input
-      type="text"
-      name="_honey"
-      v-model="_honey"
-      class="hidden"
-      tabindex="-1"
-      autocomplete="off"
-    />
+    <!-- Deceptive Honeypot (Off-screen) -->
+    <div class="sr-only opacity-0 absolute -left-[9999px] -top-[9999px]" aria-hidden="true">
+      <input
+        type="text"
+        name="address_ext"
+        v-model="address_ext"
+        tabindex="-1"
+        autocomplete="off"
+      />
+    </div>
     <div class="flex flex-col md:flex-row gap-6">
       <div class="flex-1 group">
         <label
@@ -26,7 +28,7 @@
           data-i18n="contact.placeholderName"
           data-i18n-attr="placeholder"
           :class="[
-            'w-full bg-[#18191f] border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300',
+            'w-full bg-studio-bg border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300',
             errors.name
               ? 'border-red-500 focus:ring-red-500/50'
               : 'border-white/10 focus:border-studio-flame-light focus:ring-studio-flame-light/30 hover:border-white/30',
@@ -56,7 +58,7 @@
           data-i18n="contact.placeholderEmail"
           data-i18n-attr="placeholder"
           :class="[
-            'w-full bg-[#18191f] border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300',
+            'w-full bg-studio-bg border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300',
             errors.email
               ? 'border-red-500 focus:ring-red-500/50'
               : 'border-white/10 focus:border-studio-flame-light focus:ring-studio-flame-light/30 hover:border-white/30',
@@ -86,7 +88,7 @@
         data-i18n="contact.placeholderSubject"
         data-i18n-attr="placeholder"
         :class="[
-          'w-full bg-[#18191f] border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300',
+          'w-full bg-studio-bg border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300',
           errors.subject
             ? 'border-red-500 focus:ring-red-500/50'
             : 'border-white/10 focus:border-studio-flame-light focus:ring-studio-flame-light/30 hover:border-white/30',
@@ -116,7 +118,7 @@
         data-i18n="contact.placeholderMessage"
         data-i18n-attr="placeholder"
         :class="[
-          'w-full bg-[#18191f] border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300 resize-none',
+          'w-full bg-studio-bg border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300 resize-none',
           errors.message
             ? 'border-red-500 focus:ring-red-500/50'
             : 'border-white/10 focus:border-studio-flame-light focus:ring-studio-flame-light/30 hover:border-white/30',
@@ -131,9 +133,20 @@
       >
     </div>
 
+    <!-- Cloudflare Turnstile Widget -->
+    <div class="mt-6 flex justify-center">
+      <div 
+        class="cf-turnstile" 
+        :data-sitekey="turnstileSiteKey"
+        data-callback="onTurnstileSuccess"
+        data-theme="dark"
+      ></div>
+    </div>
+
     <button
       type="submit"
-      class="w-full md:w-auto px-10 py-4 bg-gradient-to-r from-studio-flame-mid to-studio-flame-dark hover:from-studio-flame-light hover:to-studio-flame-mid text-white font-bold rounded-xl transition-all duration-400 transform hover:scale-[1.02] shadow-[0_0_20px_rgba(255,91,13,0.3)] hover:shadow-[0_0_35px_rgba(255,91,13,0.5)] mt-4 flex items-center justify-center gap-3 mx-auto"
+      :disabled="!turnstileToken && !isBotDetected"
+      class="w-full md:w-auto px-10 py-4 bg-linear-to-r from-studio-flame-mid to-studio-flame-dark hover:from-studio-flame-light hover:to-studio-flame-mid text-white font-bold rounded-xl transition-all duration-400 transform hover:scale-[1.02] shadow-[0_0_20px_rgba(255,91,13,0.3)] hover:shadow-[0_0_35px_rgba(255,91,13,0.5)] mt-4 flex items-center justify-center gap-3 mx-auto disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
     >
       <span data-i18n="contact.submitButton" class="tracking-widest uppercase text-sm">Ignite Conversation</span>
       <svg
@@ -162,9 +175,20 @@
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted } from "vue";
 
-const _honey = ref("");
+const address_ext = ref("");
+const turnstileToken = ref("");
+const isBotDetected = ref(false);
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || "1x00000000000000000000AA";
+
+
+onMounted(() => {
+  // Define callback in window for Turnstile
+  window.onTurnstileSuccess = (token) => {
+    turnstileToken.value = token;
+  };
+});
 
 const form = reactive({
   name: "",
@@ -196,23 +220,40 @@ const validate = () => {
 };
 
 const submitForm = () => {
-  // Silent HoneyPot verification (if bot fills it, act as success but don't process)
-  if (_honey.value !== "") {
+  // Deceptive HoneyPot verification
+  if (address_ext.value !== "") {
     console.warn("Bot detected via Honeypot trap.");
+    isBotDetected.value = true;
+    // Silent clear
     Object.keys(form).forEach((k) => (form[k] = ""));
-    _honey.value = "";
+    address_ext.value = "";
     return;
   }
 
-  if (validate()) {
-    console.log("Form Submitted!", { ...form });
-    successMsg.value = "Your spark has been sent! We'll be in touch soon.";
-
-    Object.keys(form).forEach((k) => (form[k] = ""));
-    setTimeout(() => {
-      successMsg.value = "";
-    }, 5000);
+  // Run validation first to show errors to user
+  if (!validate()) {
+    return;
   }
+
+  // Ensure Turnstile is verified before final processing
+  if (!turnstileToken.value) {
+    console.warn("Turnstile verification missing.");
+    return;
+  }
+
+  console.log("Form Submitted with Turnstile Token!", { ...form, token: turnstileToken.value });
+  successMsg.value = "Your spark has been sent! We'll be in touch soon.";
+
+  Object.keys(form).forEach((k) => (form[k] = ""));
+  // Reset turnstile for next submission
+  if (window.turnstile) {
+    window.turnstile.reset();
+    turnstileToken.value = "";
+  }
+
+  setTimeout(() => {
+    successMsg.value = "";
+  }, 5000);
 };
 </script>
 

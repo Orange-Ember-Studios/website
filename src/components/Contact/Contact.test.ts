@@ -25,8 +25,8 @@ describe('Contact Form Vue Component (US-05)', () => {
   it('rejects form silently if honeypot is filled (Anti-Bot)', async () => {
     const wrapper = mount(ContactForm);
     
-    // We expect a hidden honeypot field
-    const honeypot = wrapper.find('input[name="_honey"]');
+    // We expect a hidden deceptive honeypot field
+    const honeypot = wrapper.find('input[name="address_ext"]');
     expect(honeypot.exists()).toBe(true);
     
     // Fill the honeypot acting as a bot
@@ -42,5 +42,10 @@ describe('Contact Form Vue Component (US-05)', () => {
     
     // The success message should NOT appear if it's a bot
     expect(wrapper.text()).not.toContain('Your spark has been sent!');
+  });
+
+  it('contains the Cloudflare Turnstile widget', () => {
+    const wrapper = mount(ContactForm);
+    expect(wrapper.find('.cf-turnstile').exists()).toBe(true);
   });
 });
