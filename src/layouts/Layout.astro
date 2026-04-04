@@ -28,10 +28,14 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="theme-color" content="#18191f" />
     <title data-i18n="meta.title">{title}</title>
+    <link rel="canonical" href="https://orangeember.com/" />
 
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://orangeember.com/" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="es_ES" />
+    <meta property="og:locale:alternate" content="fr_FR" />
     <meta 
       property="og:title" 
       content={title} 
@@ -45,12 +49,15 @@ const {
       data-i18n-attr="content"
     />
     <meta property="og:image" content={new URL(image, "https://orangeember.com")} />
+    <meta property="og:image:alt" content="Orange Ember Studios Logo" />
     <meta property="og:site_name" content="Orange Ember Studios" />
     <meta property="og:logo" content="https://orangeember.com/favicon.svg" />
 
     <!-- Twitter / X -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://orangeember.com/" />
+    <meta property="twitter:site" content="@OrangeEmberSt" />
+    <meta property="twitter:creator" content="@OrangeEmberSt" />
     <meta 
       property="twitter:title" 
       content={title} 
@@ -68,7 +75,31 @@ const {
       content={new URL(image, "https://orangeember.com")}
     />
 
-    <!-- Load Google Fonts (e.g. Outfit or Inter for a modern look) -->
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Orange Ember Studios",
+        "url": "https://orangeember.com",
+        "logo": "https://orangeember.com/favicon.svg",
+        "description": "Orange Ember Studios. Crafting extraordinary digital experiences. We forge premium video games, web, and mobile applications.",
+        "sameAs": [
+          "https://github.com/orange-ember-studios",
+          "https://x.com/OrangeEmberSt"
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Orange Ember Studios",
+        "url": "https://orangeember.com"
+      }
+    </script>
+
+    <!-- Load Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -83,7 +114,7 @@ const {
     </script>
   </head>
   <body
-    class="bg-[#0b0f19] text-[#f3f4f6] font-['Outfit',_sans-serif] antialiased selection:bg-orange-500/30 selection:text-orange-200"
+    class="bg-[#0b0f19] text-[#f3f4f6] font-['Outfit',sans-serif] antialiased selection:bg-orange-500/30 selection:text-orange-200"
   >
     <slot />
   </body>

@@ -33,4 +33,37 @@ describe("Root Layout (OpenGraph Tags)", () => {
     expect(logoTagExists).toBe(true);
     expect(hasTheTag).toBe(true);
   });
+
+  it("should include a canonical link tag", async () => {
+    const result = await container.renderToString(Layout, {
+      props: {
+        title: "Test Studio",
+      },
+    });
+
+    const canonicalExists = result.includes('rel="canonical"');
+    expect(canonicalExists).toBe(true);
+  });
+
+  it("should include og:locale meta tag", async () => {
+    const result = await container.renderToString(Layout, {
+      props: {
+        title: "Test Studio",
+      },
+    });
+
+    const localeExists = result.includes('property="og:locale"');
+    expect(localeExists).toBe(true);
+  });
+
+  it("should include JSON-LD structured data", async () => {
+    const result = await container.renderToString(Layout, {
+      props: {
+        title: "Test Studio",
+      },
+    });
+
+    const jsonLdExists = result.includes('type="application/ld+json"');
+    expect(jsonLdExists).toBe(true);
+  });
 });
