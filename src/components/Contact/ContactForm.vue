@@ -145,11 +145,13 @@
 
     <button
       type="submit"
-      :disabled="!turnstileToken && !isBotDetected"
+      :disabled="!turnstileToken && !isBotDetected || isSubmitting"
       class="w-full md:w-auto px-10 py-4 bg-linear-to-r from-studio-flame-mid to-studio-flame-dark hover:from-studio-flame-light hover:to-studio-flame-mid text-white font-bold rounded-xl transition-all duration-400 transform hover:scale-[1.02] shadow-[0_0_20px_rgba(255,91,13,0.3)] hover:shadow-[0_0_35px_rgba(255,91,13,0.5)] mt-4 flex items-center justify-center gap-3 mx-auto disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
     >
-      <span data-i18n="contact.submitButton" class="tracking-widest uppercase text-sm">Ignite Conversation</span>
+      <span v-if="!isSubmitting" data-i18n="contact.submitButton" class="tracking-widest uppercase text-sm">Ignite Conversation</span>
+      <span v-else class="tracking-widest uppercase text-sm">Sending...</span>
       <svg
+        v-if="!isSubmitting"
         class="w-5 h-5 transition-transform group-hover:translate-x-1"
         fill="none"
         viewBox="0 0 24 24"
@@ -162,6 +164,27 @@
           d="M14 5l7 7m0 0l-7 7m7-7H3"
         ></path>
       </svg>
+      <svg
+          v-else
+          class="animate-spin h-5 w-5 text-white"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+      >
+          <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+          ></circle>
+          <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          ></path>
+      </svg>
     </button>
 
     <div
@@ -171,11 +194,19 @@
     >
       {{ successMsg }}
     </div>
+
+    <div
+      v-if="errorMsg"
+      class="mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-500 text-center font-medium shadow-lg animate-fade-in"
+    >
+      {{ errorMsg }}
+    </div>
   </form>
 </template>
 
 <script setup>
 import { reactive, ref, onMounted } from "vue";
+import { API_URLS } from "../../constants/urls";
 
 const address_ext = ref("");
 const turnstileToken = ref("");
@@ -204,10 +235,13 @@ const errors = reactive({
   message: false,
 });
 
+const isSubmitting = ref(false);
 const successMsg = ref("");
+const errorMsg = ref(""); // New error message
 
 const validate = () => {
   let isValid = true;
+  // Basic empty fields
   for (const key in form) {
     if (!form[key].trim()) {
       errors[key] = true;
@@ -216,10 +250,22 @@ const validate = () => {
       errors[key] = false;
     }
   }
+
+  // Email format validation
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (form.email && !emailPattern.test(form.email)) {
+    errors.email = true;
+    errorMsg.value = "Invalid email address";
+    isValid = false;
+  }
+
   return isValid;
 };
 
-const submitForm = () => {
+const submitForm = async () => {
+  errorMsg.value = "";
+  successMsg.value = "";
+
   // Deceptive HoneyPot verification
   if (address_ext.value !== "") {
     console.warn("Bot detected via Honeypot trap.");
@@ -230,29 +276,56 @@ const submitForm = () => {
     return;
   }
 
-  // Run validation first to show errors to user
+  // Run validation
   if (!validate()) {
     return;
   }
 
-  // Ensure Turnstile is verified before final processing
+  // Ensure Turnstile is verified
   if (!turnstileToken.value) {
     console.warn("Turnstile verification missing.");
+    errorMsg.value = "Please complete the security check.";
     return;
   }
 
-  console.log("Form Submitted with Turnstile Token!", { ...form, token: turnstileToken.value });
-  successMsg.value = "Your spark has been sent! We'll be in touch soon.";
+  isSubmitting.value = true;
 
-  Object.keys(form).forEach((k) => (form[k] = ""));
-  // Reset turnstile for next submission
-  if (window.turnstile) {
-    window.turnstile.reset();
-    turnstileToken.value = "";
+  try {
+    const response = await fetch(API_URLS.CONTACT_FORM_SUBMISSION, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...form,
+        token: turnstileToken.value,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      successMsg.value = "Your spark has been sent! We'll be in touch soon.";
+      // Reset form
+      Object.keys(form).forEach((k) => (form[k] = ""));
+      // Reset turnstile
+      if (window.turnstile) {
+        window.turnstile.reset();
+        turnstileToken.value = "";
+      }
+    } else {
+      errorMsg.value = result.error || "Something went wrong. Please try again later.";
+    }
+  } catch (error) {
+    console.error("Submission error:", error);
+    errorMsg.value = "Something went wrong. Please try again later.";
+  } finally {
+    isSubmitting.value = false;
   }
 
   setTimeout(() => {
     successMsg.value = "";
+    errorMsg.value = "";
   }, 5000);
 };
 </script>

@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { API_URLS, SITE_URLS, SOCIAL_URLS, EXTERNAL_URLS } from "../constants/urls";
 
 interface Props {
   title: string;
@@ -12,6 +13,26 @@ const {
   description = "Orange Ember Studios. Crafting extraordinary digital experiences. We forge premium video games, web, and mobile applications.",
   image = "/Shield.svg", // Using the Shield as fallback OpenGraph image
 } = Astro.props;
+
+const organizationSchema = {
+  "@context": EXTERNAL_URLS.SCHEMA_ORG,
+  "@type": "Organization",
+  "name": "Orange Ember Studios",
+  "url": SITE_URLS.BASE,
+  "logo": `${SITE_URLS.BASE}/favicon.svg`,
+  "description": description,
+  "sameAs": [
+    SOCIAL_URLS.GITHUB,
+    SOCIAL_URLS.TWITTER_X
+  ]
+};
+
+const websiteSchema = {
+  "@context": EXTERNAL_URLS.SCHEMA_ORG,
+  "@type": "WebSite",
+  "name": "Orange Ember Studios",
+  "url": SITE_URLS.BASE
+};
 ---
 
 <!doctype html>
@@ -28,11 +49,11 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="theme-color" content="#18191f" />
     <title data-i18n="meta.title">{title}</title>
-    <link rel="canonical" href="https://orangeember.com/" />
+    <link rel="canonical" href={SITE_URLS.BASE + "/"} />
 
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://orangeember.com/" />
+    <meta property="og:url" content={SITE_URLS.BASE + "/"} />
     <meta property="og:locale" content="en_US" />
     <meta property="og:locale:alternate" content="es_ES" />
     <meta property="og:locale:alternate" content="fr_FR" />
@@ -48,14 +69,14 @@ const {
       data-i18n="meta.description"
       data-i18n-attr="content"
     />
-    <meta property="og:image" content={new URL(image, "https://orangeember.com")} />
+    <meta property="og:image" content={new URL(image, SITE_URLS.BASE)} />
     <meta property="og:image:alt" content="Orange Ember Studios Logo" />
     <meta property="og:site_name" content="Orange Ember Studios" />
-    <meta property="og:logo" content="https://orangeember.com/favicon.svg" />
+    <meta property="og:logo" content={`${SITE_URLS.BASE}/favicon.svg`} />
 
     <!-- Twitter / X -->
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://orangeember.com/" />
+    <meta property="twitter:url" content={SITE_URLS.BASE + "/"} />
     <meta property="twitter:site" content="@OrangeEmberSt" />
     <meta property="twitter:creator" content="@OrangeEmberSt" />
     <meta 
@@ -72,38 +93,18 @@ const {
     />
     <meta
       property="twitter:image"
-      content={new URL(image, "https://orangeember.com")}
+      content={new URL(image, SITE_URLS.BASE)}
     />
 
     <!-- JSON-LD Structured Data -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Orange Ember Studios",
-        "url": "https://orangeember.com",
-        "logo": "https://orangeember.com/favicon.svg",
-        "description": "Orange Ember Studios. Crafting extraordinary digital experiences. We forge premium video games, web, and mobile applications.",
-        "sameAs": [
-          "https://github.com/orange-ember-studios",
-          "https://x.com/OrangeEmberSt"
-        ]
-      }
-    </script>
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "Orange Ember Studios",
-        "url": "https://orangeember.com"
-      }
-    </script>
+    <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
 
     <!-- Load Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href={EXTERNAL_URLS.GOOGLE_FONTS} />
+    <link rel="preconnect" href={EXTERNAL_URLS.GOOGLE_GSTATIC} crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+      href={`${EXTERNAL_URLS.GOOGLE_FONTS}/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap`}
       rel="stylesheet"
     />
 
@@ -114,7 +115,7 @@ const {
     </script>
 
     <!-- Cloudflare Turnstile -->
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <script src={API_URLS.TURNSTILE_SCRIPT} async defer></script>
   </head>
   <body
     class="bg-[#0b0f19] text-[#f3f4f6] font-['Outfit',sans-serif] antialiased selection:bg-orange-500/30 selection:text-orange-200"
