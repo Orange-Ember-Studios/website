@@ -136,10 +136,8 @@
     <!-- Cloudflare Turnstile Widget -->
     <div class="mt-6 flex justify-center">
       <div 
-        class="cf-turnstile" 
-        :data-sitekey="turnstileSiteKey"
-        data-callback="onTurnstileSuccess"
-        data-theme="dark"
+        ref="turnstileContainer"
+        class="min-h-[65px]"
       ></div>
     </div>
 
@@ -205,20 +203,50 @@
 </template>
 
 <script setup>
-import { reactive, ref, onMounted } from "vue";
+import { reactive, ref, onMounted, onBeforeUnmount } from "vue";
 import { API_URLS } from "../../constants/urls";
 
 const address_ext = ref("");
 const turnstileToken = ref("");
 const isBotDetected = ref(false);
 const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || "1x00000000000000000000AA";
+const turnstileContainer = ref(null);
+const turnstileWidgetId = ref(null);
 
 
 onMounted(() => {
-  // Define callback in window for Turnstile
-  window.onTurnstileSuccess = (token) => {
-    turnstileToken.value = token;
+  const initTurnstile = () => {
+    if (window.turnstile && turnstileContainer.value) {
+      try {
+        turnstileWidgetId.value = window.turnstile.render(turnstileContainer.value, {
+          sitekey: turnstileSiteKey,
+          theme: "dark",
+          callback: (token) => {
+            turnstileToken.value = token;
+          },
+          "expired-callback": () => {
+            turnstileToken.value = "";
+          },
+          "error-callback": () => {
+            turnstileToken.value = "";
+          },
+        });
+      } catch (e) {
+        console.error("Turnstile render error:", e);
+      }
+    } else {
+      // Retry if script not loaded yet
+      setTimeout(initTurnstile, 250);
+    }
   };
+
+  initTurnstile();
+});
+
+onBeforeUnmount(() => {
+  if (turnstileWidgetId.value && window.turnstile) {
+    window.turnstile.remove(turnstileWidgetId.value);
+  }
 });
 
 const form = reactive({
@@ -309,8 +337,8 @@ const submitForm = async () => {
       // Reset form
       Object.keys(form).forEach((k) => (form[k] = ""));
       // Reset turnstile
-      if (window.turnstile) {
-        window.turnstile.reset();
+      if (window.turnstile && turnstileWidgetId.value) {
+        window.turnstile.reset(turnstileWidgetId.value);
         turnstileToken.value = "";
       }
     } else {
