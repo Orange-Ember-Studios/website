@@ -75,6 +75,19 @@
     "submitButton": "Iniciar Conversación",
     "successMessage": "¡Tu chispa ha sido enviada! Nos pondremos en contacto pronto."
   },
+  "privacy": {
+    "title": "Política de Privacidad",
+    "lastUpdated": "Última actualización: 7 de abril de 2026",
+    "intro": "En Orange Ember Studios, valoramos su privacidad. Esta política explica cómo manejamos su información cuando visita nuestro sitio o utiliza nuestros servicios.",
+    "dataCollectionTitle": "Recopilación de Datos",
+    "dataCollectionDesc": "Solo recopilamos la información que nos proporciona voluntariamente a través de nuestros formularios de contacto, como su nombre y dirección de correo electrónico. Utilizamos esta información únicamente para comunicarnos con usted acerca de sus consultas.",
+    "cookiesTitle": "Cookies",
+    "cookiesDesc": "Nuestro sitio web utiliza cookies esenciales para garantizar su funcionamiento adecuado y mejorar su experiencia de usuario. No utilizamos cookies de seguimiento con fines publicitarios.",
+    "securityTitle": "Seguridad",
+    "securityDesc": "Implementamos medidas de seguridad estándar de la industria, incluida la protección de Cloudflare, para proteger sus datos de accesos no autorizados.",
+    "contactTitle": "Contáctenos",
+    "contactDesc": "Si tiene alguna pregunta sobre esta Política de Privacidad, contáctenos en privacy@orangeember.com."
+  },
   "meta": {
     "title": "Orange Ember - Estudio de Juegos y Aplicaciones",
     "description": "Orange Ember Studios. Creando experiencias digitales extraordinarias. Forjamos videojuegos premium, aplicaciones web y móviles."
