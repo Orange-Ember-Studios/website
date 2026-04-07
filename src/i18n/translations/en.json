@@ -18,6 +18,7 @@
     "titleHighlight": "Masterpieces",
     "description": "Explore a curated selection of our most ambitious desktop games, mobile experiences, and state-of-the-art web applications.",
     "statusAvailable": "Available Now",
+    "statusEarlyAccess": "Early Access",
     "statusComingSoon": "Coming Soon",
     "statusInDev": "In Development",
     "statusPublishing": "Publishing",
@@ -26,7 +27,7 @@
     "categoryWebApp": "Web Application",
     "categoryMobileApp": "Mobile App",
     "projectUnannounced": "Unannounced Title",
-    "projectTaxiBogotano": "Taxi Bogotano Rush",
+    "projectInversePulse": "Inverse Pulse",
     "projectEasyFlags": "Easy Flags",
     "projectBubbleLevel": "Bubble Level"
   },

@@ -18,6 +18,7 @@
     "titleHighlight": "Chefs-d'œuvre",
     "description": "Explorez une sélection soignée de nos jeux de bureau les plus ambitieux, expériences mobiles et applications web à la pointe de la technologie.",
     "statusAvailable": "Disponible Maintenant",
+    "statusEarlyAccess": "Accès Anticipé",
     "statusComingSoon": "Bientôt Disponible",
     "statusInDev": "En Développement",
     "statusPublishing": "En Publication",
@@ -26,7 +27,7 @@
     "categoryWebApp": "Application Web",
     "categoryMobileApp": "App Mobile",
     "projectUnannounced": "Titre Non Annoncé",
-    "projectTaxiBogotano": "Taxi Bogotano Rush",
+    "projectInversePulse": "Inverse Pulse",
     "projectEasyFlags": "Easy Flags",
     "projectBubbleLevel": "Bubble Level"
   },

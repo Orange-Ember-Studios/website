@@ -18,6 +18,7 @@
     "titleHighlight": "Obras Maestras",
     "description": "Explora una selección curada de nuestros juegos de escritorio más ambiciosos, experiencias móviles y aplicaciones web de última generación.",
     "statusAvailable": "Disponible Ahora",
+    "statusEarlyAccess": "Acceso Anticipado",
     "statusComingSoon": "Próximamente",
     "statusInDev": "En Desarrollo",
     "statusPublishing": "Publicando",
@@ -26,7 +27,7 @@
     "categoryWebApp": "Aplicación Web",
     "categoryMobileApp": "App Móvil",
     "projectUnannounced": "Título Sin Anunciar",
-    "projectTaxiBogotano": "Taxi Bogotano Rush",
+    "projectInversePulse": "Inverse Pulse",
     "projectEasyFlags": "Easy Flags",
     "projectBubbleLevel": "Bubble Level"
   },

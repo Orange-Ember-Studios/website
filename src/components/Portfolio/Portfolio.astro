@@ -17,14 +17,14 @@ const projects = [
   },
   {
     id: 2,
-    title: "Taxi Bogotano Rush",
-    titleKey: "portfolio.projectTaxiBogotano",
+    title: "Inverse Pulse",
+    titleKey: "portfolio.projectInversePulse",
     category: "Mobile Game",
     categoryKey: "portfolio.categoryMobileGame",
-    image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=2071&auto=format&fit=crop",
-    status: "Available Now",
-    statusKey: "portfolio.statusAvailable",
-    link: "https://play.google.com/store/apps/details?id=com.ces.taxibogotanorush"
+    image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop",
+    status: "Early Access",
+    statusKey: "portfolio.statusEarlyAccess",
+    link: "https://play.google.com/store/apps/details?id=com.orangeember.inversepulse"
   },
   {
     id: 3,
@@ -92,7 +92,7 @@ const projects = [
             <span 
               data-i18n={project.statusKey}
               class={`px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase shadow-lg border backdrop-blur-md
-              ${project.status === 'Available Now' ? 'bg-green-500/20 text-green-300 border-green-500/30' : ''}
+              ${project.status === 'Available Now' || project.status === 'Early Access' ? 'bg-green-500/20 text-green-300 border-green-500/30' : ''}
               ${project.status === 'Coming Soon' || project.status === 'Publishing' ? 'bg-orange-500/20 text-orange-300 border-orange-500/30' : ''}
               ${project.status === 'In Development' ? 'bg-blue-500/20 text-blue-300 border-blue-500/30' : ''}
             `}>
