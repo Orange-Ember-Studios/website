@@ -1,12 +1,12 @@
 /**
  * @vitest-environment node
  */
-import { describe, it, expect, beforeEach } from 'vitest';
-import PrivacyPage from './privacy.astro';
-import { getByText, getAllByText } from '@testing-library/dom';
-import { createAstroContainer, setupDOMEnvironment } from '../test-utils';
+import { describe, it, expect, beforeEach } from "vitest";
+import PrivacyPage from "./privacy.astro";
+import { getByText, getAllByText } from "@testing-library/dom";
+import { createAstroContainer, setupDOMEnvironment } from "../../test-utils";
 
-describe('Privacy Policy Page', () => {
+describe("Privacy Policy Page", () => {
   let container: any;
   let document: any;
 
@@ -16,9 +16,9 @@ describe('Privacy Policy Page', () => {
     document = doc;
   });
 
-  it('renders the privacy policy page with the correct title', async () => {
+  it("renders the privacy policy page with the correct title", async () => {
     const result = await container.renderToString(PrivacyPage);
-    const div = document.createElement('div');
+    const div = document.createElement("div");
     div.innerHTML = result;
     document.body.appendChild(div);
 
@@ -28,7 +28,7 @@ describe('Privacy Policy Page', () => {
 
   it('contains legal sections like "Data Collection" or "Cookies"', async () => {
     const result = await container.renderToString(PrivacyPage);
-    const div = document.createElement('div');
+    const div = document.createElement("div");
     div.innerHTML = result;
     document.body.appendChild(div);
 
