@@ -2,6 +2,7 @@
 import Layout from "./Layout.astro";
 import Navbar from "../components/Navigation/Navbar.astro";
 import Footer from "../components/Navigation/Footer.astro";
+import { SOCIAL_URLS } from "../constants/urls";
 
 interface Props {
   frontmatter: {
@@ -12,9 +13,10 @@ interface Props {
     image?: string;
     tags?: string[];
   };
+  postId: string;
 }
 
-const { frontmatter } = Astro.props;
+const { frontmatter, postId } = Astro.props;
 const { title, description, pubDate, author, image, tags } = frontmatter;
 
 const formattedDate = new Date(pubDate).toLocaleDateString("en-US", {
@@ -22,6 +24,8 @@ const formattedDate = new Date(pubDate).toLocaleDateString("en-US", {
   month: "long",
   day: "numeric",
 });
+
+const lang = Astro.locals.lang || "en";
 ---
 
 <Layout
@@ -35,7 +39,7 @@ const formattedDate = new Date(pubDate).toLocaleDateString("en-US", {
     <!-- Breadcrumbs / Back Link -->
     <div class="mb-8">
       <a
-        href="/blog"
+        href={`/${lang}/blog`}
         class="inline-flex items-center text-orange-500 hover:text-orange-400 font-medium transition-colors duration-200 group"
       >
         <svg
@@ -71,6 +75,7 @@ const formattedDate = new Date(pubDate).toLocaleDateString("en-US", {
 
       <h1
         class="text-4xl sm:text-6xl font-extrabold text-white mb-8 leading-tight tracking-tight"
+        transition:name={`title-${postId}`}
       >
         {title}
       </h1>
@@ -111,7 +116,12 @@ const formattedDate = new Date(pubDate).toLocaleDateString("en-US", {
     {
       image && (
         <div class="relative w-full aspect-21/9 rounded-4xl overflow-hidden mb-16 shadow-[0_0_50px_-12px_rgba(249,115,22,0.3)] ring-1 ring-white/10">
-          <img src={image} alt={title} class="w-full h-full object-cover" />
+          <img
+            src={image}
+            alt={title}
+            class="w-full h-full object-cover"
+            transition:name={`image-${postId}`}
+          />
           <div class="absolute inset-0 bg-linear-to-t from-[#0b0f19] via-transparent to-transparent opacity-60" />
         </div>
       )
@@ -140,10 +150,12 @@ const formattedDate = new Date(pubDate).toLocaleDateString("en-US", {
           </div>
           <div class="flex gap-4">
             <a
-              href={import.meta.env.SOCIAL_TWITTER || "#"}
+              href={SOCIAL_URLS.TWITTER_X}
+              target="_blank"
+              rel="noopener noreferrer"
               class="group flex items-center space-x-2 px-6 py-3 rounded-xl bg-white text-black font-bold hover:bg-orange-500 hover:text-white transition-all duration-300"
             >
-              <span>Follow Us</span>
+              <span>Follow Us on X</span>
               <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24"
                 ><path
                   d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"

@@ -18,7 +18,7 @@
         <label
           for="name"
           data-i18n="contact.labelName"
-          class="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-studio-flame-light transition-colors"
+          class="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-ember-400 transition-colors"
           >Name</label
         >
         <input
@@ -28,10 +28,10 @@
           data-i18n="contact.placeholderName"
           data-i18n-attr="placeholder"
           :class="[
-            'w-full bg-studio-bg border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300',
+            'w-full bg-ash-950 border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300',
             errors.name
               ? 'border-red-500 focus:ring-red-500/50'
-              : 'border-white/10 focus:border-studio-flame-light focus:ring-studio-flame-light/30 hover:border-white/30',
+              : 'border-white/10 focus:border-ember-400 focus:ring-ember-400/30 hover:border-white/30',
           ]"
           placeholder="Jane Doe"
         />
@@ -47,7 +47,7 @@
         <label
           for="email"
           data-i18n="contact.labelEmail"
-          class="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-studio-flame-light transition-colors"
+          class="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-ember-400 transition-colors"
           >Email</label
         >
         <input
@@ -58,10 +58,10 @@
           data-i18n="contact.placeholderEmail"
           data-i18n-attr="placeholder"
           :class="[
-            'w-full bg-studio-bg border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300',
+            'w-full bg-ash-950 border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300',
             errors.email
               ? 'border-red-500 focus:ring-red-500/50'
-              : 'border-white/10 focus:border-studio-flame-light focus:ring-studio-flame-light/30 hover:border-white/30',
+              : 'border-white/10 focus:border-ember-400 focus:ring-ember-400/30 hover:border-white/30',
           ]"
           placeholder="jane@example.com"
         />
@@ -78,7 +78,7 @@
       <label
         for="subject"
         data-i18n="contact.labelSubject"
-        class="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-studio-flame-light transition-colors"
+        class="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-ember-400 transition-colors"
         >Subject</label
       >
       <input
@@ -88,10 +88,10 @@
         data-i18n="contact.placeholderSubject"
         data-i18n-attr="placeholder"
         :class="[
-          'w-full bg-studio-bg border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300',
+          'w-full bg-ash-950 border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300',
           errors.subject
             ? 'border-red-500 focus:ring-red-500/50'
-            : 'border-white/10 focus:border-studio-flame-light focus:ring-studio-flame-light/30 hover:border-white/30',
+            : 'border-white/10 focus:border-ember-400 focus:ring-ember-400/30 hover:border-white/30',
         ]"
         placeholder="Game Partnership Inquiry"
       />
@@ -107,7 +107,7 @@
       <label
         for="message"
         data-i18n="contact.labelMessage"
-        class="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-studio-flame-light transition-colors"
+        class="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-ember-400 transition-colors"
         >Message</label
       >
       <textarea
@@ -118,10 +118,10 @@
         data-i18n="contact.placeholderMessage"
         data-i18n-attr="placeholder"
         :class="[
-          'w-full bg-studio-bg border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300 resize-none',
+          'w-full bg-ash-950 border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300 resize-none',
           errors.message
             ? 'border-red-500 focus:ring-red-500/50'
-            : 'border-white/10 focus:border-studio-flame-light focus:ring-studio-flame-light/30 hover:border-white/30',
+            : 'border-white/10 focus:border-ember-400 focus:ring-ember-400/30 hover:border-white/30',
         ]"
         placeholder="Tell us about your next big idea..."
       ></textarea>
@@ -144,7 +144,7 @@
     <button
       type="submit"
       :disabled="!turnstileToken && !isBotDetected || isSubmitting"
-      class="w-full md:w-auto px-10 py-4 bg-linear-to-r from-studio-flame-mid to-studio-flame-dark hover:from-studio-flame-light hover:to-studio-flame-mid text-white font-bold rounded-xl transition-all duration-400 transform hover:scale-[1.02] shadow-[0_0_20px_rgba(255,91,13,0.3)] hover:shadow-[0_0_35px_rgba(255,91,13,0.5)] mt-4 flex items-center justify-center gap-3 mx-auto disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+      class="w-full md:w-auto px-10 py-4 bg-linear-to-r from-ember-500 to-ember-700 hover:from-ember-400 hover:to-ember-500 text-white font-bold rounded-xl transition-all duration-400 transform hover:scale-[1.02] shadow-[0_0_20px_rgba(255,91,13,0.3)] hover:shadow-[0_0_35px_rgba(255,91,13,0.5)] mt-4 flex items-center justify-center gap-3 mx-auto disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
     >
       <span v-if="!isSubmitting" data-i18n="contact.submitButton" class="tracking-widest uppercase text-sm">Ignite Conversation</span>
       <span v-else class="tracking-widest uppercase text-sm">Sending...</span>

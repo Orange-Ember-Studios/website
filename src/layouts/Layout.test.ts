@@ -66,4 +66,17 @@ describe("Root Layout (OpenGraph Tags)", () => {
     const jsonLdExists = result.includes('type="application/ld+json"');
     expect(jsonLdExists).toBe(true);
   });
+
+  it("should include View Transitions (ClientRouter) support", async () => {
+    const result = await container.renderToString(Layout, {
+      props: {
+        title: "Test Studio",
+      },
+    });
+
+    // ClientRouter (ViewTransitions) in Astro usually injects specific scripts or data attributes
+    // We expect it to be present in the layout
+    const hasViewTransitions = result.includes('name="astro-view-transitions-enabled"');
+    expect(hasViewTransitions).toBe(true);
+  });
 });

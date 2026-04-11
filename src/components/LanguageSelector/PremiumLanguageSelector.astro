@@ -1,0 +1,54 @@
+---
+// src/components/LanguageSelector/PremiumLanguageSelector.astro
+import PremiumSelect from "../ui/PremiumSelect.astro";
+import { 
+  getSupportedLanguages, 
+  getCurrentLanguage 
+} from "../../i18n/i18n";
+
+const { lang: propLang } = Astro.props;
+const supportedLanguages = getSupportedLanguages();
+const currentLang = propLang || getCurrentLanguage();
+
+const langOptions = supportedLanguages.map(lang => ({
+  id: lang.code,
+  label: lang.label,
+  // We can add colors or icons here if we want premium flags/dots
+  color: lang.code === 'en' ? 'bg-blue-500' : lang.code === 'es' ? 'bg-red-500' : 'bg-white/20'
+}));
+
+const currentLangLabel = supportedLanguages.find(l => l.code === currentLang)?.label || "English";
+---
+
+<div id="premium-lang-selector-wrapper">
+  <PremiumSelect
+    id="lang-selector"
+    options={langOptions}
+    isMultiple={false}
+    initialValues={[currentLang]}
+    defaultLabel={currentLangLabel}
+    variant="navbar"
+    containerId="nav-lang-selector"
+  />
+</div>
+
+<script>
+  import { setLanguage, translateAll } from "../../i18n/i18n";
+
+  const setupLangSelector = () => {
+    const container = document.getElementById('nav-lang-selector');
+    
+    container?.addEventListener('change', (e: any) => {
+      const { values } = e.detail;
+      const newLang = values[0];
+      
+      if (newLang) {
+        setLanguage(newLang, true);
+      }
+    });
+  };
+
+  // Run initialization
+  setupLangSelector();
+  document.addEventListener('astro:page-load', setupLangSelector);
+</script>

@@ -100,6 +100,29 @@
     "showing": "Affichage :",
     "posts": "Articles",
     "newest": "Les plus récents",
-    "oldest": "Les plus anciens"
+    "oldest": "Les plus anciens",
+    "allTopics": "Tous les Sujets"
+  },
+  "tag": {
+    "GameDev": "Dév de Jeux",
+    "Godot": "Godot",
+    "Exact Slice": "Exact Slice",
+    "Pizza": "Pizza",
+    "Immersion": "Immersion",
+    "Inverse Pulse": "Inverse Pulse",
+    "Future": "Futur",
+    "Design": "Design",
+    "Technology": "Technologie",
+    "Studio": "Studio",
+    "Founding": "Fondation",
+    "Story": "Histoire",
+    "Postmortem": "Postmortem",
+    "TechStack": "TechStack"
+  },
+  "error404": {
+    "title": "404 - Page non trouvée",
+    "message": "Il semble que votre étincelle vous ait mené au vide.",
+    "description": "La page que vous recherchez a peut-être été déplacée, supprimée ou n'a jamais existé dans cette dimension.",
+    "backHome": "Retour à la réalité"
   }
 }

@@ -1,27 +1,65 @@
 @import "tailwindcss";
 
 @theme {
-  /* Colors extracted from the branding image */
-  --color-studio-bg: #18191f; /* The dark dotted background */
-  --color-studio-shield: #2d2b64; /* Deep purple/indigo shield border */
-  --color-studio-flame-light: #ff9c2a; /* Top flame tip */
-  --color-studio-flame-mid: #ff5b0d; /* Mid flame */
-  --color-studio-flame-dark: #b01b11; /* Base flame red */
+  /* 
+    ORANGE EMBER STUDIOS - STANDARD PALETTE
+    Using OKLCH for perceptual uniformity and high contrast.
+  */
+
+  /* Brand Primary: EMBER (Orange) */
+  --color-ember-50: oklch(0.97 0.02 45);
+  --color-ember-100: oklch(0.92 0.05 45);
+  --color-ember-200: oklch(0.85 0.12 45);
+  --color-ember-300: oklch(0.78 0.18 45);
+  --color-ember-400: oklch(0.7 0.23 45);
+  --color-ember-500: oklch(0.65 0.26 45); /* Core Ember Orange */
+  --color-ember-600: oklch(0.58 0.24 45);
+  --color-ember-700: oklch(0.48 0.21 45);
+  --color-ember-800: oklch(0.38 0.15 45);
+  --color-ember-900: oklch(0.25 0.1 45);
+  --color-ember-950: oklch(0.15 0.05 45);
+
+  /* Brand Secondary: VOID (Purple/Indigo) */
+  --color-void-50: oklch(0.97 0.02 270);
+  --color-void-100: oklch(0.92 0.05 270);
+  --color-void-200: oklch(0.85 0.12 270);
+  --color-void-300: oklch(0.7 0.18 270);
+  --color-void-400: oklch(0.55 0.2 270);
+  --color-void-500: oklch(0.4 0.22 270); /* Core Shield Indigo */
+  --color-void-600: oklch(0.35 0.18 270);
+  --color-void-700: oklch(0.28 0.15 270);
+  --color-void-800: oklch(0.22 0.1 270);
+  --color-void-900: oklch(0.15 0.08 270);
+  --color-void-950: oklch(0.1 0.05 270);
+
+  /* Brand Neutrals: ASH (Greys/Dark) */
+  --color-ash-50: oklch(0.98 0.01 260);
+  --color-ash-100: oklch(0.94 0.02 260);
+  --color-ash-200: oklch(0.88 0.03 260);
+  --color-ash-300: oklch(0.8 0.04 260);
+  --color-ash-400: oklch(0.7 0.05 260);
+  --color-ash-500: oklch(0.6 0.05 260);
+  --color-ash-600: oklch(0.5 0.05 260);
+  --color-ash-700: oklch(0.4 0.05 260);
+  --color-ash-800: oklch(0.3 0.04 260);
+  --color-ash-900: oklch(0.18 0.03 260); /* Studio BG depth */
+  --color-ash-950: oklch(0.12 0.02 260); /* Pure Void depth */
 }
 
 /* Orange Ember Global Variables and Resets */
 :root {
-  --bg-color: var(--color-studio-bg);
-  --text-main: #f3f4f6;
+  --bg-color: var(--color-ash-950);
+  --text-main: var(--color-ash-100);
+  --text-muted: var(--color-ash-400);
 }
 
 body {
   background-color: var(--bg-color);
   color: var(--text-main);
-  /* The default font will be handled by Tailwind, but let's ensure smooth rendering */
+  /* Ensure smooth rendering for premium typography */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Adding a subtle gradient to mimic the premium backdrop of the image */
-  background-image: radial-gradient(circle at center, #242631 0%, var(--color-studio-bg) 100%);
+  /* Premium backdrop with standardized Ash colors */
+  background-image: radial-gradient(circle at center, var(--color-ash-900) 0%, var(--color-ash-950) 100%);
   background-attachment: fixed;
 }

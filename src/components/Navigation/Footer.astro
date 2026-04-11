@@ -1,6 +1,7 @@
 ---
 // src/components/Navigation/Footer.astro
 import { SOCIAL_URLS } from "../../constants/urls";
+const { lang = Astro.params.lang || 'en' } = Astro.props;
 ---
 
 <footer
@@ -8,7 +9,7 @@ import { SOCIAL_URLS } from "../../constants/urls";
 >
   {/* Subtle decorative glow */}
   <div
-    class="absolute left-1/2 bottom-0 -translate-x-1/2 w-full h-64 bg-studio-shield/5 rounded-full blur-[120px] pointer-events-none"
+    class="absolute left-1/2 bottom-0 -translate-x-1/2 w-full h-64 bg-void-500/5 rounded-full blur-[120px] pointer-events-none"
   >
   </div>
 
@@ -16,7 +17,7 @@ import { SOCIAL_URLS } from "../../constants/urls";
     <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
       {/* Brand Column */}
       <div class="col-span-1 md:col-span-2">
-        <a href="/" class="flex items-center gap-3 group mb-6">
+        <a href={`/${lang}/`} class="flex items-center gap-3 group mb-6">
           <div class="w-10 h-10 relative">
             <img
               src="/Shield.svg"
@@ -25,7 +26,7 @@ import { SOCIAL_URLS } from "../../constants/urls";
             />
           </div>
           <span class="text-white font-bold text-xl tracking-tight">
-            Orange <span class="text-studio-flame-light">Ember</span>
+            Orange <span class="text-ember-400">Ember</span>
           </span>
         </a>
         <p
@@ -40,7 +41,7 @@ import { SOCIAL_URLS } from "../../constants/urls";
             href={SOCIAL_URLS.TWITTER_X}
             target="_blank"
             rel="noopener noreferrer"
-            class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-studio-flame-light hover:border-studio-flame-mid/50 transition-all duration-300"
+            class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-ember-400 hover:border-ember-500/50 transition-all duration-300"
             aria-label="Twitter"
           >
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"
@@ -53,7 +54,7 @@ import { SOCIAL_URLS } from "../../constants/urls";
             href={SOCIAL_URLS.GITHUB}
             target="_blank"
             rel="noopener noreferrer"
-            class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-studio-flame-light hover:border-studio-flame-mid/50 transition-all duration-300"
+            class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-ember-400 hover:border-ember-500/50 transition-all duration-300"
             aria-label="GitHub"
           >
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"
@@ -73,29 +74,29 @@ import { SOCIAL_URLS } from "../../constants/urls";
         <ul class="space-y-4">
           <li>
             <a
-              href="#portfolio"
-              class="text-gray-400 hover:text-studio-flame-light transition-colors text-base"
+              href={`/${lang}/#portfolio`}
+              class="text-gray-400 hover:text-ember-400 transition-colors text-base"
               data-i18n="nav.portfolio">Portfolio</a
             >
           </li>
           <li>
             <a
-              href="#services"
-              class="text-gray-400 hover:text-studio-flame-light transition-colors text-base"
+              href={`/${lang}/#services`}
+              class="text-gray-400 hover:text-ember-400 transition-colors text-base"
               data-i18n="nav.services">Services</a
             >
           </li>
           <li>
             <a
-              href="#about"
-              class="text-gray-400 hover:text-studio-flame-light transition-colors text-base"
+              href={`/${lang}/#about`}
+              class="text-gray-400 hover:text-ember-400 transition-colors text-base"
               data-i18n="nav.about">About</a
             >
           </li>
           <li>
             <a
-              href="#contact"
-              class="text-gray-400 hover:text-studio-flame-light transition-colors text-base"
+              href={`/${lang}/#contact`}
+              class="text-gray-400 hover:text-ember-400 transition-colors text-base"
               data-i18n="nav.workWithUs">Work with us</a
             >
           </li>
@@ -110,8 +111,8 @@ import { SOCIAL_URLS } from "../../constants/urls";
         <ul class="space-y-4">
           <li>
             <a
-              href="/privacy"
-              class="text-gray-400 hover:text-studio-flame-light transition-colors text-base"
+              href={`/${lang}/privacy`}
+              class="text-gray-400 hover:text-ember-400 transition-colors text-base"
               data-i18n="privacy.title">Privacy Policy</a
             >
           </li>
@@ -127,7 +128,7 @@ import { SOCIAL_URLS } from "../../constants/urls";
         &copy; {new Date().getFullYear()} Orange Ember Studios. All rights reserved.
       </p>
       <div class="flex items-center gap-2">
-        <span class="w-1.5 h-1.5 rounded-full bg-studio-flame-mid animate-pulse"
+        <span class="w-1.5 h-1.5 rounded-full bg-ember-500 animate-pulse"
         ></span>
         <span class="text-gray-500 text-sm tracking-wide uppercase"
           >Igniting Ideas since 2026</span

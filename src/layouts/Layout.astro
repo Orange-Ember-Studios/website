@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { ClientRouter } from "astro:transitions";
 import { API_URLS, SITE_URLS, SOCIAL_URLS, EXTERNAL_URLS } from "../constants/urls";
 
 interface Props {
@@ -13,6 +14,8 @@ const {
   description = "Orange Ember Studios. Crafting extraordinary digital experiences. We forge premium video games, web, and mobile applications.",
   image = "/Shield.svg", // Using the Shield as fallback OpenGraph image
 } = Astro.props;
+
+const lang = Astro.locals.lang || "en";
 
 const organizationSchema = {
   "@context": EXTERNAL_URLS.SCHEMA_ORG,
@@ -36,7 +39,7 @@ const websiteSchema = {
 ---
 
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang={lang} class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta 
@@ -111,7 +114,9 @@ const websiteSchema = {
     <!-- Initialize i18n -->
     <script>
       import { initI18n } from "../i18n/i18n";
-      initI18n();
+      document.addEventListener("astro:page-load", () => {
+        initI18n();
+      });
     </script>
 
     <!-- CSP and Policies for Turnstile and external services -->
@@ -120,6 +125,7 @@ const websiteSchema = {
 
     <!-- Cloudflare Turnstile -->
     <script src={API_URLS.TURNSTILE_SCRIPT} async defer></script>
+    <ClientRouter />
   </head>
   <body
     class="bg-[#0b0f19] text-[#f3f4f6] font-['Outfit',sans-serif] antialiased selection:bg-orange-500/30 selection:text-orange-200"

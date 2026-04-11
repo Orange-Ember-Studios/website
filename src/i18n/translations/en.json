@@ -100,6 +100,29 @@
     "showing": "Showing:",
     "posts": "Posts",
     "newest": "Newest First",
-    "oldest": "Oldest First"
+    "oldest": "Oldest First",
+    "allTopics": "All Topics"
+  },
+  "tag": {
+    "GameDev": "GameDev",
+    "Godot": "Godot",
+    "Exact Slice": "Exact Slice",
+    "Pizza": "Pizza",
+    "Immersion": "Immersion",
+    "Inverse Pulse": "Inverse Pulse",
+    "Future": "Future",
+    "Design": "Design",
+    "Technology": "Technology",
+    "Studio": "Studio",
+    "Founding": "Founding",
+    "Story": "Story",
+    "Postmortem": "Postmortem",
+    "TechStack": "TechStack"
+  },
+  "error404": {
+    "title": "404 - Page Not Found",
+    "message": "It seems your spark led you to a void.",
+    "description": "The page you are looking for might have been moved, deleted, or never existed in this dimension.",
+    "backHome": "Back to Reality"
   }
 }
