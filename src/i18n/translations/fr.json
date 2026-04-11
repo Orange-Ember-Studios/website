@@ -3,6 +3,7 @@
     "portfolio": "Portfolio",
     "services": "Services",
     "about": "À propos",
+    "blog": "Blog",
     "workWithUs": "Travaillez avec nous"
   },
   "hero": {
@@ -60,7 +61,7 @@
     "tagline": "Prêt à Construire ?",
     "title": "Allons",
     "titleHighlight": "Connecter",
-    "description": "Que vous ayez un prototype de jeu, une idée d'application, ou que vous vouliez simplement dire bonjour, nous sommes à l'écoute. Envoyez-nous un message ci-dessous.",
+    "description": "Que vous ayez un prototype de juego, una idea d'application, ou que vous vouliez simplement dire bonjour, nous sommes à l'écoute. Envoyez-nous un message ci-dessous.",
     "labelName": "Nom",
     "labelEmail": "Email",
     "labelSubject": "Sujet",
@@ -84,7 +85,7 @@
     "dataCollectionDesc": "Nous ne collectons que les informations que vous nous fournissez volontairement via nos formulaires de contact, telles que votre nom et votre adresse e-mail. Nous utilisons ces informations uniquement pour communiquer avec vous concernant vos demandes.",
     "cookiesTitle": "Cookies",
     "cookiesDesc": "Notre site web utilise des cookies essentiels pour assurer son bon fonctionnement et améliorer votre expérience d'utilisateur. Nous n'utilisons pas de cookies de suivi à des fins publicitaires.",
-    "securityTitle": "Sécurité",
+    "securityTitle": "Security",
     "securityDesc": "Nous mettons en œuvre des mesures de sécurité conformes aux normes de l'industrie, y compris la protection Cloudflare, pour protéger vos données contre tout accès non autorisé.",
     "contactTitle": "Contactez-nous",
     "contactDesc": "Si vous avez des questions sur cette politique de confidentialité, veuillez nous contacter à privacy@orangeember.com."
@@ -92,5 +93,9 @@
   "meta": {
     "title": "Orange Ember - Studio de Jeux et Applications",
     "description": "Orange Ember Studios. Créer des expériences numériques extraordinaires. Nous forgeons des jeux vidéo premium, des applications web et mobiles."
+  },
+  "blog": {
+    "noPostsTitle": "Aucun article trouvé",
+    "noPostsDesc": "Nous n'avons pas encore publié d'histoires dans cette langue. Restez à l'écoute !"
   }
 }

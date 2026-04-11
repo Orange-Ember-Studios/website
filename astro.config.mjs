@@ -7,6 +7,8 @@ import vue from '@astrojs/vue';
 
 import cloudflare from '@astrojs/cloudflare';
 
+import mdx from '@astrojs/mdx';
+
 // https://astro.build/config
 export default defineConfig({
   output: 'server',
@@ -15,6 +17,6 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
 
-  integrations: [vue(), sitemap()],
+  integrations: [vue(), mdx(), sitemap()],
   adapter: process.env.VITEST ? undefined : cloudflare(),
 });

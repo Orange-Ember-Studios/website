@@ -3,6 +3,7 @@
     "portfolio": "Portfolio",
     "services": "Services",
     "about": "About",
+    "blog": "Blog",
     "workWithUs": "Work with us"
   },
   "hero": {
@@ -92,5 +93,9 @@
   "meta": {
     "title": "Orange Ember - Game & App Studios",
     "description": "Orange Ember Studios. Crafting extraordinary digital experiences. We forge premium video games, web, and mobile applications."
+  },
+  "blog": {
+    "noPostsTitle": "No posts found",
+    "noPostsDesc": "We haven't published any stories in this language yet. Stay tuned!"
   }
 }

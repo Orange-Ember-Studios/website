@@ -34,12 +34,57 @@ import {
   type SupportedLanguage 
 } from '../../i18n/i18n';
 
+const getInitialLanguage = (): SupportedLanguage => {
+  if (typeof window !== "undefined") {
+    const path = window.location.pathname;
+    if (path.startsWith("/blog/es/")) return "es";
+    if (path.startsWith("/blog/fr/")) return "fr";
+  }
+  return getCurrentLanguage();
+};
+
 const supportedLanguages = getSupportedLanguages();
-const selectedLanguage = ref<SupportedLanguage>(getCurrentLanguage());
+const selectedLanguage = ref<SupportedLanguage>(getInitialLanguage());
 
 const onLanguageChange = () => {
-  setLanguage(selectedLanguage.value);
+  const newLang = selectedLanguage.value;
+  setLanguage(newLang);
   translateAll();
+
+  // Blog post redirection logic to sync with selected language
+  if (typeof window !== 'undefined') {
+    const currentPath = window.location.pathname;
+    // Check if we are on a blog post (not just the index)
+    if (currentPath.startsWith('/blog/') && currentPath !== '/blog' && currentPath !== '/blog/') {
+      const segments = currentPath.split('/').filter(s => s.length > 0);
+      
+      // Supported translation prefixes (excluding default English)
+      const langPrefixes = ['es', 'fr'];
+      let baseSlug = '';
+
+      if (langPrefixes.includes(segments[1])) {
+        // We are already on a translated post, get the base slug
+        baseSlug = segments.slice(2).join('/');
+      } else {
+        // We are on an English post (no prefix)
+        baseSlug = segments.slice(1).join('/');
+      }
+
+      // Build the new localized path
+      let newPath = '/blog';
+      if (newLang !== 'en') {
+        newPath += `/${newLang}`;
+      }
+      if (baseSlug) {
+        newPath += `/${baseSlug}`;
+      }
+
+      // Only redirect if the path changed and is not the same
+      if (newPath !== currentPath && newPath !== '/blog' && newPath !== '/blog/') {
+        window.location.href = newPath;
+      }
+    }
+  }
 };
 </script>
 
