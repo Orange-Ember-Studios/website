@@ -44,6 +44,15 @@
   --color-ash-800: oklch(0.3 0.04 260);
   --color-ash-900: oklch(0.18 0.03 260); /* Studio BG depth */
   --color-ash-950: oklch(0.12 0.02 260); /* Pure Void depth */
+
+  /* Expanded Brand Palette: PERCEPTUALLY UNIFORM COLORS */
+  --color-emerald-500: oklch(0.65 0.2 160);
+  --color-sky-500: oklch(0.65 0.2 240);
+  --color-rose-500: oklch(0.65 0.2 10);
+  --color-amber-500: oklch(0.75 0.2 75);
+  --color-violet-500: oklch(0.6 0.2 300);
+  --color-teal-500: oklch(0.65 0.2 180);
+  --color-pink-500: oklch(0.65 0.2 330);
 }
 
 /* Orange Ember Global Variables and Resets */

@@ -27,6 +27,13 @@ const allTags = [
   ...new Set(posts.flatMap((post) => post.data.tags || [])),
 ].sort();
 
+import {
+  tagTranslations,
+  tagColors,
+  getTagStyle,
+  getTagColor,
+} from "./tagMetadata";
+
 const getPostLang = (id: string) => {
   if (id.startsWith("es/")) return "es";
   if (id.startsWith("fr/")) return "fr";
@@ -35,76 +42,27 @@ const getPostLang = (id: string) => {
 
 // Tag ID to Language mapping for dynamic filtering
 const tagsByLang = {
-  en: [...new Set(allPosts.filter(p => getPostLang(p.id) === 'en').flatMap(p => p.data.tags || []))],
-  es: [...new Set(allPosts.filter(p => getPostLang(p.id) === 'es').flatMap(p => p.data.tags || []))],
-  fr: [...new Set(allPosts.filter(p => getPostLang(p.id) === 'fr').flatMap(p => p.data.tags || []))],
-};
-
-// Tag Localization Map
-const tagTranslations: Record<string, Record<string, string>> = {
-  en: {
-    Immersion: "Immersion",
-    Postmortem: "Postmortem",
-    "Inverse Pulse": "Inverse Pulse",
-    "Exact Slice": "Exact Slice",
-    GameDev: "GameDev",
-    Godot: "Godot",
-    Pizza: "Pizza",
-    Future: "Future",
-    Gaming: "Gaming",
-    Technology: "Technology",
-    Design: "Design",
-    Masterpieces: "Masterpieces",
-    Studio: "Studio",
-  },
-  es: {
-    Immersion: "Inmersión",
-    Postmortem: "Postmortem",
-    "Inverse Pulse": "Inverse Pulse",
-    "Exact Slice": "Exact Slice",
-    GameDev: "Desarrollo",
-    Godot: "Godot",
-    Pizza: "Pizza",
-    Future: "Futuro",
-    Gaming: "Gaming",
-    Technology: "Tecnología",
-    Design: "Diseño",
-    Masterpieces: "Obras Maestras",
-    Studio: "Estudio",
-  },
-  fr: {
-    Immersion: "Immersion",
-    Postmortem: "Postmortem",
-    "Inverse Pulse": "Inverse Pulse",
-    "Exact Slice": "Exact Slice",
-    GameDev: "Dév de Jeux",
-    Godot: "Godot",
-    Pizza: "Pizza",
-    Future: "Futur",
-    Gaming: "Gaming",
-    Technology: "Technologie",
-    Design: "Design",
-    Masterpieces: "Chefs-d'œuvre",
-    Studio: "Studio",
-  },
-};
-
-const tagColors: Record<string, string> = {
-  GameDev: "bg-blue-500",
-  Godot: "bg-purple-500",
-  "Exact Slice": "bg-orange-500",
-  Pizza: "bg-red-500",
-  Immersion: "bg-emerald-500",
-  "Inverse Pulse": "bg-pink-500",
-  Future: "bg-cyan-500",
-  Design: "bg-amber-500",
-  Technology: "bg-indigo-500",
-  Studio: "bg-rose-500",
-};
-
-const getTagStyle = (tag: string) => {
-  const color = tagColors[tag] || "bg-white/20";
-  return `text-[10px] font-bold uppercase tracking-widest py-1 px-3 border border-white/10 rounded-full ${color.replace("bg-", "text-").replace("500", "400")} ${color}/10 hover:border-${color.replace("bg-", "")}/50`;
+  en: [
+    ...new Set(
+      allPosts
+        .filter((p) => getPostLang(p.id) === "en")
+        .flatMap((p) => p.data.tags || []),
+    ),
+  ],
+  es: [
+    ...new Set(
+      allPosts
+        .filter((p) => getPostLang(p.id) === "es")
+        .flatMap((p) => p.data.tags || []),
+    ),
+  ],
+  fr: [
+    ...new Set(
+      allPosts
+        .filter((p) => getPostLang(p.id) === "fr")
+        .flatMap((p) => p.data.tags || []),
+    ),
+  ],
 };
 
 const tagOptions = [
@@ -112,7 +70,7 @@ const tagOptions = [
   ...allTags.map((tag) => ({
     id: tag,
     label: tag,
-    color: tagColors[tag] || "bg-white/20",
+    color: getTagColor(tag),
     i18nKey: `tag.${tag}`,
   })),
 ];
@@ -225,13 +183,13 @@ const sortOptions = [
           >
             {post.data.image && (
               <div class="aspect-16/10 overflow-hidden">
-                  <img
-                    src={post.data.image}
-                    alt={post.data.title}
-                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    transition:name={`image-${post.id}`}
-                  />
-                </div>
+                <img
+                  src={post.data.image}
+                  alt={post.data.title}
+                  class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  transition:name={`image-${post.id}`}
+                />
+              </div>
             )}
 
             <div class="p-8">
@@ -332,164 +290,168 @@ const sortOptions = [
 
   document.addEventListener("astro:page-load", () => {
     let selectedTags = new Set<string>();
-  const metadata = document.getElementById("blog-metadata");
-  const tagTranslations = metadata
-    ? JSON.parse(metadata.getAttribute("data-translations") || "{}")
-    : {};
-  const tagsByLang = metadata
-    ? JSON.parse(metadata.getAttribute("data-tags-by-lang") || "{}")
-    : {};
+    const metadata = document.getElementById("blog-metadata");
+    const tagTranslations = metadata
+      ? JSON.parse(metadata.getAttribute("data-translations") || "{}")
+      : {};
+    const tagsByLang = metadata
+      ? JSON.parse(metadata.getAttribute("data-tags-by-lang") || "{}")
+      : {};
 
-  const tagFilterContainer = document.getElementById("tag-filter-container");
-  const sortFilterContainer = document.getElementById("sort-filter-container");
-
-  const translateTags = () => {
-    const lang = getCurrentLanguage();
-
-    // Translate tags inside posts
-    const tagElements = document.querySelectorAll("[data-tag-id]");
-    tagElements.forEach((el) => {
-      const tagId = el.getAttribute("data-tag-id");
-      if (tagId && tagTranslations[lang] && tagTranslations[lang][tagId]) {
-        el.textContent = tagTranslations[lang][tagId];
-      }
-    });
-
-    updateTagVisibility();
-    updateTagLabels();
-  };
-
-  const updateTagLabels = () => {
-    const lang = getCurrentLanguage();
-    const triggerLabel = tagFilterContainer?.querySelector(".selected-label");
-
-    if (selectedTags.size === 0 || selectedTags.has("all")) {
-      if (triggerLabel) triggerLabel.textContent = getTranslation("blog.allTopics") || "All Topics";
-    } else if (selectedTags.size === 1) {
-      const tagID = Array.from(selectedTags)[0];
-      if (triggerLabel)
-        triggerLabel.textContent =
-          (tagTranslations[lang] && tagTranslations[lang][tagID]) || tagID;
-    } else {
-      const selectedText = {
-        en: "Selected",
-        es: "Seleccionados",
-        fr: "Sélectionnés"
-      };
-      if (triggerLabel)
-        triggerLabel.textContent = `${selectedTags.size} ${selectedText[lang] || selectedText.en}`;
-    }
-
-    // Update individual option labels in dropdown
-    const options = tagFilterContainer?.querySelectorAll(
-      ".option-btn span[data-tag-id]",
+    const tagFilterContainer = document.getElementById("tag-filter-container");
+    const sortFilterContainer = document.getElementById(
+      "sort-filter-container",
     );
-    options?.forEach((opt) => {
-      const id = opt.getAttribute("data-tag-id");
-      if (id && tagTranslations[lang] && tagTranslations[lang][id]) {
-        opt.textContent = tagTranslations[lang][id];
-      }
-    });
-  };
 
-  const updateTagVisibility = () => {
-    const lang = getCurrentLanguage();
-    const currentLangTags = tagsByLang[lang] || [];
+    const translateTags = () => {
+      const lang = getCurrentLanguage();
 
-    const tagOptionBtns = tagFilterContainer?.querySelectorAll(
-      '.option-btn[data-value]:not([data-value="all"])',
-    );
-    tagOptionBtns?.forEach((btn) => {
-      const tag = btn.getAttribute("data-value");
-      if (tag && currentLangTags.includes(tag)) {
-        (btn as HTMLElement).style.display = "flex";
-      } else {
-        (btn as HTMLElement).style.display = "none";
-        if (tag && selectedTags.has(tag)) {
-          selectedTags.delete(tag);
+      // Translate tags inside posts
+      const tagElements = document.querySelectorAll("[data-tag-id]");
+      tagElements.forEach((el) => {
+        const tagId = el.getAttribute("data-tag-id");
+        if (tagId && tagTranslations[lang] && tagTranslations[lang][tagId]) {
+          el.textContent = tagTranslations[lang][tagId];
         }
-      }
-    });
+      });
 
-    const separator = tagFilterContainer?.querySelector(
-      ".separator",
-    ) as HTMLElement;
-    if (separator) {
-      separator.style.display = currentLangTags.length > 0 ? "block" : "none";
-    }
-  };
+      updateTagVisibility();
+      updateTagLabels();
+    };
 
-  const filterPosts = () => {
-    const currentLang = getCurrentLanguage();
-    const posts = document.querySelectorAll("[data-post-lang]");
-    const emptyState = document.getElementById("blog-empty-state");
-    const postsCount = document.getElementById("posts-count");
-    let visibleCount = 0;
+    const updateTagLabels = () => {
+      const lang = getCurrentLanguage();
+      const triggerLabel = tagFilterContainer?.querySelector(".selected-label");
 
-    posts.forEach((post) => {
-      const postLang = post.getAttribute("data-post-lang");
-      const postTags = post.getAttribute("data-tags")?.split(",") || [];
-
-      const langMatch = postLang === currentLang;
-      const tagMatch =
-        selectedTags.size === 0 ||
-        selectedTags.has("all") ||
-        Array.from(selectedTags).some((t) => postTags.includes(t));
-
-      if (langMatch && tagMatch) {
-        (post as HTMLElement).classList.remove("hidden");
-        (post as HTMLElement).classList.add("block");
-        visibleCount++;
+      if (selectedTags.size === 0 || selectedTags.has("all")) {
+        if (triggerLabel)
+          triggerLabel.textContent =
+            getTranslation("blog.allTopics") || "All Topics";
+      } else if (selectedTags.size === 1) {
+        const tagID = Array.from(selectedTags)[0];
+        if (triggerLabel)
+          triggerLabel.textContent =
+            (tagTranslations[lang] && tagTranslations[lang][tagID]) || tagID;
       } else {
-        (post as HTMLElement).classList.remove("block");
-        (post as HTMLElement).classList.add("hidden");
+        const selectedText = {
+          en: "Selected",
+          es: "Seleccionados",
+          fr: "Sélectionnés",
+        };
+        if (triggerLabel)
+          triggerLabel.textContent = `${selectedTags.size} ${selectedText[lang] || selectedText.en}`;
+      }
+
+      // Update individual option labels in dropdown
+      const options = tagFilterContainer?.querySelectorAll(
+        ".option-btn span[data-tag-id]",
+      );
+      options?.forEach((opt) => {
+        const id = opt.getAttribute("data-tag-id");
+        if (id && tagTranslations[lang] && tagTranslations[lang][id]) {
+          opt.textContent = tagTranslations[lang][id];
+        }
+      });
+    };
+
+    const updateTagVisibility = () => {
+      const lang = getCurrentLanguage();
+      const currentLangTags = tagsByLang[lang] || [];
+
+      const tagOptionBtns = tagFilterContainer?.querySelectorAll(
+        '.option-btn[data-value]:not([data-value="all"])',
+      );
+      tagOptionBtns?.forEach((btn) => {
+        const tag = btn.getAttribute("data-value");
+        if (tag && currentLangTags.includes(tag)) {
+          (btn as HTMLElement).style.display = "flex";
+        } else {
+          (btn as HTMLElement).style.display = "none";
+          if (tag && selectedTags.has(tag)) {
+            selectedTags.delete(tag);
+          }
+        }
+      });
+
+      const separator = tagFilterContainer?.querySelector(
+        ".separator",
+      ) as HTMLElement;
+      if (separator) {
+        separator.style.display = currentLangTags.length > 0 ? "block" : "none";
+      }
+    };
+
+    const filterPosts = () => {
+      const currentLang = getCurrentLanguage();
+      const posts = document.querySelectorAll("[data-post-lang]");
+      const emptyState = document.getElementById("blog-empty-state");
+      const postsCount = document.getElementById("posts-count");
+      let visibleCount = 0;
+
+      posts.forEach((post) => {
+        const postLang = post.getAttribute("data-post-lang");
+        const postTags = post.getAttribute("data-tags")?.split(",") || [];
+
+        const langMatch = postLang === currentLang;
+        const tagMatch =
+          selectedTags.size === 0 ||
+          selectedTags.has("all") ||
+          Array.from(selectedTags).some((t) => postTags.includes(t));
+
+        if (langMatch && tagMatch) {
+          (post as HTMLElement).classList.remove("hidden");
+          (post as HTMLElement).classList.add("block");
+          visibleCount++;
+        } else {
+          (post as HTMLElement).classList.remove("block");
+          (post as HTMLElement).classList.add("hidden");
+        }
+      });
+
+      if (postsCount) postsCount.textContent = visibleCount.toString();
+
+      if (visibleCount === 0) {
+        emptyState?.classList.remove("hidden");
+        emptyState?.classList.add("flex");
+      } else {
+        emptyState?.classList.remove("flex");
+        emptyState?.classList.add("hidden");
+      }
+    };
+
+    // Listen to PremiumSelect events
+    tagFilterContainer?.addEventListener("change", (e: any) => {
+      const { values } = e.detail;
+      selectedTags = new Set(values);
+      updateTagLabels();
+      filterPosts();
+    });
+
+    sortFilterContainer?.addEventListener("change", (e: any) => {
+      const { values } = e.detail;
+      const sortVal = values[0];
+      if (sortVal) {
+        const url = new URL(window.location.href);
+        url.searchParams.set("sort", sortVal);
+        window.location.href = url.toString();
       }
     });
 
-    if (postsCount) postsCount.textContent = visibleCount.toString();
-
-    if (visibleCount === 0) {
-      emptyState?.classList.remove("hidden");
-      emptyState?.classList.add("flex");
-    } else {
-      emptyState?.classList.remove("flex");
-      emptyState?.classList.add("hidden");
-    }
-  };
-
-  // Listen to PremiumSelect events
-  tagFilterContainer?.addEventListener("change", (e: any) => {
-    const { values } = e.detail;
-    selectedTags = new Set(values);
-    updateTagLabels();
+    // Run on initial load
+    translateTags();
     filterPosts();
-  });
 
-  sortFilterContainer?.addEventListener("change", (e: any) => {
-    const { values } = e.detail;
-    const sortVal = values[0];
-    if (sortVal) {
-      const url = new URL(window.location.href);
-      url.searchParams.set("sort", sortVal);
-      window.location.href = url.toString();
-    }
-  });
-
-  // Run on initial load
-  translateTags();
-  filterPosts();
-
-  // Listen for language changes
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      if (mutation.attributeName === "lang") {
-        translateTags();
-        filterPosts();
-      }
+    // Listen for language changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === "lang") {
+          translateTags();
+          filterPosts();
+        }
+      });
     });
-  });
 
-  observer.observe(document.documentElement, { attributes: true });
+    observer.observe(document.documentElement, { attributes: true });
 
     document.addEventListener("change", (e) => {
       const target = e.target as HTMLSelectElement;

@@ -3,6 +3,7 @@ import Layout from "./Layout.astro";
 import Navbar from "../components/Navigation/Navbar.astro";
 import Footer from "../components/Navigation/Footer.astro";
 import { SOCIAL_URLS } from "../constants/urls";
+import { getTagStyle } from "../components/blog/tagMetadata";
 
 interface Props {
   frontmatter: {
@@ -65,7 +66,7 @@ const lang = Astro.locals.lang || "en";
         tags && (
           <div class="flex flex-wrap gap-2 mb-6">
             {tags.map((tag) => (
-              <span class="px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-lg bg-orange-500/10 text-orange-400 border border-orange-500/20">
+              <span class={getTagStyle(tag)}>
                 {tag}
               </span>
             ))}
