@@ -1,0 +1,46 @@
+---
+title: "Exact Slice: The Art of Precision Slicing"
+description: "Discover how we are developing Exact Slice, a game where pizza-cutting accuracy isn't just a mechanic—it's a geometric challenge."
+pubDate: "2026-04-11"
+author: "Jose Joya"
+tags: ["GameDev", "Godot", "Exact Slice", "Pizza"]
+image: "/blog/exact-slice-accuracy.png"
+---
+
+## Slicing for the Perfect Percentage
+
+At **Orange Ember Studios**, we always look for mechanics that seem simple at first glance but hide technical and addictive depth. This is how **Exact Slice** was born—our latest project developed in Godot 4.6.
+
+The premise is straightforward: you have a pizza, and you must cut it to get a specific percentage. Sounds easy? Try getting a perfect 12.5% with a single stroke while the timer is ticking.
+
+## The Geometric Challenge in Godot 4.6
+
+From a development standpoint, creating a robust 2D slicing system required advanced polygon handling. We used `Polygon2D` and `CollisionPolygon2D` to represent the pizzas, allowing each player's stroke to recalculate the resulting shapes in real-time.
+
+### Powered by Jolt Physics
+
+Although Exact Slice is primarily a 2D experience, we've integrated **Jolt Physics** to manage area detections and collisions with millimeter precision. This ensures that no matter how complex the cutting angle, the engine responds flawlessly.
+
+## Variety and Customization: The Skins
+
+A pizza game wouldn't be complete without a good variety of toppings. We've implemented a robust economy and customization system that allows players to unlock different styles:
+- **Cosmic:** A pizza dusted with stardust.
+- **Royal:** For the most sophisticated tastes, with golden crusts.
+- **Frozen:** Straight from the freezer, with frosty visual effects.
+
+Each skin is more than just a texture swap; thanks to our custom shader system and circular masks, the visual feedback when slicing feels unique for every style.
+
+## Polish and Game Feel
+
+To make the game feel *Premium*, we focused heavily on micro-animations. When you make a cut:
+1. The pieces smoothly separate with a **Tween** effect.
+2. A bright flash highlights the cut line.
+3. The percentage is calculated and displayed with clean, vibrant typography.
+
+It's that combination of mathematical precision and visual satisfaction that defines the **Exact Slice** experience.
+
+## Coming Soon
+
+We are in the final stages of polishing, refining the integration with **Google Play Game Services** so you can compete on global leaderboards and unlock achievements for your surgical precision.
+
+Get ready to sharpen your skills and prove you are the ultimate pizza master in **Exact Slice**!

@@ -1,0 +1,46 @@
+---
+title: "Exact Slice: El Arte de la Precisión en un Cuchillo"
+description: "Descubre cómo estamos desarrollando Exact Slice, un juego donde la exactitud al cortar pizzas no es solo una mecánica, sino un desafío geométrico."
+pubDate: "2026-04-11"
+author: "Jose Joya"
+tags: ["GameDev", "Godot", "Exact Slice", "Pizza"]
+image: "/blog/exact-slice-accuracy.png"
+---
+
+## Cortar por el Porcentaje Perfecto
+
+En **Orange Ember Studios**, siempre buscamos mecánicas que parezcan simples a primera vista pero que escondan una profundidad técnica y adictiva. Así nace **Exact Slice**, nuestro proyecto más reciente desarrollado en Godot 4.6.
+
+La premisa es sencilla: tienes una pizza y debes cortarla para obtener un porcentaje específico. ¿Suena fácil? Intenta sacar un 12.5% perfecto con un solo trazo mientras el cronómetro corre.
+
+## El Desafío Geométrico en Godot 4.6
+
+Desde el punto de vista del desarrollo, crear un sistema de corte robusto en 2D requirió un manejo avanzado de polígonos. Utilizamos `Polygon2D` y `CollisionPolygon2D` para representar las pizzas, permitiendo que cada tajo del jugador recalcule en tiempo real las nuevas formas resultantes.
+
+### Potenciado por Jolt Physics
+
+Aunque Exact Slice es principalmente una experiencia 2D, hemos integrado **Jolt Physics** para gestionar las detecciones de área y colisiones con una precisión milimétrica. Esto nos permite asegurar que, sin importar cuán complejo sea el ángulo de corte, el motor responda de manera impecable.
+
+## Variedad y Personalización: Las "Skins"
+
+Un juego sobre pizzas no estaría completo sin una buena variedad de ingredientes. Hemos implementado un robusto sistema de economía y personalización que permite a los jugadores desbloquear diferentes estilos:
+- **Cósmica:** Una pizza bañada en polvo de estrellas.
+- **Real:** Para los gustos más sofisticados, con bordes dorados.
+- **Gélida:** Directamente sacada del congelador, con efectos visuales de escarcha.
+
+Cada skin no es solo un cambio de textura; gracias a nuestro sistema de shaders personalizados y máscaras circulares, la retroalimentación visual al cortar se siente única para cada estilo.
+
+## Pulido y Sensación de Juego (Game Feel)
+
+Para que el juego se sienta *Premium*, nos enfocamos mucho en las micro-animaciones. Cuando realizas un corte:
+1. Las piezas se separan suavemente con un efecto de **Tween**.
+2. Un flash brillante resalta la línea de corte.
+3. Se calcula el porcentaje y se muestra con una tipografía limpia y vibrante.
+
+Es esa combinación de precisión matemática y satisfacción visual lo que define la experiencia de **Exact Slice**.
+
+## Próximamente
+
+Estamos en las etapas finales de pulido, refinando la integración con **Google Play Game Services** para que puedas competir en tablas de clasificación mundiales y desbloquear logros por tu precisión quirúrgica.
+
+¡Prepárate para afilar tus habilidades y demostrar que eres el maestro pizzero definitivo en **Exact Slice**!
