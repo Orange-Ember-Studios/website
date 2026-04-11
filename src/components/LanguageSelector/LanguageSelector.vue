@@ -11,7 +11,7 @@
         v-for="lang in supportedLanguages" 
         :key="lang.code" 
         :value="lang.code"
-        class="bg-[#18191f] text-white"
+        class="bg-studio-bg text-white"
       >
         {{ lang.label }}
       </option>
