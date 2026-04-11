@@ -96,6 +96,10 @@
   },
   "blog": {
     "noPostsTitle": "Aucun article trouvé",
-    "noPostsDesc": "Nous n'avons pas encore publié d'histoires dans cette langue. Restez à l'écoute !"
+    "noPostsDesc": "Nous n'avons pas encore publié d'histoires dans cette langue. Restez à l'écoute !",
+    "showing": "Affichage :",
+    "posts": "Articles",
+    "newest": "Les plus récents",
+    "oldest": "Les plus anciens"
   }
 }

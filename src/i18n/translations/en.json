@@ -96,6 +96,10 @@
   },
   "blog": {
     "noPostsTitle": "No posts found",
-    "noPostsDesc": "We haven't published any stories in this language yet. Stay tuned!"
+    "noPostsDesc": "We haven't published any stories in this language yet. Stay tuned!",
+    "showing": "Showing:",
+    "posts": "Posts",
+    "newest": "Newest First",
+    "oldest": "Oldest First"
   }
 }

@@ -4,14 +4,19 @@ import Layout from "../../layouts/Layout.astro";
 import Navbar from "../../components/Navigation/Navbar.astro";
 import Footer from "../../components/Navigation/Footer.astro";
 
-const posts = (await getCollection("blog")).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+const sortOrder = Astro.url.searchParams.get("sort") || "desc";
+
+const posts = (await getCollection("blog")).sort((a, b) => {
+  if (sortOrder === "asc") {
+    return a.data.pubDate.valueOf() - b.data.pubDate.valueOf();
+  }
+  return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+});
 
 const getPostLang = (id: string) => {
-  if (id.startsWith('es/')) return 'es';
-  if (id.startsWith('fr/')) return 'fr';
-  return 'en';
+  if (id.startsWith("es/")) return "es";
+  if (id.startsWith("fr/")) return "fr";
+  return "en";
 };
 ---
 
@@ -36,6 +41,30 @@ const getPostLang = (id: string) => {
         of digital experiences.
       </p>
     </header>
+
+    <div class="flex flex-col sm:flex-row justify-between items-center mb-12 gap-6 animate-fade-in" style="animation-delay: 200ms">
+      <div class="flex items-center space-x-2 text-gray-400">
+        <span class="text-sm font-medium uppercase tracking-widest" data-i18n="blog.showing">Showing:</span>
+        <span id="posts-count" class="text-white font-bold text-lg">0</span>
+        <span class="text-sm font-medium uppercase tracking-widest" data-i18n="blog.posts">Posts</span>
+      </div>
+
+      <div class="relative group">
+        <label for="sort-select" class="sr-only">Sort by date</label>
+        <select
+          id="sort-select"
+          class="appearance-none bg-white/5 border border-white/10 rounded-xl px-6 py-3 pr-12 text-sm font-bold text-white focus:outline-none focus:ring-2 focus:ring-orange-500/30 hover:bg-white/10 transition-all cursor-pointer shadow-lg"
+        >
+          <option value="desc" selected={sortOrder === "desc"} data-i18n="blog.newest">Newest First</option>
+          <option value="asc" selected={sortOrder === "asc"} data-i18n="blog.oldest">Oldest First</option>
+        </select>
+        <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-orange-500">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </div>
+    </div>
 
     <div 
       id="posts-grid"
@@ -132,6 +161,7 @@ const getPostLang = (id: string) => {
     const currentLang = getCurrentLanguage();
     const posts = document.querySelectorAll('[data-post-lang]');
     const emptyState = document.getElementById('blog-empty-state');
+    const postsCount = document.getElementById('posts-count');
     let visibleCount = 0;
 
     posts.forEach(post => {
@@ -146,6 +176,8 @@ const getPostLang = (id: string) => {
       }
     });
 
+    if (postsCount) postsCount.textContent = visibleCount.toString();
+
     if (visibleCount === 0) {
       emptyState?.classList.remove('hidden');
       emptyState?.classList.add('flex');
@@ -157,6 +189,14 @@ const getPostLang = (id: string) => {
 
   // Run on initial load
   filterPosts();
+
+  // Handle Sort Change
+  const sortSelect = document.getElementById('sort-select') as HTMLSelectElement;
+  sortSelect?.addEventListener('change', () => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('sort', sortSelect.value);
+    window.location.href = url.toString();
+  });
 
   // Listen for language changes via the global translateAll trigger or select change
   // We can also use a MutationObserver on documentElement.lang if preferred

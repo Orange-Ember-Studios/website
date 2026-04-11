@@ -96,6 +96,10 @@
   },
   "blog": {
     "noPostsTitle": "No se encontraron entradas",
-    "noPostsDesc": "Aún no hemos publicado historias en este idioma. ¡Mantente atento!"
+    "noPostsDesc": "Aún no hemos publicado historias en este idioma. ¡Mantente atento!",
+    "showing": "Mostrando:",
+    "posts": "Entradas",
+    "newest": "Más recientes primero",
+    "oldest": "Más antiguas primero"
   }
 }
