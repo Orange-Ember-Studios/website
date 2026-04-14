@@ -24,8 +24,13 @@ if (!post) {
 }
 
 const { Content } = await render(post);
+
+// Calculate reading time
+const wordsPerMinute = 200;
+const words = post.body ? post.body.split(/\s+/g).length : 0;
+const readingTime = Math.ceil(words / wordsPerMinute);
 ---
 
-<BlogLayout frontmatter={post.data} postId={post.id}>
+<BlogLayout frontmatter={post.data} postId={post.id} readingTime={readingTime}>
   <Content />
 </BlogLayout>

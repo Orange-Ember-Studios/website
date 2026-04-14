@@ -84,8 +84,8 @@ const sortOptions = [
 ---
 
 <Layout
-  title="Blog | Orange Ember Studios"
-  description="Insights, news, and stories from the forge of Orange Ember Studios."
+  title={`${getTranslation("blog.indexTitlePrefix", lang as any)}${getTranslation("blog.indexTitleHighlight", lang as any)}${getTranslation("blog.indexTitleSuffix", lang as any)} | Orange Ember Studios`}
+  description={getTranslation("blog.indexDescription", lang as any)}
 >
   <Navbar />
 

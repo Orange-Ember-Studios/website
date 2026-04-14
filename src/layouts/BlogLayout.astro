@@ -16,9 +16,10 @@ interface Props {
     tags?: string[];
   };
   postId: string;
+  readingTime?: number;
 }
 
-const { frontmatter, postId } = Astro.props;
+const { frontmatter, postId, readingTime = 5 } = Astro.props;
 const { title, description, pubDate, author, image, tags } = frontmatter;
 
 const lang = Astro.locals.lang || "en";
@@ -112,12 +113,12 @@ const formattedDate = new Date(pubDate).toLocaleDateString(
               stroke-width="2"
               d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
           </svg>
-          <span data-i18n="post.estReadTime"
-            >{getTranslation("post.estReadTime", lang as any).replace(
+          <span>
+            {getTranslation("post.estReadTime", lang as any).replace(
               "{time}",
-              "6",
-            )}</span
-          >
+              readingTime.toString(),
+            )}
+          </span>
         </div>
       </div>
     </header>

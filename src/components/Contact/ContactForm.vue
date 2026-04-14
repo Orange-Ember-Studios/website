@@ -147,7 +147,7 @@
       class="w-full md:w-auto px-10 py-4 bg-linear-to-r from-ember-500 to-ember-700 hover:from-ember-400 hover:to-ember-500 text-white font-bold rounded-xl transition-all duration-400 transform hover:scale-[1.02] shadow-[0_0_20px_rgba(255,91,13,0.3)] hover:shadow-[0_0_35px_rgba(255,91,13,0.5)] mt-4 flex items-center justify-center gap-3 mx-auto disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
     >
       <span v-if="!isSubmitting" data-i18n="contact.submitButton" class="tracking-widest uppercase text-sm">Ignite Conversation</span>
-      <span v-else class="tracking-widest uppercase text-sm">Sending...</span>
+      <span v-else data-i18n="contact.sending" class="tracking-widest uppercase text-sm">Sending...</span>
       <svg
         v-if="!isSubmitting"
         class="w-5 h-5 transition-transform group-hover:translate-x-1"
@@ -205,6 +205,7 @@
 <script setup>
 import { reactive, ref, onMounted, onBeforeUnmount } from "vue";
 import { API_URLS } from "../../constants/urls";
+import { getTranslation } from "../../i18n/i18n";
 
 const address_ext = ref("");
 const turnstileToken = ref("");
@@ -283,7 +284,7 @@ const validate = () => {
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (form.email && !emailPattern.test(form.email)) {
     errors.email = true;
-    errorMsg.value = "Invalid email address";
+    errorMsg.value = getTranslation("contact.invalidEmail");
     isValid = false;
   }
 
@@ -312,7 +313,7 @@ const submitForm = async () => {
   // Ensure Turnstile is verified
   if (!turnstileToken.value) {
     console.warn("Turnstile verification missing.");
-    errorMsg.value = "Please complete the security check.";
+    errorMsg.value = getTranslation("contact.securityCheck");
     return;
   }
 
@@ -333,7 +334,7 @@ const submitForm = async () => {
     const result = await response.json();
 
     if (response.ok) {
-      successMsg.value = "Your spark has been sent! We'll be in touch soon.";
+      successMsg.value = getTranslation("contact.successMessage");
       // Reset form
       Object.keys(form).forEach((k) => (form[k] = ""));
       // Reset turnstile
@@ -342,11 +343,11 @@ const submitForm = async () => {
         turnstileToken.value = "";
       }
     } else {
-      errorMsg.value = result.error || "Something went wrong. Please try again later.";
+      errorMsg.value = result.error || getTranslation("contact.genericError");
     }
   } catch (error) {
     console.error("Submission error:", error);
-    errorMsg.value = "Something went wrong. Please try again later.";
+    errorMsg.value = getTranslation("contact.genericError");
   } finally {
     isSubmitting.value = false;
   }
