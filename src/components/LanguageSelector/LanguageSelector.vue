@@ -1,18 +1,9 @@
 <template>
   <div class="relative group">
     <label for="lang-select" class="sr-only">Select Language</label>
-    <select
-      id="lang-select"
-      v-model="selectedLanguage"
-      @change="onLanguageChange"
-      class="appearance-none bg-void-500/20 border border-ember-500/30 rounded-full px-4 py-2 pr-10 text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-ember-400/30 hover:bg-void-500/40 transition-all duration-300 cursor-pointer"
-    >
-      <option 
-        v-for="lang in supportedLanguages" 
-        :key="lang.code" 
-        :value="lang.code"
-        class="bg-ash-950 text-white"
-      >
+    <select id="lang-select" v-model="selectedLanguage" @input="onLanguageChange"
+      class="appearance-none bg-void-500/20 border border-ember-500/30 rounded-full px-4 py-2 pr-10 text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-ember-400/30 hover:bg-void-500/40 transition-all duration-300 cursor-pointer">
+      <option v-for="lang in supportedLanguages" :key="lang.code" :value="lang.code" class="bg-ash-950 text-white">
         {{ lang.label }}
       </option>
     </select>
@@ -26,19 +17,19 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { 
-  getSupportedLanguages, 
-  getCurrentLanguage, 
-  setLanguage, 
+import {
+  getSupportedLanguages,
+  getCurrentLanguage,
+  setLanguage,
   translateAll,
-  type SupportedLanguage 
+  type SupportedLanguage
 } from '../../i18n/i18n';
 
 const getInitialLanguage = (): SupportedLanguage => {
   if (typeof window !== "undefined") {
     const path = window.location.pathname;
-    if (path.startsWith("/blog/es/")) return "es";
-    if (path.startsWith("/blog/fr/")) return "fr";
+    if (path.includes("/es/")) return "es";
+    if (path.startsWith("/fr/")) return "fr";
   }
   return getCurrentLanguage();
 };
@@ -57,7 +48,7 @@ const onLanguageChange = () => {
     // Check if we are on a blog post (not just the index)
     if (currentPath.startsWith('/blog/') && currentPath !== '/blog' && currentPath !== '/blog/') {
       const segments = currentPath.split('/').filter(s => s.length > 0);
-      
+
       // Supported translation prefixes (excluding default English)
       const langPrefixes = ['es', 'fr'];
       let baseSlug = '';

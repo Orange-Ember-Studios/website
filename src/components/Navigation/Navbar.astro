@@ -1,7 +1,7 @@
 ---
 // src/components/Navigation/Navbar.astro
 import PremiumLanguageSelector from "../LanguageSelector/PremiumLanguageSelector.astro";
-const { lang = Astro.params.lang || 'en' } = Astro.props;
+const { lang = Astro.params.lang || "en" } = Astro.props;
 ---
 
 <nav
@@ -57,7 +57,7 @@ const { lang = Astro.params.lang || 'en' } = Astro.props;
       >
         Work with us
       </a>
-      <PremiumLanguageSelector lang={lang} />
+      <PremiumLanguageSelector lang={lang} id="desktop-lang-selector" />
     </div>
 
     {/* Mobile Menu Button ... */}
@@ -83,7 +83,7 @@ const { lang = Astro.params.lang || 'en' } = Astro.props;
       {/* Close Icon (hidden by default) */}
       <svg
         id="close-icon"
-        class="w-8 h-8 transition-transform duration-300 hidden absolute -top-3 -left-6"
+        class="w-8 h-8 transition-transform duration-300 hidden absolute top-0 left-0"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -101,7 +101,7 @@ const { lang = Astro.params.lang || 'en' } = Astro.props;
 {/* Full Screen Mobile Menu Overlay */}
 <div
   id="mobile-menu"
-  class="fixed inset-0 bg-ash-950/95 backdrop-blur-2xl z-40 flex flex-col items-center justify-center translate-x-full transition-transform duration-500 ease-in-out md:hidden text-center"
+  class="fixed inset-0 bg-ash-950/95 backdrop-blur-2xl z-50 flex flex-col items-center justify-center translate-x-full transition-transform duration-500 ease-in-out md:hidden text-center"
 >
   <div class="flex flex-col items-center gap-8">
     <a
@@ -136,7 +136,7 @@ const { lang = Astro.params.lang || 'en' } = Astro.props;
       Work with us
     </a>
     <div class="mt-4">
-      <PremiumLanguageSelector lang={lang} />
+      <PremiumLanguageSelector lang={lang} id="mobile-lang-selector" />
     </div>
   </div>
 </div>
@@ -144,40 +144,40 @@ const { lang = Astro.params.lang || 'en' } = Astro.props;
 <script>
   document.addEventListener("astro:page-load", () => {
     const nav = document.getElementById("main-nav");
-  const mobileBtn = document.getElementById("mobile-menu-btn");
-  const mobileMenu = document.getElementById("mobile-menu");
-  const menuIcon = document.getElementById("menu-icon");
-  const closeIcon = document.getElementById("close-icon");
-  const mobileLinks = document.querySelectorAll(".mobile-link");
+    const mobileBtn = document.getElementById("mobile-menu-btn");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const menuIcon = document.getElementById("menu-icon");
+    const closeIcon = document.getElementById("close-icon");
+    const mobileLinks = document.querySelectorAll(".mobile-link");
 
-  let isMenuOpen = false;
+    let isMenuOpen = false;
 
-  const toggleMenu = () => {
-    isMenuOpen = !isMenuOpen;
-    mobileBtn?.setAttribute("aria-expanded", isMenuOpen.toString());
+    const toggleMenu = () => {
+      isMenuOpen = !isMenuOpen;
+      mobileBtn?.setAttribute("aria-expanded", isMenuOpen.toString());
 
-    if (isMenuOpen) {
-      mobileMenu?.classList.remove("translate-x-full");
-      mobileMenu?.classList.add("translate-x-0");
-      menuIcon?.classList.add("hidden");
-      closeIcon?.classList.remove("hidden");
-      document.body.style.overflow = "hidden"; // Prevent scrolling when open
-    } else {
-      mobileMenu?.classList.remove("translate-x-0");
-      mobileMenu?.classList.add("translate-x-full");
-      menuIcon?.classList.remove("hidden");
-      closeIcon?.classList.add("hidden");
-      document.body.style.overflow = "";
-    }
-  };
+      if (isMenuOpen) {
+        mobileMenu?.classList.remove("translate-x-full");
+        mobileMenu?.classList.add("translate-x-0");
+        menuIcon?.classList.add("hidden");
+        closeIcon?.classList.remove("hidden");
+        document.body.style.overflow = "hidden"; // Prevent scrolling when open
+      } else {
+        mobileMenu?.classList.remove("translate-x-0");
+        mobileMenu?.classList.add("translate-x-full");
+        menuIcon?.classList.remove("hidden");
+        closeIcon?.classList.add("hidden");
+        document.body.style.overflow = "";
+      }
+    };
 
-  mobileBtn?.addEventListener("click", toggleMenu);
+    mobileBtn?.addEventListener("click", toggleMenu);
 
-  mobileLinks.forEach((link) => {
-    link.addEventListener("click", () => {
-      if (isMenuOpen) toggleMenu();
+    mobileLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        if (isMenuOpen) toggleMenu();
+      });
     });
-  });
 
     window.addEventListener("scroll", () => {
       if (window.scrollY > 50) {
