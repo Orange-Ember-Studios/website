@@ -134,7 +134,8 @@
     "Studio": "Studio",
     "Story": "Histoire",
     "Founding": "Fondation",
-    "TechStack": "Stack Technique"
+    "TechStack": "Stack Technique",
+    "Technical": "Technique"
   },
   "error404": {
     "title": "404 - Page non trouvée",

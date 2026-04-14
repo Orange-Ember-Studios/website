@@ -134,7 +134,8 @@
     "Studio": "Studio",
     "Story": "Story",
     "Founding": "Founding",
-    "TechStack": "Tech Stack"
+    "TechStack": "Tech Stack",
+    "Technical": "Technical"
   },
   "error404": {
     "title": "404 - Page Not Found",

@@ -16,6 +16,7 @@ export const tagTranslations: Record<string, Record<string, string>> = {
     Story: "Story",
     Founding: "Founding",
     TechStack: "Tech Stack",
+    Technical: "Technical",
   },
   es: {
     Immersion: "Inmersión",
@@ -34,6 +35,7 @@ export const tagTranslations: Record<string, Record<string, string>> = {
     Story: "Historia",
     Founding: "Fundación",
     TechStack: "Stack Tecnológico",
+    Technical: "Técnico",
   },
   fr: {
     Immersion: "Immersion",
@@ -52,6 +54,7 @@ export const tagTranslations: Record<string, Record<string, string>> = {
     Story: "Histoire",
     Founding: "Fondation",
     TechStack: "Stack Technique",
+    Technical: "Technique",
   },
 };
 
@@ -73,6 +76,7 @@ export const tagColors: Record<string, string> = {
   Story: "bg-teal-500",
   Founding: "bg-sky-500",
   TechStack: "bg-emerald-500",
+  Technical: "bg-purple-500",
 };
 
 // Map of localized names to the background class for lookup
@@ -90,6 +94,8 @@ const tagColorLookup: Record<string, string> = {
   StackTechnique: "bg-emerald-500",
   "Stack Technique": "bg-emerald-500",
   "Dév de Jeux": "bg-blue-500",
+  Técnico: "bg-purple-500",
+  Technique: "bg-purple-500",
 };
 
 export const getTagColor = (tag: string): string => {

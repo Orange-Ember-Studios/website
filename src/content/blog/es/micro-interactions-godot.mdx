@@ -1,0 +1,68 @@
+---
+title: "Detalles Pequeños, Impacto Grande: Micro-Interacciones en Godot"
+description: "Por qué las micro-animaciones y el 'juice' son la diferencia entre un prototipo y un juego premium. Un análisis técnico del desarrollo de Exact Slice."
+pubDate: "2026-04-14"
+author: "Jose Joya"
+tags: ["GameDev", "Godot", "Exact Slice", "Técnico"]
+image: "/blog/micro-interactions-godot.jpg"
+---
+
+## La Filosofía del 'Juice'
+
+En el desarrollo de videojuegos, la diferencia entre una mecánica que "funciona" y una que "se siente bien" se conoce comúnmente como **Juice** (jugo). Mientras que las macro-interacciones definen el gameplay (ej. "corto la pizza"), las micro-interacciones definen la *experiencia* (ej. "la pizza opone resistencia y luego se separa con un destello satisfactorio").
+
+En **Orange Ember Studios**, creemos que estos pequeños detalles son los que elevan un proyecto de un simple MVP a una experiencia de vanguardia.
+
+## ¿Por qué Godot 4?
+
+Para nuestro último proyecto, **Exact Slice**, elegimos Godot 4.6. ¿Por qué? Porque sus sistemas de **AnimationPlayer** y **Tween** se encuentran entre los más amigables para desarrolladores en la industria. Nos permiten iterar en micro-animaciones en cuestión de segundos sin salir del editor.
+
+## Caso de Estudio: Slicing en Exact Slice
+
+Cuando un jugador realiza un corte en Exact Slice, varias cosas suceden simultáneamente para proporcionar feedback táctil:
+
+### 1. La Separación (Tweens)
+En lugar de simplemente teletransportar las dos mitades, usamos un `Tween` para interpolar suavemente su posición y rotación. Esto da la sensación de momentum físico.
+
+```gdscript
+func animate_slice_separation(piece_a: RigidBody2D, piece_b: RigidBody2D, direction: Vector2):
+    var tween = create_tween().set_parallel(true).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+    
+    # Empuja las piezas significativamente una de la otra
+    tween.tween_property(piece_a, "position", piece_a.position - direction * 50, 0.4)
+    tween.tween_property(piece_b, "position", piece_b.position + direction * 50, 0.4)
+    
+    # Añade una ligera rotación aleatoria para personalidad extra
+    tween.tween_property(piece_a, "rotation", piece_a.rotation + randf_range(-0.1, 0.1), 0.4)
+```
+
+### 2. El Pulso Visual (Glow & Flash)
+Un efecto de "destello" resalta la línea de corte. Logramos esto usando un shader simple o aumentando temporalmente el valor de `self_modulate` del sprite.
+
+### 3. Screen Shake & Haptics
+Nada comunica "impacto" como un sutil temblor de cámara. Usamos un nodo `ShakeCamera2D` dedicado que interrumpe el enfoque del jugador lo suficiente para reconocer la acción.
+
+```gdscript
+# Implementación simple de Screen Shake
+var shake_intensity: float = 0.0
+
+func _process(delta):
+    if shake_intensity > 0:
+        offset = Vector2(randf(), randf()) * shake_intensity
+        shake_intensity = lerp(shake_intensity, 0.0, delta * 10.0)
+
+func apply_shake(intensity: float):
+    shake_intensity = intensity
+```
+
+## Cerrando la Brecha
+
+Las micro-interacciones son más que solo "pulido"; son la forma principal de comunicarse con el subconsciente del jugador. En **Exact Slice**, cada porcentaje calculado y cada fragmento visual que vuela es una decisión técnica deliberada para asegurar que el jugador sienta el "snap" de un corte perfecto.
+
+Si eres un desarrollador que busca crear juegos que se sientan "vivos", Godot es tu mejor aliado. Su arquitectura modular te permite construir estos sistemas de feedback una vez y reutilizarlos en todos tus proyectos.
+
+## ¿Listo para Experimentar?
+
+Empieza por lo pequeño. Añade un rebote a tus botones. Añade un congelamiento de 0.1s al impactar. Te sorprenderá cuánto cambian estos detalles "invisibles" tu juego.
+
+¡Mantente atento a más análisis técnicos de nuestro proceso de desarrollo en **Orange Ember Studios**!
