@@ -115,7 +115,10 @@
     "statistics": "Estadísticas",
     "sortResults": "Ordenar por",
     "readStory": "Leer Historia",
-    "selected": "Seleccionados"
+    "selected": "Seleccionados",
+    "loadMore": "Cargar más historias",
+    "showingCount": "Mostrando {visible} de {total} entradas",
+    "allLoaded": "¡Te has puesto al día con todas nuestras historias!"
   },
   "tag": {
     "all": "Todos los Temas",

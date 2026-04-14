@@ -6,7 +6,6 @@ import Footer from "../../components/Navigation/Footer.astro";
 import PremiumSelect from "../../components/ui/PremiumSelect.astro";
 import { getTranslation } from "../../i18n/i18n";
 
-
 const { lang = "en" } = Astro.props;
 
 const allPosts = await getCollection("blog");
@@ -94,13 +93,20 @@ const sortOptions = [
       <h1
         class="text-5xl sm:text-7xl font-extrabold text-white mb-6 tracking-tight"
       >
-        <span data-i18n="blog.indexTitlePrefix">{getTranslation("blog.indexTitlePrefix", lang as any)}</span><span
+        <span data-i18n="blog.indexTitlePrefix"
+          >{getTranslation("blog.indexTitlePrefix", lang as any)}</span
+        ><span
           class="text-transparent bg-clip-text bg-linear-to-r from-orange-500 to-red-600"
           data-i18n="blog.indexTitleHighlight"
           >{getTranslation("blog.indexTitleHighlight", lang as any)}</span
-        ><span data-i18n="blog.indexTitleSuffix">{getTranslation("blog.indexTitleSuffix", lang as any)}</span>
+        ><span data-i18n="blog.indexTitleSuffix"
+          >{getTranslation("blog.indexTitleSuffix", lang as any)}</span
+        >
       </h1>
-      <p class="text-xl text-gray-400 max-w-2xl mx-auto" data-i18n="blog.indexDescription">
+      <p
+        class="text-xl text-gray-400 max-w-2xl mx-auto"
+        data-i18n="blog.indexDescription"
+      >
         {getTranslation("blog.indexDescription", lang as any)}
       </p>
     </header>
@@ -158,7 +164,9 @@ const sortOptions = [
           isMultiple={false}
           initialValues={[sortOrder]}
           defaultLabel={sortOrder === "desc" ? "Newest First" : "Oldest First"}
-          defaultLabelI18n={sortOrder === "desc" ? "blog.newest" : "blog.oldest"}
+          defaultLabelI18n={sortOrder === "desc"
+            ? "blog.newest"
+            : "blog.oldest"}
           class="w-full sm:w-64"
           containerId="sort-filter-container"
         />
@@ -179,13 +187,12 @@ const sortOptions = [
       class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
     >
       {
-        posts.map((post, index) => (
+        posts.map((post) => (
           <a
             href={`/${lang}/blog/${post.id.replace(`${lang}/`, "")}`}
             data-post-lang={getPostLang(post.id)}
             data-tags={post.data.tags?.join(",")}
             class="hidden group relative bg-white/5 border border-white/10 rounded-[2.5rem] overflow-hidden hover:border-orange-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_-12px_rgba(249,115,22,0.2)]"
-            style={`animation-delay: ${index * 100}ms`}
           >
             {post.data.image && (
               <div class="aspect-16/10 overflow-hidden">
@@ -206,11 +213,14 @@ const sortOptions = [
                   </span>
                 ))}
                 <span class="text-xs text-gray-500 ml-auto">
-                  {post.data.pubDate.toLocaleDateString(lang === "en" ? "en-US" : (lang === "es" ? "es-ES" : "fr-FR"), {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })}
+                  {post.data.pubDate.toLocaleDateString(
+                    lang === "en" ? "en-US" : lang === "es" ? "es-ES" : "fr-FR",
+                    {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    },
+                  )}
                 </span>
               </div>
 
@@ -226,7 +236,9 @@ const sortOptions = [
               </p>
 
               <div class="flex items-center text-white font-bold text-sm group-hover:translate-x-1 transition-transform">
-                <span data-i18n="blog.readStory">{getTranslation("blog.readStory", lang as any)}</span>
+                <span data-i18n="blog.readStory">
+                  {getTranslation("blog.readStory", lang as any)}
+                </span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="h-4 w-4 ml-2 text-orange-500"
@@ -248,7 +260,7 @@ const sortOptions = [
       }
     </div>
 
-    {/* Empty State */}
+    <!-- Empty State -->
     <div
       id="blog-empty-state"
       class="hidden flex-col items-center justify-center py-20 text-center"
@@ -286,6 +298,74 @@ const sortOptions = [
         We haven't published any stories with these criteria yet. Stay tuned!
       </p>
     </div>
+
+    <!-- Pagination / Progressive Loading UI -->
+    <div
+      id="blog-pagination"
+      class="mt-20 flex-col items-center animate-fade-in hidden"
+      style="animation-delay: 400ms;"
+    >
+      <div class="mb-8 flex flex-col items-center w-full max-w-xs">
+        <div class="flex justify-between w-full mb-3 px-1">
+          <span
+            class="text-[10px] uppercase tracking-[0.2em] font-black text-white/40"
+            id="pagination-status"
+          >
+            {
+              getTranslation("blog.showingCount", lang as any)
+                .replace("{visible}", "0")
+                .replace("{total}", "0")
+            }
+          </span>
+        </div>
+        <div
+          class="w-full h-1 bg-white/5 rounded-full overflow-hidden border border-white/5"
+        >
+          <div
+            id="pagination-progress"
+            class="h-full bg-linear-to-r from-orange-500 to-red-600 transition-all duration-700 ease-out"
+            style="width: 0%"
+          >
+          </div>
+        </div>
+      </div>
+
+      <button
+        id="load-more-btn"
+        class="group relative px-10 py-5 bg-white/5 border border-white/10 rounded-2xl text-white font-black uppercase tracking-[0.2em] text-xs hover:bg-orange-500 hover:border-orange-500 transition-all duration-500 hover:shadow-[0_0_40px_rgba(249,115,22,0.4)] active:scale-95 cursor-pointer overflow-hidden"
+      >
+        <span class="relative z-10 flex items-center">
+          <span data-i18n="blog.loadMore"
+            >{getTranslation("blog.loadMore", lang as any)}</span
+          >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4 ml-3 transition-transform duration-500 group-hover:rotate-90"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="3"
+              d="M12 4v16m8-8H4"></path>
+          </svg>
+        </span>
+        <div
+          class="absolute inset-0 bg-linear-to-r from-orange-600 to-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        >
+        </div>
+      </button>
+
+      <p
+        id="all-loaded-msg"
+        class="hidden text-gray-500 text-sm font-medium italic"
+        data-i18n="blog.allLoaded"
+      >
+        {getTranslation("blog.allLoaded", lang as any)}
+      </p>
+    </div>
   </main>
 
   <Footer />
@@ -295,23 +375,24 @@ const sortOptions = [
   import { getCurrentLanguage, getTranslation } from "../../i18n/i18n";
 
   document.addEventListener("astro:page-load", () => {
+    const DEFAULT_PAGE_SIZE = 9;
+    let visibleLimit = DEFAULT_PAGE_SIZE;
     let selectedTags = new Set<string>();
     const metadata = document.getElementById("blog-metadata");
-    const tagTranslations = metadata
-      ? JSON.parse(metadata.getAttribute("data-translations") || "{}")
-      : {};
     const tagsByLang = metadata
       ? JSON.parse(metadata.getAttribute("data-tags-by-lang") || "{}")
       : {};
-
     const tagFilterContainer = document.getElementById("tag-filter-container");
     const sortFilterContainer = document.getElementById(
       "sort-filter-container",
     );
+    const loadMoreBtn = document.getElementById("load-more-btn");
+    const paginationContainer = document.getElementById("blog-pagination");
+    const paginationProgress = document.getElementById("pagination-progress");
+    const paginationStatus = document.getElementById("pagination-status");
+    const allLoadedMsg = document.getElementById("all-loaded-msg");
 
     const translateTags = () => {
-      const lang = getCurrentLanguage();
-
       // Translate tags inside posts
       const tagElements = document.querySelectorAll("[data-tag-id]");
       tagElements.forEach((el) => {
@@ -323,10 +404,30 @@ const sortOptions = [
 
       updateTagVisibility();
       updateTagLabels();
+      updatePaginationLabels();
+    };
+
+    const updatePaginationLabels = () => {
+      if (paginationStatus) {
+        const visibleDisplay =
+          paginationStatus.getAttribute("data-visible") || "0";
+        const totalDisplay = paginationStatus.getAttribute("data-total") || "0";
+        paginationStatus.textContent = getTranslation("blog.showingCount")
+          .replace("{visible}", visibleDisplay)
+          .replace("{total}", totalDisplay);
+      }
+
+      const loadMoreText = loadMoreBtn?.querySelector(
+        "[data-i18n='blog.loadMore']",
+      );
+      if (loadMoreText)
+        loadMoreText.textContent = getTranslation("blog.loadMore");
+
+      if (allLoadedMsg)
+        allLoadedMsg.textContent = getTranslation("blog.allLoaded");
     };
 
     const updateTagLabels = () => {
-      const lang = getCurrentLanguage();
       const triggerLabel = tagFilterContainer?.querySelector(".selected-label");
 
       if (selectedTags.size === 0 || selectedTags.has("all")) {
@@ -381,13 +482,17 @@ const sortOptions = [
       }
     };
 
-    const filterPosts = () => {
+    const filterPosts = (isLoadMore = false) => {
       const currentLang = getCurrentLanguage();
       const posts = document.querySelectorAll("[data-post-lang]");
       const emptyState = document.getElementById("blog-empty-state");
       const postsCount = document.getElementById("posts-count");
-      let visibleCount = 0;
 
+      let totalMatching = 0;
+      let visibleInFilter = 0;
+
+      // First pass: identify matching posts
+      const matchingPosts: HTMLElement[] = [];
       posts.forEach((post) => {
         const postLang = post.getAttribute("data-post-lang");
         const postTags = post.getAttribute("data-tags")?.split(",") || [];
@@ -399,18 +504,78 @@ const sortOptions = [
           Array.from(selectedTags).some((t) => postTags.includes(t));
 
         if (langMatch && tagMatch) {
-          (post as HTMLElement).classList.remove("hidden");
-          (post as HTMLElement).classList.add("block");
-          visibleCount++;
+          matchingPosts.push(post as HTMLElement);
+          totalMatching++;
         } else {
           (post as HTMLElement).classList.remove("block");
           (post as HTMLElement).classList.add("hidden");
+          (post as HTMLElement).style.opacity = "0";
+          (post as HTMLElement).style.transform = "translateY(20px)";
         }
       });
 
-      if (postsCount) postsCount.textContent = visibleCount.toString();
+      // Second pass: apply visibility limit
+      matchingPosts.forEach((post, index) => {
+        if (index < visibleLimit) {
+          const isNewlyVisible = post.classList.contains("hidden");
+          post.classList.remove("hidden");
+          post.classList.add("block");
+          visibleInFilter++;
 
-      if (visibleCount === 0) {
+          // Apply staggered animation for newly revealed posts or on load
+          if (isNewlyVisible || !isLoadMore) {
+            const staggerDelay = (index % DEFAULT_PAGE_SIZE) * 100;
+            setTimeout(() => {
+              post.style.transition = "all 0.6s cubic-bezier(0.16, 1, 0.3, 1)";
+              post.style.opacity = "1";
+              post.style.transform = "translateY(0)";
+            }, staggerDelay);
+          } else {
+            post.style.opacity = "1";
+            post.style.transform = "translateY(0)";
+          }
+        } else {
+          post.classList.remove("block");
+          post.classList.add("hidden");
+        }
+      });
+
+      // Update Counts & Stats
+      if (postsCount) postsCount.textContent = totalMatching.toString();
+
+      // Update Pagination UI
+      if (totalMatching > 0) {
+        paginationContainer?.classList.remove("hidden");
+        paginationContainer?.classList.add("flex");
+
+        if (visibleInFilter < totalMatching) {
+          loadMoreBtn?.classList.remove("hidden");
+          allLoadedMsg?.classList.add("hidden");
+        } else {
+          loadMoreBtn?.classList.add("hidden");
+          allLoadedMsg?.classList.remove("hidden");
+        }
+
+        // Update Progress Bar
+        const percentage = Math.round((visibleInFilter / totalMatching) * 100);
+        if (paginationProgress)
+          paginationProgress.style.width = `${percentage}%`;
+
+        // Update Status Label
+        if (paginationStatus) {
+          paginationStatus.setAttribute(
+            "data-visible",
+            visibleInFilter.toString(),
+          );
+          paginationStatus.setAttribute("data-total", totalMatching.toString());
+          updatePaginationLabels();
+        }
+      } else {
+        paginationContainer?.classList.remove("flex");
+        paginationContainer?.classList.add("hidden");
+      }
+
+      if (totalMatching === 0) {
         emptyState?.classList.remove("hidden");
         emptyState?.classList.add("flex");
       } else {
@@ -419,10 +584,17 @@ const sortOptions = [
       }
     };
 
+    // Listen to Load More
+    loadMoreBtn?.addEventListener("click", () => {
+      visibleLimit += DEFAULT_PAGE_SIZE;
+      filterPosts(true);
+    });
+
     // Listen to PremiumSelect events
     tagFilterContainer?.addEventListener("change", (e: any) => {
       const { values } = e.detail;
       selectedTags = new Set(values);
+      visibleLimit = DEFAULT_PAGE_SIZE; // Reset limit on filter change
       updateTagLabels();
       filterPosts();
     });

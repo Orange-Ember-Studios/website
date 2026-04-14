@@ -115,7 +115,10 @@
     "statistics": "Statistics",
     "sortResults": "Sort Results",
     "readStory": "Read Story",
-    "selected": "Selected"
+    "selected": "Selected",
+    "loadMore": "Load More Stories",
+    "showingCount": "Showing {visible} of {total} stories",
+    "allLoaded": "You've caught up with all our stories!"
   },
   "tag": {
     "all": "All Topics",
