@@ -101,7 +101,16 @@
     "posts": "Posts",
     "newest": "Newest First",
     "oldest": "Oldest First",
-    "allTopics": "All Topics"
+    "allTopics": "All Topics",
+    "indexTitlePrefix": "The ",
+    "indexTitleHighlight": "Ember",
+    "indexTitleSuffix": " Blog",
+    "indexDescription": "Deep dives into game development, architectural patterns, and the future of digital experiences.",
+    "filterByTopics": "Filter by Topics",
+    "statistics": "Statistics",
+    "sortResults": "Sort Results",
+    "readStory": "Read Story",
+    "selected": "Selected"
   },
   "tag": {
     "GameDev": "GameDev",
@@ -117,12 +126,46 @@
     "Founding": "Founding",
     "Story": "Story",
     "Postmortem": "Postmortem",
-    "TechStack": "TechStack"
+    "TechStack": "Tech Stack",
+    "Gaming": "Gaming",
+    "Masterpieces": "Masterpieces",
+    "Historia": "Story",
+    "Fundación": "Founding",
+    "StackTecnológico": "Tech Stack",
+    "Histoire": "Story",
+    "Fondation": "Founding",
+    "StackTechnique": "Tech Stack",
+    "Desarrollo": "GameDev",
+    "Dév de Jeux": "GameDev",
+    "Inmersión": "Immersion",
+    "Futuro": "Future",
+    "Futur": "Future",
+    "Diseño": "Design",
+    "Tecnología": "Technology",
+    "Technologie": "Technology",
+    "Estudio": "Studio",
+    "Videojuegos": "Gaming",
+    "Jeux Vidéo": "Gaming",
+    "Obras Maestras": "Masterpieces",
+    "Chefs-d'œuvre": "Masterpieces"
   },
   "error404": {
     "title": "404 - Page Not Found",
     "message": "It seems your spark led you to a void.",
     "description": "The page you are looking for might have been moved, deleted, or never existed in this dimension.",
     "backHome": "Back to Reality"
+  },
+  "footer": {
+    "ignitingSince": "Igniting Ideas since 2026",
+    "allRightsReserved": "All rights reserved.",
+    "studio": "Studio",
+    "legal": "Legal"
+  },
+  "post": {
+    "backToBlog": "Back to Blog",
+    "estReadTime": "Est. {time} min read",
+    "enjoyedPost": "Enjoyed this post?",
+    "stayUpdated": "Stay updated with our latest news and game development insights.",
+    "followX": "Follow Us on"
   }
 }

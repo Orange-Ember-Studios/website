@@ -38,6 +38,7 @@
     "titleHighlight": "Forgeons",
     "description": "Nous nous spécialisons dans la création d'expériences interactives de premier plan. De l'adrénaline du gaming à l'utilité fluide des apps modernes.",
     "desktopGamesTitle": "Jeux Vidéo PC",
+    "desktopGamesTitle": "Jeux Vidéo PC",
     "desktopGamesDesc": "Des expériences de jeu captivantes conçues spécifiquement pour les sorties PC et Steam, donnant vie à des mondes créatifs et soignés.",
     "mobileGamesTitle": "Jeux Mobiles",
     "mobileGamesDesc": "Jeux mobiles hautement optimisés pour captiver les joueurs sur appareils Android. (Compatibilité iOS bientôt disponible).",
@@ -101,7 +102,16 @@
     "posts": "Articles",
     "newest": "Les plus récents",
     "oldest": "Les plus anciens",
-    "allTopics": "Tous les Sujets"
+    "allTopics": "Tous les Sujets",
+    "indexTitlePrefix": "Le Blog ",
+    "indexTitleHighlight": "Ember",
+    "indexTitleSuffix": "",
+    "indexDescription": "Plongées approfondies dans le développement de jeux, les modèles architecturaux et l'avenir des expériences numériques.",
+    "filterByTopics": "Filtrer par Sujets",
+    "statistics": "Statistiques",
+    "sortResults": "Trier par",
+    "readStory": "Lire l'histoire",
+    "selected": "Sélectionnés"
   },
   "tag": {
     "GameDev": "Dév de Jeux",
@@ -117,12 +127,46 @@
     "Founding": "Fondation",
     "Story": "Histoire",
     "Postmortem": "Postmortem",
-    "TechStack": "TechStack"
+    "TechStack": "Stack Technique",
+    "Gaming": "Jeux Vidéo",
+    "Masterpieces": "Chefs-d'œuvre",
+    "Historia": "Histoire",
+    "Fundación": "Fondation",
+    "StackTecnológico": "Stack Technique",
+    "Histoire": "Histoire",
+    "Fondation": "Fondation",
+    "StackTechnique": "Stack Technique",
+    "Desarrollo": "Dév de Jeux",
+    "Dév de Jeux": "Dév de Jeux",
+    "Inmersión": "Immersion",
+    "Futuro": "Futur",
+    "Futur": "Futur",
+    "Diseño": "Design",
+    "Tecnología": "Technologie",
+    "Technologie": "Technologie",
+    "Estudio": "Studio",
+    "Videojuegos": "Jeux Vidéo",
+    "Jeux Vidéo": "Jeux Vidéo",
+    "Obras Maestras": "Chefs-d'œuvre",
+    "Chefs-d'œuvre": "Chefs-d'œuvre"
   },
   "error404": {
     "title": "404 - Page non trouvée",
     "message": "Il semble que votre étincelle vous ait mené au vide.",
     "description": "La page que vous recherchez a peut-être été déplacée, supprimée ou n'a jamais existé dans cette dimension.",
     "backHome": "Retour à la réalité"
+  },
+  "footer": {
+    "ignitingSince": "Allumer les idées depuis 2026",
+    "allRightsReserved": "Tous droits réservés.",
+    "studio": "Studio",
+    "legal": "Légal"
+  },
+  "post": {
+    "backToBlog": "Retour au Blog",
+    "estReadTime": "Lecture estimée : {time} min",
+    "enjoyedPost": "Vous avez aimé cet article ?",
+    "stayUpdated": "Restez informé de nos dernières nouvelles et perspectives de développement.",
+    "followX": "Suivez-nous sur"
   }
 }

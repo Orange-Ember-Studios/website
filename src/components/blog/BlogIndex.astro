@@ -4,6 +4,8 @@ import Layout from "../../layouts/Layout.astro";
 import Navbar from "../../components/Navigation/Navbar.astro";
 import Footer from "../../components/Navigation/Footer.astro";
 import PremiumSelect from "../../components/ui/PremiumSelect.astro";
+import { getTranslation } from "../../i18n/i18n";
+
 
 const { lang = "en" } = Astro.props;
 
@@ -92,14 +94,14 @@ const sortOptions = [
       <h1
         class="text-5xl sm:text-7xl font-extrabold text-white mb-6 tracking-tight"
       >
-        The <span
+        <span data-i18n="blog.indexTitlePrefix">{getTranslation("blog.indexTitlePrefix", lang as any)}</span><span
           class="text-transparent bg-clip-text bg-linear-to-r from-orange-500 to-red-600"
-          >Ember</span
-        > Blog
+          data-i18n="blog.indexTitleHighlight"
+          >{getTranslation("blog.indexTitleHighlight", lang as any)}</span
+        ><span data-i18n="blog.indexTitleSuffix">{getTranslation("blog.indexTitleSuffix", lang as any)}</span>
       </h1>
-      <p class="text-xl text-gray-400 max-w-2xl mx-auto">
-        Deep dives into game development, architectural patterns, and the future
-        of digital experiences.
+      <p class="text-xl text-gray-400 max-w-2xl mx-auto" data-i18n="blog.indexDescription">
+        {getTranslation("blog.indexDescription", lang as any)}
       </p>
     </header>
 
@@ -110,7 +112,8 @@ const sortOptions = [
       <!-- Reusable Premium Select for Tags -->
       <PremiumSelect
         id="tag-filter"
-        label="Filter by Topics"
+        label={getTranslation("blog.filterByTopics", lang as any)}
+        labelI18n="blog.filterByTopics"
         options={tagOptions}
         isMultiple={true}
         initialValues={["all"]}
@@ -125,7 +128,8 @@ const sortOptions = [
         <div class="w-full sm:w-auto">
           <label
             class="text-[10px] uppercase tracking-[0.25em] font-black text-white/30 mb-3 block ml-1"
-            >Statistics</label
+            data-i18n="blog.statistics"
+            >{getTranslation("blog.statistics", lang as any)}</label
           >
           <div
             class="flex items-center space-x-3 text-gray-400 bg-white/5 px-6 rounded-2xl border border-white/10 shadow-lg min-h-[60px]"
@@ -148,11 +152,13 @@ const sortOptions = [
         <!-- Reusable Premium Select for Sort -->
         <PremiumSelect
           id="sort-filter"
-          label="Sort Results"
+          label={getTranslation("blog.sortResults", lang as any)}
+          labelI18n="blog.sortResults"
           options={sortOptions}
           isMultiple={false}
           initialValues={[sortOrder]}
           defaultLabel={sortOrder === "desc" ? "Newest First" : "Oldest First"}
+          defaultLabelI18n={sortOrder === "desc" ? "blog.newest" : "blog.oldest"}
           class="w-full sm:w-64"
           containerId="sort-filter-container"
         />
@@ -200,7 +206,7 @@ const sortOptions = [
                   </span>
                 ))}
                 <span class="text-xs text-gray-500 ml-auto">
-                  {post.data.pubDate.toLocaleDateString("en-US", {
+                  {post.data.pubDate.toLocaleDateString(lang === "en" ? "en-US" : (lang === "es" ? "es-ES" : "fr-FR"), {
                     month: "short",
                     day: "numeric",
                     year: "numeric",
@@ -220,7 +226,7 @@ const sortOptions = [
               </p>
 
               <div class="flex items-center text-white font-bold text-sm group-hover:translate-x-1 transition-transform">
-                Read Story
+                <span data-i18n="blog.readStory">{getTranslation("blog.readStory", lang as any)}</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="h-4 w-4 ml-2 text-orange-500"
@@ -310,8 +316,8 @@ const sortOptions = [
       const tagElements = document.querySelectorAll("[data-tag-id]");
       tagElements.forEach((el) => {
         const tagId = el.getAttribute("data-tag-id");
-        if (tagId && tagTranslations[lang] && tagTranslations[lang][tagId]) {
-          el.textContent = tagTranslations[lang][tagId];
+        if (tagId) {
+          el.textContent = getTranslation(`tag.${tagId}`);
         }
       });
 
@@ -330,16 +336,10 @@ const sortOptions = [
       } else if (selectedTags.size === 1) {
         const tagID = Array.from(selectedTags)[0];
         if (triggerLabel)
-          triggerLabel.textContent =
-            (tagTranslations[lang] && tagTranslations[lang][tagID]) || tagID;
+          triggerLabel.textContent = getTranslation(`tag.${tagID}`);
       } else {
-        const selectedText = {
-          en: "Selected",
-          es: "Seleccionados",
-          fr: "Sélectionnés",
-        };
         if (triggerLabel)
-          triggerLabel.textContent = `${selectedTags.size} ${selectedText[lang] || selectedText.en}`;
+          triggerLabel.textContent = `${selectedTags.size} ${getTranslation("blog.selected")}`;
       }
 
       // Update individual option labels in dropdown
@@ -348,8 +348,8 @@ const sortOptions = [
       );
       options?.forEach((opt) => {
         const id = opt.getAttribute("data-tag-id");
-        if (id && tagTranslations[lang] && tagTranslations[lang][id]) {
-          opt.textContent = tagTranslations[lang][id];
+        if (id) {
+          opt.textContent = getTranslation(`tag.${id}`);
         }
       });
     };

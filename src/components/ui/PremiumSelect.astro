@@ -14,6 +14,7 @@ interface Props {
   initialValues?: string | string[];
   defaultLabel?: string;
   defaultLabelI18n?: string;
+  labelI18n?: string;
   class?: string;
   containerId?: string;
   variant?: "default" | "navbar";
@@ -27,6 +28,7 @@ const {
   initialValues = [],
   defaultLabel = "Select option",
   defaultLabelI18n,
+  labelI18n,
   class: className = "",
   containerId = `select-container-${id}`,
   variant = "default",
@@ -50,7 +52,10 @@ const isNavbar = variant === "navbar";
   <div class="relative w-full group">
     {
       label && !isNavbar && (
-        <label class="text-[10px] uppercase tracking-[0.25em] font-black text-white/30 mb-3 block ml-1">
+        <label
+          class="text-[10px] uppercase tracking-[0.25em] font-black text-white/30 mb-3 block ml-1"
+          data-i18n={labelI18n}
+        >
           {label}
         </label>
       )

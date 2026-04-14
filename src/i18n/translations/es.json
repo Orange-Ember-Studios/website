@@ -101,7 +101,16 @@
     "posts": "Entradas",
     "newest": "Más recientes primero",
     "oldest": "Más antiguas primero",
-    "allTopics": "Todos los Temas"
+    "allTopics": "Todos los Temas",
+    "indexTitlePrefix": "El Blog de ",
+    "indexTitleHighlight": "Ember",
+    "indexTitleSuffix": "",
+    "indexDescription": "Inmersiones profundas en el desarrollo de juegos, patrones arquitectónicos y el futuro de las experiencias digitales.",
+    "filterByTopics": "Filtrar por Temas",
+    "statistics": "Estadísticas",
+    "sortResults": "Ordenar por",
+    "readStory": "Leer Historia",
+    "selected": "Seleccionados"
   },
   "tag": {
     "GameDev": "Desarrollo",
@@ -117,12 +126,46 @@
     "Founding": "Fundación",
     "Story": "Historia",
     "Postmortem": "Postmortem",
-    "TechStack": "TechStack"
+    "TechStack": "Stack Tecnológico",
+    "Gaming": "Videojuegos",
+    "Masterpieces": "Obras Maestras",
+    "Historia": "Historia",
+    "Fundación": "Fundación",
+    "StackTecnológico": "Stack Tecnológico",
+    "Histoire": "Historia",
+    "Fondation": "Fundación",
+    "StackTechnique": "Stack Tecnológico",
+    "Desarrollo": "Desarrollo",
+    "Dév de Jeux": "Desarrollo",
+    "Inmersión": "Inmersión",
+    "Futuro": "Futuro",
+    "Futur": "Futuro",
+    "Diseño": "Diseño",
+    "Tecnología": "Tecnología",
+    "Technologie": "Tecnología",
+    "Estudio": "Estudio",
+    "Videojuegos": "Videojuegos",
+    "Jeux Vidéo": "Videojuegos",
+    "Obras Maestras": "Obras Maestras",
+    "Chefs-d'œuvre": "Obras Maestras"
   },
   "error404": {
     "title": "404 - Página no encontrada",
     "message": "Parece que tu chispa te llevó al vacío.",
     "description": "La página que buscas pudo haber sido movida, eliminada o nunca existió en esta dimensión.",
     "backHome": "Volver a la realidad"
+  },
+  "footer": {
+    "ignitingSince": "Encendiendo ideas desde 2026",
+    "allRightsReserved": "Todos los derechos reservados.",
+    "studio": "Estudio",
+    "legal": "Legal"
+  },
+  "post": {
+    "backToBlog": "Volver al Blog",
+    "estReadTime": "Lectura estimada: {time} min",
+    "enjoyedPost": "¿Te gustó este artículo?",
+    "stayUpdated": "Mantente al día con nuestras últimas noticias y novedades en desarrollo.",
+    "followX": "Síguenos en"
   }
 }
