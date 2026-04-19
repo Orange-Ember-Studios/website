@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import { ClientRouter } from "astro:transitions";
 import { API_URLS, SITE_URLS, SOCIAL_URLS, EXTERNAL_URLS } from "../constants/urls";
+import { resolveImageUrl } from "../lib/images";
 
 interface Props {
   title: string;
@@ -14,6 +15,9 @@ const {
   description = "Orange Ember Studios. Crafting extraordinary digital experiences. We forge premium video games, web, and mobile applications.",
   image = "/Shield.svg", // Using the Shield as fallback OpenGraph image
 } = Astro.props;
+
+const resolvedImage = resolveImageUrl(image);
+const fullImageUrl = resolvedImage.startsWith('http') ? resolvedImage : new URL(resolvedImage, SITE_URLS.BASE).toString();
 
 const lang = Astro.locals.lang || "en";
 
@@ -72,8 +76,8 @@ const websiteSchema = {
       data-i18n="meta.description"
       data-i18n-attr="content"
     />
-    <meta property="og:image" content={new URL(image, SITE_URLS.BASE)} />
-    <meta property="og:image:alt" content="Orange Ember Studios Logo" />
+    <meta property="og:image" content={fullImageUrl} />
+    <meta property="og:image:alt" content="Orange Ember Studios" />
     <meta property="og:site_name" content="Orange Ember Studios" />
     <meta property="og:logo" content={`${SITE_URLS.BASE}/favicon.svg`} />
 
@@ -96,7 +100,7 @@ const websiteSchema = {
     />
     <meta
       property="twitter:image"
-      content={new URL(image, SITE_URLS.BASE)}
+      content={fullImageUrl}
     />
 
     <!-- JSON-LD Structured Data -->

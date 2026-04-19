@@ -1,0 +1,10 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import DashboardApp from '../../components/Admin/Dashboard.vue';
+
+// Middleware protects this route automatically
+---
+
+<Layout title="CMS Dashboard | Orange Ember">
+  <DashboardApp client:only="vue" />
+</Layout>

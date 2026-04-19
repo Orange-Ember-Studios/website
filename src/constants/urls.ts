@@ -22,6 +22,7 @@ export const SOCIAL_URLS = {
 export const SITE_URLS = {
   BASE: "https://orangeember.com",
   EASY_FLAGS: "https://easy-flags.orangeember.com/",
+  CDN_BASE: "https://raw.githubusercontent.com/Orange-Ember-Studios/cdn-resources/main",
 } as const;
 
 export const EXTERNAL_URLS = {

@@ -1,16 +1,18 @@
 ---
-import { getCollection } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import Navbar from "../../components/Navigation/Navbar.astro";
 import Footer from "../../components/Navigation/Footer.astro";
 import PremiumSelect from "../../components/ui/PremiumSelect.astro";
 import { getTranslation } from "../../i18n/i18n";
+import { getPublishedPostsByType } from "../../lib/posts.service";
+import { resolveImageUrl } from "../../lib/images";
 
 const { lang = "en" } = Astro.props;
 
-const allPosts = await getCollection("blog");
 const url = new URL(Astro.request.url);
 const sortOrder = url.searchParams.get("sort") || "desc";
+
+const allPosts = await getPublishedPostsByType('blog');
 
 // Filter posts by language server-side
 const posts = allPosts.filter((p) => {
@@ -197,7 +199,7 @@ const sortOptions = [
             {post.data.image && (
               <div class="aspect-16/10 overflow-hidden">
                 <img
-                  src={post.data.image}
+                  src={resolveImageUrl(post.data.image)}
                   alt={post.data.title}
                   class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   transition:name={`image-${post.id}`}
@@ -231,9 +233,10 @@ const sortOptions = [
                 {post.data.title}
               </h2>
 
-              <p class="text-gray-400 line-clamp-3 mb-6 text-sm leading-relaxed">
-                {post.data.description}
-              </p>
+              <p 
+                class="text-gray-400 line-clamp-3 mb-6 text-sm leading-relaxed"
+                set:html={post.data.description}
+              />
 
               <div class="flex items-center text-white font-bold text-sm group-hover:translate-x-1 transition-transform">
                 <span data-i18n="blog.readStory">

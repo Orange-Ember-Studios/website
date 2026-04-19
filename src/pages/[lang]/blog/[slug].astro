@@ -1,6 +1,6 @@
 ---
-import { getEntry, render } from "astro:content";
 import BlogLayout from "../../../layouts/BlogLayout.astro";
+import { getPublishedPostBySlug } from "../../../lib/posts.service";
 
 const { lang, slug } = Astro.params;
 
@@ -8,29 +8,23 @@ if (!lang || !slug) {
   return new Response(null, { status: 404 });
 }
 
-// Map URL lang to content collection structure
-// en: slug
-// es: es/slug
-// fr: fr/slug
-const postId = lang === "en" ? slug : `${lang}/${slug}`;
-
-const post = await getEntry("blog", postId as any);
+// Fetch via Repository/Service pattern, hiding DB logic
+const post = await getPublishedPostBySlug(slug, lang);
 
 if (!post) {
-  return new Response(null, {
-    status: 404,
-    statusText: "Not found",
-  });
+  return new Response(null, { status: 404, statusText: "Not found" });
 }
 
-const { Content } = await render(post);
-
-// Calculate reading time
-const wordsPerMinute = 200;
-const words = post.body ? post.body.split(/\s+/g).length : 0;
-const readingTime = Math.ceil(words / wordsPerMinute);
+const { frontmatter, readingTime, htmlContent } = post;
 ---
 
-<BlogLayout frontmatter={post.data} postId={post.id} readingTime={readingTime}>
-  <Content />
+<BlogLayout
+  frontmatter={frontmatter}
+  postId={`${lang}/${slug}`}
+  readingTime={readingTime}
+>
+  <article
+    set:html={htmlContent}
+    class="prose prose-invert max-w-none text-neutral-300"
+  />
 </BlogLayout>
