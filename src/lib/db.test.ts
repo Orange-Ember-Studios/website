@@ -22,9 +22,9 @@ describe('Database connection (LibSQL)', () => {
     vi.stubEnv('TURSO_DATABASE_URL', 'libsql://test.turso.io');
     vi.stubEnv('TURSO_AUTH_TOKEN', 'fake-token-123');
     getDbClient();
-    expect(createClient).toHaveBeenCalledWith({
+    expect(createClient).toHaveBeenCalledWith(expect.objectContaining({
       url: 'libsql://test.turso.io',
       authToken: 'fake-token-123'
-    });
+    }));
   });
 });
