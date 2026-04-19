@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getDbClient } from './db';
-import { createClient } from '@libsql/client';
+import { createClient } from '@libsql/client/web';
 
-vi.mock('@libsql/client', () => ({
+vi.mock('@libsql/client/web', () => ({
   createClient: vi.fn(),
 }));
 
