@@ -34,12 +34,37 @@ const formattedDate = new Date(pubDate).toLocaleDateString(
     day: "numeric",
   },
 );
+const blogSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": title,
+  "description": description,
+  "image": resolvedImage,
+  "datePublished": new Date(pubDate).toISOString(),
+  "author": {
+    "@type": "Person",
+    "name": author
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Orange Ember Studios",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://orangeember.com/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": `https://orangeember.com/${lang}/blog/${postId.split('/').pop()}`
+  }
+};
 ---
 
 <Layout
   title={`${title} | Orange Ember Blog`}
   description={description}
   image={resolvedImage}
+  extraSchema={[blogSchema]}
 >
   <Navbar />
 

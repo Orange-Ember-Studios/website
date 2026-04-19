@@ -1,4 +1,70 @@
 {
+  "admin": {
+    "login": {
+      "title": "Orange Ember CMS",
+      "username": "Usuario",
+      "password": "Contraseña",
+      "signIn": "Iniciar Sesión",
+      "authenticating": "Autenticando...",
+      "error_auth": "Error de autenticación",
+      "error_network": "Ocurrió un error de red"
+    },
+    "dashboard": {
+      "title": "Panel CMS",
+      "newPost": "+ Nueva Entrada",
+      "loading": "Cargando contenido...",
+      "noContent": "No se encontró contenido para esta categoría",
+      "createFirst": "Crear el primero",
+      "editContent": "Editar Contenido",
+      "blogPosts": "Entradas de Blog",
+      "portfolio": "Portafolio",
+      "caseStudies": "Casos de Estudio",
+      "profile": "Perfil",
+      "signOut": "Cerrar Sesión"
+    },
+    "profile": {
+      "title": "Perfil de Usuario",
+      "subtitle": "Administra la información de tu cuenta y configuración de seguridad.",
+      "basicInfo": "Información Básica",
+      "userId": "ID de Usuario",
+      "changePassword": "Cambiar Contraseña",
+      "currentPassword": "Contraseña Actual",
+      "newPassword": "Nueva Contraseña",
+      "confirmPassword": "Confirmar Nueva Contraseña",
+      "updatePassword": "Actualizar Contraseña",
+      "updating": "Actualizando...",
+      "error_match": "Las nuevas contraseñas no coinciden",
+      "error_length": "La contraseña debe tener al menos 6 caracteres",
+      "error_network": "Ocurrió un error de red",
+      "success": "Contraseña actualizada con éxito"
+    },
+    "editor": {
+      "saving": "Guardando...",
+      "savePost": "Guardar Entrada",
+      "cancel": "Cancelar",
+      "slug": "url-slug",
+      "author": "Nombre del Autor",
+      "image": "Ruta de Imagen (ej. /blog/image.jpg)",
+      "postTitle": "Título de la Entrada",
+      "category": "Categoría",
+      "status": "Estado",
+      "shortDescription": "Descripción Corta",
+      "shortDescriptionPlaceholder": "Una breve descripción para el proyecto...",
+      "externalLink": "Enlace Externo (Opcional)",
+      "projectStatus": {
+        "now": "Disponible Ahora",
+        "soon": "Próximamente",
+        "publishing": "Publicando",
+        "dev": "En Desarrollo"
+      },
+      "projectCategory": {
+        "desktop": "Juego de Escritorio",
+        "mobileGame": "Juego Móvil",
+        "mobileApp": "Aplicación Móvil",
+        "webApp": "Aplicación Web"
+      }
+    }
+  },
   "nav": {
     "portfolio": "Portafolio",
     "services": "Servicios",

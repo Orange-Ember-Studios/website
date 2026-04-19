@@ -23,7 +23,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
           </svg>
 
-          {{ type.name }}
+          {{ getTranslation(`admin.dashboard.${type.id === 'blog' ? 'blogPosts' : type.id === 'project' ? 'portfolio' : 'caseStudies'}`) }}
         </button>
       </nav>
       <div class="p-4 border-t border-neutral-800 space-y-2">
@@ -33,14 +33,14 @@
           <svg class="w-5 h-5 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
           </svg>
-          Profile
+          {{ getTranslation('admin.dashboard.profile') }}
         </button>
         <button @click="logout"
           class="flex items-center gap-3 px-4 py-2 text-neutral-400 hover:text-white w-full transition-colors group">
           <svg class="w-5 h-5 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
           </svg>
-          Sign Out
+          {{ getTranslation('admin.dashboard.signOut') }}
         </button>
       </div>
     </aside>
@@ -50,10 +50,10 @@
       <!-- Topbar -->
       <header
         class="h-16 border-b border-neutral-800 bg-neutral-900/50 backdrop-blur-md flex items-center justify-between px-6">
-        <h2 class="text-lg font-semibold capitalize">{{ activeType.replace('_', ' ') }}</h2>
+        <h2 class="text-lg font-semibold capitalize">{{ getTranslation(`admin.dashboard.${activeType === 'blog' ? 'blogPosts' : activeType === 'project' ? 'portfolio' : activeType === 'case_study' ? 'caseStudies' : 'profile'}`) }}</h2>
         <button v-if="activeType !== 'profile'" @click="createNewPost"
           class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-lg shadow-orange-500/20 transition-all hover:-translate-y-0.5">
-          + New Post
+          {{ getTranslation('admin.dashboard.newPost') }}
         </button>
       </header>
 
@@ -63,12 +63,12 @@
         
         <div v-else-if="loading" class="flex flex-col items-center justify-center py-20 text-neutral-500 gap-4">
           <div class="w-8 h-8 border-2 border-orange-500/30 border-t-orange-500 rounded-full animate-spin"></div>
-          Loading contents...
+          {{ getTranslation('admin.dashboard.loading') }}
         </div>
         
         <div v-else-if="filteredPosts.length === 0" class="flex flex-col items-center justify-center py-20 text-neutral-500 gap-2 border-2 border-dashed border-neutral-800 rounded-2xl">
-           <p>No content found for this category</p>
-           <button @click="createNewPost" class="text-orange-500 hover:underline text-sm font-medium">Create the first one</button>
+           <p>{{ getTranslation('admin.dashboard.noContent') }}</p>
+           <button @click="createNewPost" class="text-orange-500 hover:underline text-sm font-medium">{{ getTranslation('admin.dashboard.createFirst') }}</button>
         </div>
 
         <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -91,7 +91,7 @@
                   d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
                 </path>
               </svg>
-              Edit Content
+              {{ getTranslation('admin.dashboard.editContent') }}
             </div>
           </div>
         </div>
@@ -105,6 +105,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
+import { getTranslation } from '../../i18n/i18n';
 import Editor from './Editor.vue';
 import Profile from './Profile.vue';
 

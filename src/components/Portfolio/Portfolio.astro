@@ -58,7 +58,31 @@ const projects = dbProjects
       isExternal,
     };
   });
+
+const portfolioSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "itemListElement": projects.map((project, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "item": {
+      "@type": "SoftwareApplication",
+      "name": project.title,
+      "description": project.description,
+      "applicationCategory": project.category,
+      "image": project.image,
+      "url": project.link,
+      "author": {
+        "@type": "Organization",
+        "name": "Orange Ember Studios"
+      }
+    }
+  }))
+};
 ---
+
+<!-- Structured Data for AIs -->
+<script type="application/ld+json" set:html={JSON.stringify(portfolioSchema)} />
 
 <section
   id="portfolio"

@@ -1,4 +1,70 @@
 {
+  "admin": {
+    "login": {
+      "title": "Orange Ember CMS",
+      "username": "Username",
+      "password": "Password",
+      "signIn": "Sign In",
+      "authenticating": "Authenticating...",
+      "error_auth": "Authentication failed",
+      "error_network": "Network error occurred"
+    },
+    "dashboard": {
+      "title": "CMS Dashboard",
+      "newPost": "+ New Post",
+      "loading": "Loading contents...",
+      "noContent": "No content found for this category",
+      "createFirst": "Create the first one",
+      "editContent": "Edit Content",
+      "blogPosts": "Blog Posts",
+      "portfolio": "Portfolio",
+      "caseStudies": "Case Studies",
+      "profile": "Profile",
+      "signOut": "Sign Out"
+    },
+    "profile": {
+      "title": "User Profile",
+      "subtitle": "Manage your account information and security settings.",
+      "basicInfo": "Basic Information",
+      "userId": "User ID",
+      "changePassword": "Change Password",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm New Password",
+      "updatePassword": "Update Password",
+      "updating": "Updating...",
+      "error_match": "New passwords do not match",
+      "error_length": "Password must be at least 6 characters long",
+      "error_network": "A network error occurred",
+      "success": "Password updated successfully"
+    },
+    "editor": {
+      "saving": "Saving...",
+      "savePost": "Save Post",
+      "cancel": "Cancel",
+      "slug": "slug-url",
+      "author": "Author Name",
+      "image": "Image Path (e.g. /blog/image.jpg)",
+      "postTitle": "Post Title",
+      "category": "Category",
+      "status": "Status",
+      "shortDescription": "Short Description",
+      "shortDescriptionPlaceholder": "A short description for the project...",
+      "externalLink": "External Link (Optional)",
+      "projectStatus": {
+        "now": "Available Now",
+        "soon": "Coming Soon",
+        "publishing": "Publishing",
+        "dev": "In Development"
+      },
+      "projectCategory": {
+        "desktop": "Desktop Game",
+        "mobileGame": "Mobile Game",
+        "mobileApp": "Mobile App",
+        "webApp": "Web Application"
+      }
+    }
+  },
   "nav": {
     "portfolio": "Portfolio",
     "services": "Services",

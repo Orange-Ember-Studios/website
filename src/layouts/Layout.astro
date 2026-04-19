@@ -8,12 +8,18 @@ interface Props {
   title: string;
   description?: string;
   image?: string;
+  noindex?: boolean;
+  titleKey?: string;
+  extraSchema?: any[];
 }
 
 const {
   title,
   description = "Orange Ember Studios. Crafting extraordinary digital experiences. We forge premium video games, web, and mobile applications.",
   image = "/Shield.svg", // Using the Shield as fallback OpenGraph image
+  noindex = false,
+  titleKey = "meta.title",
+  extraSchema = [],
 } = Astro.props;
 
 const resolvedImage = resolveImageUrl(image);
@@ -34,6 +40,33 @@ const organizationSchema = {
   ]
 };
 
+const breadcrumbSchema = {
+  "@context": EXTERNAL_URLS.SCHEMA_ORG,
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": SITE_URLS.BASE
+    }
+  ]
+};
+
+// If we are in a subpath, we should ideally add it to breadcrumbs
+// This is a simplified version
+if (typeof Astro.url !== 'undefined' && Astro.url.pathname !== '/') {
+  const paths = Astro.url.pathname.split('/').filter(Boolean);
+  paths.forEach((path, index) => {
+    breadcrumbSchema.itemListElement.push({
+      "@type": "ListItem",
+      "position": index + 2,
+      "name": path.charAt(0).toUpperCase() + path.slice(1),
+      "item": `${SITE_URLS.BASE}/${paths.slice(0, index + 1).join('/')}`
+    });
+  });
+}
+
 const websiteSchema = {
   "@context": EXTERNAL_URLS.SCHEMA_ORG,
   "@type": "WebSite",
@@ -46,6 +79,9 @@ const websiteSchema = {
 <html lang={lang} class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
+    <meta name="author" content="Orange Ember Studios" />
+    <meta name="publisher" content="Orange Ember Studios" />
+    <meta name="generator" content={Astro.generator} />
     <meta 
       name="description" 
       content={description} 
@@ -55,7 +91,9 @@ const websiteSchema = {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="theme-color" content="#18191f" />
-    <title data-i18n="meta.title">{title}</title>
+    <title data-i18n={titleKey}>{title}</title>
+
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={SITE_URLS.BASE + "/"} />
 
     <!-- Open Graph / Facebook / WhatsApp -->
@@ -67,7 +105,7 @@ const websiteSchema = {
     <meta 
       property="og:title" 
       content={title} 
-      data-i18n="meta.title"
+      data-i18n={titleKey}
       data-i18n-attr="content"
     />
     <meta 
@@ -89,7 +127,7 @@ const websiteSchema = {
     <meta 
       property="twitter:title" 
       content={title} 
-      data-i18n="meta.title"
+      data-i18n={titleKey}
       data-i18n-attr="content"
     />
     <meta 
@@ -106,6 +144,10 @@ const websiteSchema = {
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
     <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    {extraSchema.map((schema) => (
+      <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    ))}
 
     <!-- Load Google Fonts -->
     <link rel="preconnect" href={EXTERNAL_URLS.GOOGLE_FONTS} />

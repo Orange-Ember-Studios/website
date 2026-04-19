@@ -1,0 +1,19 @@
+# ai.txt - Permissions for AI models
+# See https://ai-txt.org/ for more info
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+
+User-agent: GPTBot
+Allow: /
+Disallow: /admin/
+Usage-Policy: https://orangeember.com/privacy
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin/
+
+User-agent: CCBot
+Allow: /
+Disallow: /admin/

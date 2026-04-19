@@ -1,6 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import Login from "../../components/Admin/Login.vue";
+import LoginComponent from "../../components/Admin/Login.vue";
 
 // The middleware handles redirecting authenticated users away from /admin/login
 // But wait, if they are already logged in, it's better to redirect them to /admin.
@@ -9,6 +9,10 @@ if (Astro.locals.user) {
 }
 ---
 
-<Layout title="CMS Login | Orange Ember">
-  <Login client:only="vue" />
+<Layout
+  title="CMS Login | Orange Ember"
+  noindex={true}
+  titleKey="admin.login.title"
+>
+  <LoginComponent client:only="vue" />
 </Layout>

@@ -5,6 +5,6 @@ import DashboardApp from '../../components/Admin/Dashboard.vue';
 // Middleware protects this route automatically
 ---
 
-<Layout title="CMS Dashboard | Orange Ember">
+<Layout title="CMS Dashboard | Orange Ember" noindex={true} titleKey="admin.dashboard.title">
   <DashboardApp client:only="vue" />
 </Layout>

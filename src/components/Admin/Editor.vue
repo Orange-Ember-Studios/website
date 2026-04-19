@@ -6,12 +6,12 @@
       <!-- Header -->
       <div class="px-6 py-4 border-b border-neutral-800 flex justify-between items-center bg-neutral-900">
         <div class="flex gap-4 items-center w-full max-w-3xl">
-          <input v-model="draft.slug" placeholder="slug-url"
+          <input v-model="draft.slug" :placeholder="getTranslation('admin.editor.slug')"
             class="bg-neutral-800 border border-neutral-700 text-sm rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-1 focus:ring-orange-500 w-1/4" />
-          <input v-model="draft.author" placeholder="Author Name"
+          <input v-model="draft.author" :placeholder="getTranslation('admin.editor.author')"
             class="bg-neutral-800 border border-neutral-700 text-sm rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-1 focus:ring-orange-500 w-1/4" />
           <div class="flex-1 flex gap-2 items-center">
-            <input v-model="draft.image" placeholder="Image Path (e.g. /blog/image.jpg)" list="public-images"
+            <input v-model="draft.image" :placeholder="getTranslation('admin.editor.image')" list="public-images"
               class="bg-neutral-800 border border-neutral-700 text-sm rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-1 focus:ring-orange-500 w-full" />
             <datalist id="public-images">
               <optgroup label="Blog Images">
@@ -35,17 +35,17 @@
           </div>
           <select v-model="draft.type"
             class="bg-neutral-800 border border-neutral-700 text-sm rounded-lg px-3 py-2 focus:outline-none text-white appearance-none min-w-[100px]">
-            <option value="blog">Blog</option>
-            <option value="project">Project</option>
-            <option value="case_study">Case Study</option>
+            <option value="blog">{{ getTranslation('admin.dashboard.blogPosts') }}</option>
+            <option value="project">{{ getTranslation('admin.dashboard.portfolio') }}</option>
+            <option value="case_study">{{ getTranslation('admin.dashboard.caseStudies') }}</option>
           </select>
         </div>
         <div class="flex gap-3">
           <button @click="handleClose"
-            class="px-4 py-2 text-sm text-neutral-400 hover:text-white transition-colors">Cancel</button>
+            class="px-4 py-2 text-sm text-neutral-400 hover:text-white transition-colors">{{ getTranslation('admin.editor.cancel') }}</button>
           <button @click="save" :disabled="saving"
             class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-lg disabled:opacity-50 transition-all">
-            {{ saving ? 'Saving...' : 'Save Post' }}
+            {{ saving ? getTranslation('admin.editor.saving') : getTranslation('admin.editor.savePost') }}
           </button>
         </div>
       </div>
@@ -61,36 +61,36 @@
       <!-- Editor Content -->
       <div class="flex-1 overflow-y-auto p-8 relative bg-neutral-950">
         <div class="max-w-3xl mx-auto">
-          <input v-model="activeTranslation.title" placeholder="Post Title"
+          <input v-model="activeTranslation.title" :placeholder="getTranslation('admin.editor.postTitle')"
             class="w-full bg-transparent text-4xl font-bold text-white border-none focus:outline-none mb-8 placeholder-neutral-700" />
             
           <!-- Project Configuration -->
           <div v-if="draft.type === 'project'" class="space-y-6">
             <div>
-              <label class="block text-sm font-medium text-neutral-400 mb-2">Category</label>
+              <label class="block text-sm font-medium text-neutral-400 mb-2">{{ getTranslation('admin.editor.category') }}</label>
               <select v-model="projectMeta.category" class="bg-neutral-800 border border-neutral-700 text-sm rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-1 focus:ring-orange-500 w-full">
-                <option value="Desktop Game">Desktop Game</option>
-                <option value="Mobile Game">Mobile Game</option>
-                <option value="Mobile App">Mobile App</option>
-                <option value="Web Application">Web Application</option>
+                <option value="Desktop Game">{{ getTranslation('admin.editor.projectCategory.desktop') }}</option>
+                <option value="Mobile Game">{{ getTranslation('admin.editor.projectCategory.mobileGame') }}</option>
+                <option value="Mobile App">{{ getTranslation('admin.editor.projectCategory.mobileApp') }}</option>
+                <option value="Web Application">{{ getTranslation('admin.editor.projectCategory.webApp') }}</option>
               </select>
             </div>
             <div>
-              <label class="block text-sm font-medium text-neutral-400 mb-2">Status</label>
+              <label class="block text-sm font-medium text-neutral-400 mb-2">{{ getTranslation('admin.editor.status') }}</label>
               <select v-model="projectMeta.status" class="bg-neutral-800 border border-neutral-700 text-sm rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-1 focus:ring-orange-500 w-full">
-                <option value="Available Now">Available Now</option>
-                <option value="Coming Soon">Coming Soon</option>
-                <option value="Publishing">Publishing</option>
-                <option value="In Development">In Development</option>
+                <option value="Available Now">{{ getTranslation('admin.editor.projectStatus.now') }}</option>
+                <option value="Coming Soon">{{ getTranslation('admin.editor.projectStatus.soon') }}</option>
+                <option value="Publishing">{{ getTranslation('admin.editor.projectStatus.publishing') }}</option>
+                <option value="In Development">{{ getTranslation('admin.editor.projectStatus.dev') }}</option>
               </select>
             </div>
             <div>
-              <label class="block text-sm font-medium text-neutral-400 mb-2">Short Description</label>
-              <textarea v-model="projectMeta.description" placeholder="A short description for the project..."
+              <label class="block text-sm font-medium text-neutral-400 mb-2">{{ getTranslation('admin.editor.shortDescription') }}</label>
+              <textarea v-model="projectMeta.description" :placeholder="getTranslation('admin.editor.shortDescriptionPlaceholder')"
                 class="bg-neutral-800 border border-neutral-700 text-sm rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-1 focus:ring-orange-500 w-full min-h-[100px]"></textarea>
             </div>
             <div>
-              <label class="block text-sm font-medium text-neutral-400 mb-2">External Link (Optional)</label>
+              <label class="block text-sm font-medium text-neutral-400 mb-2">{{ getTranslation('admin.editor.externalLink') }}</label>
               <input v-model="projectMeta.link" type="url" placeholder="https://store.steampowered.com/app/..."
                 class="bg-neutral-800 border border-neutral-700 text-sm rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-1 focus:ring-orange-500 w-full" />
             </div>
@@ -108,6 +108,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, shallowRef } from 'vue';
+import { getTranslation } from '../../i18n/i18n';
 import EditorJS from '@editorjs/editorjs';
 // @ts-ignore
 import Header from '@editorjs/header';

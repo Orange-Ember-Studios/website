@@ -1,4 +1,70 @@
 {
+  "admin": {
+    "login": {
+      "title": "Orange Ember CMS",
+      "username": "Nom d'utilisateur",
+      "password": "Mot de passe",
+      "signIn": "Se Connecter",
+      "authenticating": "Authentification...",
+      "error_auth": "L'authentification a échoué",
+      "error_network": "Une erreur de réseau s'est produite"
+    },
+    "dashboard": {
+      "title": "Tableau de Bord CMS",
+      "newPost": "+ Nouvel Article",
+      "loading": "Chargement du contenu...",
+      "noContent": "Aucun contenu trouvé pour cette catégorie",
+      "createFirst": "Créer le premier",
+      "editContent": "Modifier le Contenu",
+      "blogPosts": "Articles de Blog",
+      "portfolio": "Portfolio",
+      "caseStudies": "Études de Cas",
+      "profile": "Profil",
+      "signOut": "Se Déconnecter"
+    },
+    "profile": {
+      "title": "Profil de l'Utilisateur",
+      "subtitle": "Gérez les informations de votre compte et vos paramètres de sécurité.",
+      "basicInfo": "Informations de Base",
+      "userId": "ID Utilisateur",
+      "changePassword": "Changer le Mot de Passe",
+      "currentPassword": "Mot de Passe Actuel",
+      "newPassword": "Nouveau Mot de Passe",
+      "confirmPassword": "Confirmer le Nouveau Mot de Passe",
+      "updatePassword": "Mettre à Jour le Mot de Passe",
+      "updating": "Mise à jour...",
+      "error_match": "Les nouveaux mots de passe ne correspondent pas",
+      "error_length": "Le mot de passe doit comporter au moins 6 caractères",
+      "error_network": "Une erreur de réseau s'est produite",
+      "success": "Mot de passe mis à jour avec succès"
+    },
+    "editor": {
+      "saving": "Enregistrement...",
+      "savePost": "Enregistrer l'Article",
+      "cancel": "Annuler",
+      "slug": "url-slug",
+      "author": "Nom de l'Auteur",
+      "image": "Chemin de l'Image (ex. /blog/image.jpg)",
+      "postTitle": "Titre de l'Article",
+      "category": "Catégorie",
+      "status": "Statut",
+      "shortDescription": "Description Courte",
+      "shortDescriptionPlaceholder": "Une brève description pour le projet...",
+      "externalLink": "Lien Externe (Optionnel)",
+      "projectStatus": {
+        "now": "Disponible Maintenant",
+        "soon": "Bientôt Disponible",
+        "publishing": "Édition",
+        "dev": "En Développement"
+      },
+      "projectCategory": {
+        "desktop": "Jeu de Bureau",
+        "mobileGame": "Jeu Mobile",
+        "mobileApp": "Application Mobile",
+        "webApp": "Application Web"
+      }
+    }
+  },
   "nav": {
     "portfolio": "Portfolio",
     "services": "Services",
