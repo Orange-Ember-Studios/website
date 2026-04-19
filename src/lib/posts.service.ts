@@ -158,7 +158,7 @@ export async function getPublishedPostBySlug(slug: string, lang: string) {
 
   try {
     const data = typeof post.content === 'string' ? JSON.parse(post.content) : post.content;
-    htmlContent = parseEditorJsBlocks(data.blocks || []);
+    htmlContent = await parseEditorJsBlocks(data.blocks || []);
 
     const textBlock = data.blocks?.find((b: any) => b.type === "paragraph");
     if (textBlock) {

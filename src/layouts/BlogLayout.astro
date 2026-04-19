@@ -216,6 +216,43 @@ const blogSchema = {
   <Footer />
 </Layout>
 
+<script>
+  function setupCopyButtons() {
+    const buttons = document.querySelectorAll('.copy-button');
+    
+    buttons.forEach(button => {
+      button.addEventListener('click', async () => {
+        const code = decodeURIComponent(button.getAttribute('data-code') || '');
+        const span = button.querySelector('span');
+        const svg = button.querySelector('svg');
+        
+        try {
+          await navigator.clipboard.writeText(code);
+          
+          if (span) span.textContent = 'Copied!';
+          if (svg) svg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />';
+          
+          button.classList.add('text-green-400');
+          
+          setTimeout(() => {
+            if (span) span.textContent = 'Copy';
+            if (svg) svg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />';
+            button.classList.remove('text-green-400');
+          }, 2000);
+        } catch (err) {
+          console.error('Failed to copy: ', err);
+        }
+      });
+    });
+  }
+
+  // Run on initial load
+  setupCopyButtons();
+
+  // Run on view transitions
+  document.addEventListener('astro:after-swap', setupCopyButtons);
+</script>
+
 <style is:global>
   @reference "../styles/global.css";
 
@@ -286,11 +323,32 @@ const blogSchema = {
   }
 
   .prose-premium pre {
-    @apply bg-[#080b12] rounded-2xl p-6 border border-white/5 my-8 overflow-x-auto shadow-2xl;
+    @apply bg-[#0d1117] rounded-2xl p-6 border border-white/5 my-8 overflow-x-auto shadow-2xl;
   }
 
-  .prose-premium code {
-    @apply text-orange-300 font-mono text-sm bg-white/5 px-1.5 py-0.5 rounded;
+  .prose-premium :not(pre) > code {
+    @apply text-orange-400 font-mono text-sm bg-white/10 px-1.5 py-0.5 rounded border border-white/5;
+  }
+
+  /* Shiki Overrides */
+  .code-block-wrapper pre {
+    @apply !bg-transparent !m-0 !p-6 !border-none !shadow-none !rounded-none;
+  }
+
+  .code-block-wrapper code {
+    @apply !bg-transparent !p-0 !text-inherit !text-sm;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-white/10 rounded-full hover:bg-white/20 transition-colors;
   }
 
   .prose-premium img {

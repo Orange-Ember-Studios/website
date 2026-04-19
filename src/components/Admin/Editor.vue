@@ -214,30 +214,76 @@ class SimpleCode {
     return { title: 'Code', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>' };
   }
   constructor({ data }: any) {
-    this.data = { code: data.code || '' };
+    this.data = { 
+      code: data.code || '',
+      language: data.language || 'gdscript'
+    };
     this.wrapper = undefined;
   }
   render() {
     this.wrapper = document.createElement('div');
+    this.wrapper.classList.add('flex', 'flex-col', 'gap-2', 'p-4', 'bg-[#171717]', 'rounded-xl', 'border', 'border-[#404040]');
+    
+    const langSelect = document.createElement('select');
+    const languages = [
+      { val: 'gdscript', label: 'GDScript' },
+      { val: 'javascript', label: 'JavaScript' },
+      { val: 'typescript', label: 'TypeScript' },
+      { val: 'vue', label: 'Vue' },
+      { val: 'astro', label: 'Astro' },
+      { val: 'html', label: 'HTML' },
+      { val: 'css', label: 'CSS' },
+      { val: 'json', label: 'JSON' },
+      { val: 'bash', label: 'Bash' },
+      { val: 'csharp', label: 'C#' },
+      { val: 'cpp', label: 'C++' },
+      { val: 'python', label: 'Python' },
+      { val: 'sql', label: 'SQL' },
+      { val: 'yaml', label: 'YAML' }
+    ];
+    
+    languages.forEach(l => {
+      const opt = document.createElement('option');
+      opt.value = l.val;
+      opt.textContent = l.label;
+      if (this.data.language === l.val) opt.selected = true;
+      langSelect.appendChild(opt);
+    });
+    
+    langSelect.style.background = '#262626';
+    langSelect.style.color = 'white';
+    langSelect.style.border = '1px solid #404040';
+    langSelect.style.borderRadius = '4px';
+    langSelect.style.padding = '4px 8px';
+    langSelect.style.fontSize = '12px';
+    langSelect.style.width = 'fit-content';
+    langSelect.style.marginBottom = '8px';
+
     const textarea = document.createElement('textarea');
     textarea.value = this.data.code;
     textarea.placeholder = 'Paste your code here...';
     textarea.style.width = '100%';
-    textarea.style.minHeight = '100px';
-    textarea.style.background = '#171717';
-    textarea.style.color = '#fb923c';
+    textarea.style.minHeight = '150px';
+    textarea.style.background = '#0d1117';
+    textarea.style.color = '#e5e5e5';
     textarea.style.border = '1px solid #404040';
     textarea.style.borderRadius = '8px';
     textarea.style.padding = '12px';
     textarea.style.fontFamily = 'monospace';
     textarea.style.fontSize = '14px';
     textarea.style.outline = 'none';
+    
+    this.wrapper.appendChild(langSelect);
     this.wrapper.appendChild(textarea);
     return this.wrapper;
   }
   save(wrapper: any) {
     const textarea = wrapper.querySelector('textarea');
-    return { code: textarea.value };
+    const langSelect = wrapper.querySelector('select');
+    return { 
+      code: textarea.value,
+      language: langSelect.value
+    };
   }
 }
 

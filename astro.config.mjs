@@ -18,5 +18,5 @@ export default defineConfig({
   },
 
   integrations: [vue(), mdx(), sitemap()],
-  adapter: process.env.NODE_ENV === "development" ? undefined : cloudflare(),
+  adapter: (process.env.NODE_ENV === "development" || process.env.VITEST) ? undefined : cloudflare(),
 });
