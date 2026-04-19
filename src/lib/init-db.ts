@@ -1,12 +1,13 @@
 import { createClient } from '@libsql/client';
 import { hashPassword } from './auth';
+import { EnvManager } from './EnvManager';
 import * as dotenv from 'dotenv';
 dotenv.config({ path: '.env.local' });
 import crypto from 'crypto';
 
 async function init() {
-  const url = process.env.TURSO_DATABASE_URL;
-  const authToken = process.env.TURSO_AUTH_TOKEN;
+  const url = EnvManager.TURSO_DATABASE_URL;
+  const authToken = EnvManager.TURSO_AUTH_TOKEN;
 
   if (!url || !authToken) throw new Error('Missing credentials in .env.local');
 

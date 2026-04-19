@@ -1,7 +1,8 @@
 import { SignJWT, jwtVerify } from 'jose';
+import { EnvManager } from './EnvManager';
 
 // Envolvemos el secreto en Uint8Array como requiere `jose`
-const getSecret = () => new TextEncoder().encode(import.meta.env.JWT_SECRET || 'orange-ember-fallback-secret-for-dev');
+const getSecret = () => new TextEncoder().encode(EnvManager.JWT_SECRET);
 
 export async function createToken(payload: { userId: string; username: string }) {
   return await new SignJWT(payload)

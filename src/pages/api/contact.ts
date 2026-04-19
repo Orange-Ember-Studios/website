@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { API_URLS } from "../../constants/urls";
+import { EnvManager } from "../../lib/EnvManager";
 
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
@@ -26,7 +27,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     const result = await fetch(API_URLS.TURNSTILE_VERIFY, {
       method: "POST",
-      body: `secret=${import.meta.env.TURNSTILE_SECRET_KEY}&response=${token}`,
+      body: `secret=${EnvManager.TURNSTILE_SECRET_KEY}&response=${token}`,
       headers: {
         "content-type": "application/x-www-form-urlencoded",
       },
@@ -41,7 +42,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     }
 
     // 4. Send Email using Resend
-    const resendApiKey = import.meta.env.RESEND_API_KEY;
+    const resendApiKey = EnvManager.RESEND_API_KEY;
 
     if (!resendApiKey) {
       console.error("RESEND_API_KEY is not defined in environment variables.");

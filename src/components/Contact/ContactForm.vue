@@ -206,11 +206,12 @@
 import { reactive, ref, onMounted, onBeforeUnmount } from "vue";
 import { API_URLS } from "../../constants/urls";
 import { getTranslation } from "../../i18n/i18n";
+import { EnvManager } from "../../lib/EnvManager";
 
 const address_ext = ref("");
 const turnstileToken = ref("");
 const isBotDetected = ref(false);
-const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || "1x00000000000000000000AA";
+const turnstileSiteKey = EnvManager.PUBLIC_TURNSTILE_SITE_KEY || "1x00000000000000000000AA";
 const turnstileContainer = ref(null);
 const turnstileWidgetId = ref(null);
 

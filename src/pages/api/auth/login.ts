@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { loginUser } from '../../../lib/auth.service';
+import { EnvManager } from '../../../lib/EnvManager';
 
 export const POST: APIRoute = async ({ request, cookies }) => {
   try {
@@ -24,7 +25,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     cookies.set('admin_token', authData.token, {
       path: '/',
       httpOnly: true,
-      secure: import.meta.env.PROD,
+      secure: EnvManager.IS_PROD,
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 // 24 hours
     });
