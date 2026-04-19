@@ -259,15 +259,24 @@ const blogSchema = {
     @apply text-orange-400 no-underline border-b border-orange-500/30 hover:border-orange-500 hover:text-orange-300 transition-all;
   }
 
-  .prose-premium ul {
-    @apply space-y-3 mb-8 ml-4;
+  .prose-premium ul,
+  .prose-premium ol {
+    @apply space-y-3 mb-8;
   }
 
-  .prose-premium li {
+  .prose-premium ul {
+    @apply list-none ml-4;
+  }
+
+  .prose-premium ol {
+    @apply list-decimal ml-8;
+  }
+
+  .prose-premium ul li {
     @apply relative pl-6;
   }
 
-  .prose-premium li::before {
+  .prose-premium ul li::before {
     content: "";
     @apply absolute left-0 top-[0.6em] h-1.5 w-1.5 rounded-full bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.6)];
   }
