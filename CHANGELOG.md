@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.11](https://github.com/Orange-Ember-Studios/website/compare/v0.0.10...v0.0.11) (2026-04-22)
+
+
+### Features
+
+* **icons:** replace svgs with lucide icon library ([fc836fc](https://github.com/Orange-Ember-Studios/website/commit/fc836fc3d14d23812c20e383627d44cb565e83b0))
+
 ### [0.0.10](https://github.com/Orange-Ember-Studios/website/compare/v0.0.9...v0.0.10) (2026-04-22)
 
 
