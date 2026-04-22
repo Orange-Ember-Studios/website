@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.12](https://github.com/Orange-Ember-Studios/website/compare/v0.0.11...v0.0.12) (2026-04-22)
+
+
+### Bug Fixes
+
+* **husky:** removed first two lines for deprecations. ([159f859](https://github.com/Orange-Ember-Studios/website/commit/159f8595738a70f27fe4887fba53cf954677a2cb))
+
 ### [0.0.11](https://github.com/Orange-Ember-Studios/website/compare/v0.0.10...v0.0.11) (2026-04-22)
 
 
