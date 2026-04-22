@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.10](https://github.com/Orange-Ember-Studios/website/compare/v0.0.9...v0.0.10) (2026-04-22)
+
+
+### Bug Fixes
+
+* **blog:** use JavaScript regex engine for Shiki to fix Cloudflare WASM error ([af879e6](https://github.com/Orange-Ember-Studios/website/commit/af879e6cf8c7a199e84fcb84ef8d1e59b5a9a6df))
+
 ### [0.0.9](https://github.com/Orange-Ember-Studios/website/compare/v0.0.8...v0.0.9) (2026-04-22)
 
 
