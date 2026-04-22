@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.9](https://github.com/Orange-Ember-Studios/website/compare/v0.0.8...v0.0.9) (2026-04-22)
+
+
+### Features
+
+* **blog:** integrate Shiki for syntax highlighting and enhance code block styles ([323dd6a](https://github.com/Orange-Ember-Studios/website/commit/323dd6a9d3f11107b773ec3ec8ad1ffb5cca0eea))
+* **cms:** replace EditorJS with Milkdown for Markdown support ([3692bb2](https://github.com/Orange-Ember-Studios/website/commit/3692bb217265ec0faf864331420cb04ee8f30dfd))
+
 ### [0.0.8](https://github.com/Orange-Ember-Studios/website/compare/v0.0.7...v0.0.8) (2026-04-19)
 
 ### [0.0.7](https://github.com/Orange-Ember-Studios/website/compare/v0.0.6...v0.0.7) (2026-04-19)
