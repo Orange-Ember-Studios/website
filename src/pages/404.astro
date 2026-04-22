@@ -1,7 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { getTranslation } from "../i18n/i18n";
-
+import { ArrowRight } from '@lucide/astro';
+---
 // We set the status code to 404
 if (Astro.response) {
   Astro.response.status = 404;
@@ -95,20 +96,8 @@ if (Astro.response) {
           >
             <span data-i18n="error404.backHome"
               >{getTranslation("error404.backHome")}</span
-            >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="3"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="transition-transform group-hover:translate-x-1"
-              ><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg
-            >
+        >
+            <ArrowRight size={20} stroke-width={3} class="transition-transform group-hover:translate-x-1" />
           </span>
         </a>
       </div>

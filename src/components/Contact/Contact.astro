@@ -2,6 +2,7 @@
 // src/components/Contact/Contact.astro
 // US-05: Contact Form Section
 import ContactForm from './ContactForm.vue';
+import { Mail, X } from '@lucide/astro';
 ---
 
 <section id="contact" aria-label="Contact Us" class="py-24 bg-[#0b0f19] border-t border-white/5 relative overflow-hidden">
@@ -34,12 +35,12 @@ import ContactForm from './ContactForm.vue';
     {/* Social links / alternative contact (Optional but good for completeness) */}
     <div class="mt-16 flex flex-col md:flex-row justify-center items-center gap-8 text-gray-400">
       <a href="mailto:hello@orangeember.com" class="hover:text-ember-400 transition-colors flex items-center gap-2">
-        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+        <Mail class="w-5 h-5" />
         hello@orangeember.com
       </a>
       <div class="hidden md:block w-1.5 h-1.5 rounded-full bg-white/20"></div>
       <a href="https://x.com/OrangeEmberSt" target="_blank" rel="noopener noreferrer" class="hover:text-ember-400 transition-colors flex items-center gap-2">
-        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>
+        <X class="w-5 h-5" />
         @OrangeEmberSt
       </a>
     </div>

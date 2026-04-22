@@ -6,6 +6,7 @@ import { SOCIAL_URLS } from "../constants/urls";
 import { getTagStyle } from "../components/blog/tagMetadata";
 import { getTranslation } from "../i18n/i18n";
 import { resolveImageUrl } from "../lib/images";
+import { ArrowLeft, Clock, X } from '@lucide/astro';
 
 interface Props {
   frontmatter: {
@@ -75,19 +76,7 @@ const blogSchema = {
         href={`/${lang}/blog`}
         class="inline-flex items-center text-orange-500 hover:text-orange-400 font-medium transition-colors duration-200 group"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5 mr-2 transform group-hover:-translate-x-1 transition-transform duration-200"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-        </svg>
+        <ArrowLeft class="h-5 w-5 mr-2 transform group-hover:-translate-x-1 transition-transform duration-200" />
         <span data-i18n="post.backToBlog"
           >{getTranslation("post.backToBlog", lang as any)}</span
         >
@@ -127,19 +116,7 @@ const blogSchema = {
         </div>
         <div class="h-8 w-px bg-white/10 hidden sm:block"></div>
         <div class="hidden sm:flex items-center text-sm font-medium">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 mr-2 text-orange-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
+          <Clock class="h-5 w-5 mr-2 text-orange-500" />
           <span>
             {
               getTranslation("post.estReadTime", lang as any).replace(
@@ -201,11 +178,7 @@ const blogSchema = {
               <span data-i18n="post.followX"
                 >{getTranslation("post.followX", lang as any)}</span
               >
-              <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24"
-                ><path
-                  d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
-                ></path></svg
-              >
+              <X class="h-5 w-5" />
             </a>
           </div>
         </div>

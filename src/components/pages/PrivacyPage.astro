@@ -3,6 +3,7 @@
 import Layout from "../../layouts/Layout.astro";
 import Navbar from "../Navigation/Navbar.astro";
 import Footer from "../Navigation/Footer.astro";
+import { ChevronLeft } from '@lucide/astro';
 ---
 
 <Layout title="Privacy Policy - Orange Ember Studios">
@@ -25,18 +26,7 @@ import Footer from "../Navigation/Footer.astro";
           href="/"
           class="text-ember-400 hover:text-white transition-colors flex items-center gap-2 mb-8 group"
         >
-          <svg
-            class="w-5 h-5 group-hover:-translate-x-1 transition-transform"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15 19l-7-7 7-7"></path>
-          </svg>
+          <ChevronLeft class="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
           <span data-i18n="nav.backToHome">Back to Home</span>
         </a>
 

@@ -1,4 +1,6 @@
 ---
+import { ChevronDown, Check } from '@lucide/astro';
+
 interface Option {
   id: string;
   label: string;
@@ -68,19 +70,7 @@ const isNavbar = variant === "navbar";
       <span class="selected-label truncate" data-i18n={defaultLabelI18n}
         >{defaultLabel}</span
       >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class={`text-orange-500 transition-transform duration-300 ml-3 arrow-icon ${isNavbar ? "h-4 w-4" : "h-5 w-5"}`}
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M19 9l-7 7-7-7"></path>
-      </svg>
+      <ChevronDown class={`text-orange-500 transition-transform duration-300 ml-3 arrow-icon ${isNavbar ? "h-4 w-4" : "h-5 w-5"}`} />
     </button>
 
     <!-- Dropdown Menu -->
@@ -100,20 +90,7 @@ const isNavbar = variant === "navbar";
               <div
                 class={`shrink-0 border border-white/20 flex items-center justify-center group-[.active]/opt:bg-orange-500 group-[.active]/opt:border-orange-500 group-[.active]/opt:shadow-[0_0_15px_rgba(249,115,22,0.4)] transition-all duration-300 ${isMultiple ? "rounded-lg" : "rounded-full"} ${isNavbar ? "w-4 h-4 mr-3" : "w-6 h-6 mr-5"}`}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class={`text-white opacity-0 group-[.active]/opt:opacity-100 transition-opacity ${isNavbar ? "h-2.5 w-2.5" : "h-4 w-4"}`}
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="4"
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
+                <Check class={`text-white opacity-0 group-[.active]/opt:opacity-100 transition-opacity ${isNavbar ? "h-2.5 w-2.5" : "h-4 w-4"}`} />
               </div>
               <span
                 class={`font-bold text-gray-400 group-[.active]/opt:text-white leading-tight transition-colors truncate block grow pr-2 ${isNavbar ? "text-xs" : "text-base tracking-wide"}`}

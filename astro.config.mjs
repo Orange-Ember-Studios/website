@@ -15,6 +15,9 @@ export default defineConfig({
   site: "https://orangeember.com",
   vite: {
     plugins: [tailwindcss()],
+    ssr: {
+      noExternal: ['@lucide/astro', 'lucide-vue-next']
+    }
   },
 
   integrations: [vue(), mdx(), sitemap()],

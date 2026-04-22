@@ -45,5 +45,6 @@ Senior Engineer instructions for the Orange Ember Studios ecosystem.
 
 ## Implementation Rules
 - Prefer Tailwind CSS.
+- **Iconography:** Use `lucide-astro` (or `lucide-vue-next` for Vue components) for all icons. Avoid manual SVGs unless strictly necessary for custom branding.
 - Maintain high-quality types (no `any`).
 - Update `CHANGELOG.md` when versioning.

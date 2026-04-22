@@ -34,20 +34,20 @@ defineEmits(['update:modelValue']);
 }
 
 /* Typography & Content */
-.milkdown .ProseMirror h1 { @apply text-4xl font-bold text-white mb-8 tracking-tight; }
-.milkdown .ProseMirror h2 { @apply text-2xl font-bold text-white mt-10 mb-4 tracking-tight; }
-.milkdown .ProseMirror h3 { @apply text-xl font-semibold text-ash-100 mt-8 mb-3; }
-.milkdown .ProseMirror p { @apply mb-6 leading-relaxed text-ash-300 text-lg; }
+.milkdown .ProseMirror h1 { @apply text-2xl md:text-4xl font-bold text-white mb-6 md:mb-8 tracking-tight; }
+.milkdown .ProseMirror h2 { @apply text-xl md:text-2xl font-bold text-white mt-8 md:mt-10 mb-3 md:mb-4 tracking-tight; }
+.milkdown .ProseMirror h3 { @apply text-lg md:text-xl font-semibold text-ash-100 mt-6 md:mt-8 mb-2 md:mb-3; }
+.milkdown .ProseMirror p { @apply mb-4 md:mb-6 leading-relaxed text-ash-300 text-base md:text-lg; }
 
-.milkdown .ProseMirror ul { @apply list-disc pl-6 mb-6 space-y-2 text-ash-300; }
-.milkdown .ProseMirror ol { @apply list-decimal pl-6 mb-6 space-y-2 text-ash-300; }
+.milkdown .ProseMirror ul { @apply list-disc pl-5 md:pl-6 mb-4 md:mb-6 space-y-1 md:space-y-2 text-ash-300; }
+.milkdown .ProseMirror ol { @apply list-decimal pl-5 md:pl-6 mb-4 md:mb-6 space-y-1 md:space-y-2 text-ash-300; }
 
 .milkdown .ProseMirror blockquote { 
-  @apply border-l-4 border-ember-500 bg-ash-900/50 px-6 py-4 rounded-r-xl mb-8 italic text-ash-200; 
+  @apply border-l-4 border-ember-500 bg-ash-900/50 px-4 md:px-6 py-3 md:py-4 rounded-r-xl mb-6 md:mb-8 italic text-ash-200; 
 }
 
 .milkdown .ProseMirror pre { 
-  @apply bg-ash-900/80 p-6 rounded-xl border border-ash-800/80 mb-8 overflow-x-auto shadow-2xl backdrop-blur-sm; 
+  @apply bg-ash-900/80 p-4 md:p-6 rounded-xl border border-ash-800/80 mb-6 md:mb-8 overflow-x-auto shadow-2xl backdrop-blur-sm; 
 }
 
 .milkdown .ProseMirror pre code {

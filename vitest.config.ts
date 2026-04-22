@@ -6,6 +6,11 @@ export default getViteConfig({
     setupFiles: ['./vitest.setup.ts'],
     include: ['src/**/*.test.{ts,tsx}'],
     globals: true,
+    server: {
+      deps: {
+        inline: ['@lucide/astro'],
+      },
+    },
   },
   resolve: {
     conditions: ['node'],

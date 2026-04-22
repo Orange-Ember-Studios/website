@@ -13,15 +13,9 @@
           :class="['flex items-center gap-3 px-4 py-3 rounded-lg w-full transition-all group', 
                    activeType === type.id ? 'bg-orange-500/10 text-orange-400 font-medium' : 'text-neutral-500 hover:text-white hover:bg-neutral-800']">
           
-          <svg v-if="type.id === 'blog'" class="w-5 h-5 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5L18.5 6H15m-3 4h3m-3 4h3m-3 4h3"></path>
-          </svg>
-          <svg v-else-if="type.id === 'project'" class="w-5 h-5 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-          </svg>
-          <svg v-else class="w-5 h-5 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-          </svg>
+          <Newspaper v-if="type.id === 'blog'" class="w-5 h-5 text-current" />
+          <ImageIcon v-else-if="type.id === 'project'" class="w-5 h-5 text-current" />
+          <FileText v-else class="w-5 h-5 text-current" />
 
           {{ getTranslation(`admin.dashboard.${type.id === 'blog' ? 'blogPosts' : type.id === 'project' ? 'portfolio' : 'caseStudies'}`) }}
         </button>
@@ -30,35 +24,46 @@
         <button @click="setActiveType('profile')"
           :class="['flex items-center gap-3 px-4 py-2 rounded-lg w-full transition-all group', 
                    activeType === 'profile' ? 'bg-orange-500/10 text-orange-400 font-medium' : 'text-neutral-400 hover:text-white hover:bg-neutral-800']">
-          <svg class="w-5 h-5 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-          </svg>
+          <User class="w-5 h-5 text-current" />
           {{ getTranslation('admin.dashboard.profile') }}
         </button>
         <button @click="logout"
           class="flex items-center gap-3 px-4 py-2 text-neutral-400 hover:text-white w-full transition-colors group">
-          <svg class="w-5 h-5 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-          </svg>
+          <LogOut class="w-5 h-5 text-current" />
           {{ getTranslation('admin.dashboard.signOut') }}
         </button>
       </div>
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+    <main class="flex-1 flex flex-col h-screen overflow-hidden pb-16 md:pb-0">
       <!-- Topbar -->
       <header
-        class="h-16 border-b border-neutral-800 bg-neutral-900/50 backdrop-blur-md flex items-center justify-between px-6">
-        <h2 class="text-lg font-semibold capitalize">{{ getTranslation(`admin.dashboard.${activeType === 'blog' ? 'blogPosts' : activeType === 'project' ? 'portfolio' : activeType === 'case_study' ? 'caseStudies' : 'profile'}`) }}</h2>
-        <button v-if="activeType !== 'profile'" @click="createNewPost"
-          class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-lg shadow-orange-500/20 transition-all hover:-translate-y-0.5">
-          {{ getTranslation('admin.dashboard.newPost') }}
-        </button>
+        class="h-16 border-b border-neutral-800 bg-neutral-900/50 backdrop-blur-md flex items-center justify-between px-4 md:px-6">
+        <div class="flex items-center gap-3">
+          <!-- Mobile Menu Logo or Indicator -->
+          <div class="md:hidden w-8 h-8 rounded bg-orange-500/10 flex items-center justify-center border border-orange-500/20">
+             <span class="text-orange-500 font-bold text-xs">OE</span>
+          </div>
+          <h2 class="text-sm md:text-lg font-semibold capitalize truncate max-w-[150px] md:max-w-none">
+            {{ getTranslation(`admin.dashboard.${activeType === 'blog' ? 'blogPosts' : activeType === 'project' ? 'portfolio' : activeType === 'case_study' ? 'caseStudies' : 'profile'}`) }}
+          </h2>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button v-if="activeType !== 'profile'" @click="createNewPost"
+            class="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-medium shadow-lg shadow-orange-500/20 transition-all hover:-translate-y-0.5">
+            {{ getTranslation('admin.dashboard.newPost') }}
+          </button>
+          
+          <button @click="logout" class="md:hidden p-2 text-neutral-400 hover:text-white">
+            <LogOut class="w-5 h-5" />
+          </button>
+        </div>
       </header>
 
       <!-- Content Area -->
-      <div class="flex-1 p-6 overflow-auto">
+      <div class="flex-1 p-4 md:p-6 overflow-auto">
         <Profile v-if="activeType === 'profile'" />
         
         <div v-else-if="loading" class="flex flex-col items-center justify-center py-20 text-neutral-500 gap-4">
@@ -66,37 +71,51 @@
           {{ getTranslation('admin.dashboard.loading') }}
         </div>
         
-        <div v-else-if="filteredPosts.length === 0" class="flex flex-col items-center justify-center py-20 text-neutral-500 gap-2 border-2 border-dashed border-neutral-800 rounded-2xl">
+        <div v-else-if="filteredPosts.length === 0" class="flex flex-col items-center justify-center py-20 text-neutral-500 gap-2 border-2 border-dashed border-neutral-800 rounded-2xl text-center px-4">
            <p>{{ getTranslation('admin.dashboard.noContent') }}</p>
            <button @click="createNewPost" class="text-orange-500 hover:underline text-sm font-medium">{{ getTranslation('admin.dashboard.createFirst') }}</button>
         </div>
 
-        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           <div v-for="post in filteredPosts" :key="post.id"
-            class="bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden hover:border-orange-500/50 transition-colors cursor-pointer group flex flex-col justify-between p-5"
+            class="bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden hover:border-orange-500/50 transition-colors cursor-pointer group flex flex-col justify-between p-4 md:p-5 shadow-sm"
             @click="editPost(post)">
             <div>
-              <div class="flex justify-between items-start mb-4">
+              <div class="flex justify-between items-start mb-3 md:mb-4">
                 <span
-                  class="px-2.5 py-1 text-xs font-semibold uppercase tracking-wider rounded-md bg-neutral-800 text-neutral-400 group-hover:text-amber-400 group-hover:bg-amber-400/10 transition-colors">{{
+                  class="px-2 py-0.5 md:px-2.5 md:py-1 text-[10px] md:text-xs font-semibold uppercase tracking-wider rounded-md bg-neutral-800 text-neutral-400 group-hover:text-amber-400 group-hover:bg-amber-400/10 transition-colors">{{
                     post.type }}</span>
-                <span class="text-xs text-neutral-500">{{ new Date(post.created_at).toLocaleDateString() }}</span>
+                <span class="text-[10px] md:text-xs text-neutral-500">{{ new Date(post.created_at).toLocaleDateString() }}</span>
               </div>
-              <h3 class="text-lg font-medium text-white mb-2">{{ post.slug }}</h3>
+              <h3 class="text-base md:text-lg font-medium text-white mb-2 line-clamp-2">{{ post.slug }}</h3>
             </div>
             <div
-              class="flex items-center gap-2 mt-4 text-xs font-medium text-neutral-500 group-hover:text-orange-400 transition-colors">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
-                </path>
-              </svg>
+              class="flex items-center gap-2 mt-3 md:mt-4 text-[10px] md:text-xs font-medium text-neutral-500 group-hover:text-orange-400 transition-colors">
+              <Pencil class="w-3.5 h-3.5 md:w-4 md:h-4" />
               {{ getTranslation('admin.dashboard.editContent') }}
             </div>
           </div>
         </div>
       </div>
     </main>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-neutral-900 border-t border-neutral-800 flex items-center justify-around px-2 z-40">
+      <button v-for="type in [...contentTypes, { id: 'profile', name: 'Profile' }]" :key="type.id"
+        @click="setActiveType(type.id)"
+        class="flex flex-col items-center gap-1 min-w-[64px] transition-colors"
+        :class="activeType === type.id ? 'text-orange-500' : 'text-neutral-500'">
+        
+        <Newspaper v-if="type.id === 'blog'" class="w-5 h-5" />
+        <ImageIcon v-else-if="type.id === 'project'" class="w-5 h-5" />
+        <FileText v-else-if="type.id === 'case_study'" class="w-5 h-5" />
+        <User v-else-if="type.id === 'profile'" class="w-5 h-5" />
+
+        <span class="text-[10px] font-medium tracking-tight">
+          {{ type.id === 'blog' ? 'Blog' : type.id === 'project' ? 'Works' : type.id === 'case_study' ? 'Cases' : 'User' }}
+        </span>
+      </button>
+    </nav>
 
     <!-- Editor Modal -->
     <Editor v-if="editingPost" :post="editingPost" @close="closeEditor" @saved="refreshPosts" />
@@ -108,6 +127,14 @@ import { ref, onMounted, computed } from 'vue';
 import { getTranslation } from '../../i18n/i18n';
 import Editor from './Editor.vue';
 import Profile from './Profile.vue';
+import { 
+  Newspaper, 
+  Image as ImageIcon, 
+  FileText, 
+  User, 
+  LogOut, 
+  Pencil 
+} from 'lucide-vue-next';
 
 const posts = ref<any[]>([]);
 const loading = ref(true);

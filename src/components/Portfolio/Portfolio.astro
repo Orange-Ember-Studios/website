@@ -2,6 +2,7 @@
 import { SITE_URLS } from "../../constants/urls";
 import { getPublishedPostsByType } from "../../lib/posts.service";
 import { resolveImageUrl } from "../../lib/images";
+import { ExternalLink } from '@lucide/astro';
 
 const { lang = Astro.params.lang || "en" } = Astro.props;
 
@@ -160,19 +161,7 @@ const portfolioSchema = {
               <span class="text-ember-400 font-semibold tracking-[0.2em] uppercase text-xs md:text-sm mb-3 flex items-center gap-2">
                 <span data-i18n={project.categoryKey}>{project.category}</span>
                 {project.isExternal && (
-                  <svg
-                    class="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity -translate-x-2 group-hover:translate-x-0 duration-500"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                    />
-                  </svg>
+                  <ExternalLink class="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity -translate-x-2 group-hover:translate-x-0 duration-500" />
                 )}
               </span>
               <h3

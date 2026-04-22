@@ -1,6 +1,7 @@
 ---
 // src/components/About/About.astro
 // US-04: About Us Section
+import { Zap } from '@lucide/astro';
 ---
 
 <section id="about" aria-label="Our Story" class="py-24 bg-ash-950 text-white relative border-t border-white/5 overflow-hidden">
@@ -60,7 +61,7 @@
         {/* Floating Stat Card */}
         <div class="absolute -bottom-6 -left-6 md:-left-12 bg-ash-950 border border-white/10 rounded-2xl p-6 shadow-[0_20px_40px_rgba(45,43,100,0.4)] flex items-center gap-4 hover:-translate-y-2 transition-transform duration-500">
           <div class="w-12 h-12 rounded-full bg-ember-500/20 flex items-center justify-center text-ember-400">
-            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            <Zap class="w-6 h-6" />
           </div>
           <div>
             <span data-i18n="about.ignitingIdeas" class="block text-white font-bold text-lg">Igniting Ideas</span>
