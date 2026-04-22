@@ -47,11 +47,15 @@ defineEmits(['update:modelValue']);
 }
 
 .milkdown .ProseMirror pre { 
-  @apply bg-ash-900 p-6 rounded-xl border border-ash-800 mb-8 overflow-x-auto shadow-inner; 
+  @apply bg-ash-900/80 p-6 rounded-xl border border-ash-800/80 mb-8 overflow-x-auto shadow-2xl backdrop-blur-sm; 
+}
+
+.milkdown .ProseMirror pre code {
+  @apply font-mono text-ash-100 bg-transparent p-0 leading-relaxed;
 }
 
 .milkdown .ProseMirror code { 
-  @apply font-mono text-ember-400 bg-ash-800/80 px-1.5 py-0.5 rounded text-sm; 
+  @apply font-mono text-ember-400 bg-ash-800/80 px-1.5 py-0.5 rounded text-sm border border-ash-700/50; 
 }
 
 .milkdown .ProseMirror strong { @apply text-white font-bold; }

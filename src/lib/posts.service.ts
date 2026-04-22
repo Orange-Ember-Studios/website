@@ -1,4 +1,30 @@
 import { getDbClient } from './db';
+import { marked } from 'marked';
+import { createHighlighter } from 'shiki';
+
+const highlighter = await createHighlighter({
+  themes: ['github-dark'],
+  langs: ['gdscript', 'javascript', 'typescript', 'vue', 'astro', 'bash', 'cpp', 'csharp', 'python', 'sql', 'yaml']
+});
+
+// Configure marked to use shiki for code blocks
+marked.use({
+  async: true,
+  renderer: {
+    code(token) {
+      const { text, lang } = token;
+      if (!lang) return `<pre><code>${text}</code></pre>`;
+      try {
+        return highlighter.codeToHtml(text, {
+          lang,
+          theme: 'github-dark'
+        });
+      } catch (e) {
+        return `<pre><code class="language-${lang}">${text}</code></pre>`;
+      }
+    }
+  }
+});
 
 export async function getAllPosts() {
   const db = getDbClient();

@@ -55,6 +55,20 @@
   --color-pink-500: oklch(0.65 0.2 330);
 }
 
+/* Shiki Code Block Styles */
+pre.shiki {
+  @apply bg-ash-900! p-6 rounded-2xl border border-ash-800 my-8 overflow-x-auto shadow-2xl relative;
+}
+
+pre.shiki code {
+  @apply font-mono text-sm leading-relaxed block min-w-max;
+}
+
+/* Inline code inside prose */
+.prose :not(pre) > code {
+  @apply font-mono text-ember-400 bg-ash-800/50 px-1.5 py-0.5 rounded text-[0.9em] border border-ash-700/30;
+}
+
 /* Orange Ember Global Variables and Resets */
 :root {
   --bg-color: var(--color-ash-950);
