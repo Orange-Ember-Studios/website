@@ -96,9 +96,8 @@
             </div>
           </div>
 
-          <!-- Editor.js Container (hidden for projects) -->
-          <div v-show="draft.type !== 'project'" :id="`editorjs-${activeLang}`" class="editor-container prose prose-invert max-w-none text-neutral-200">
-          </div>
+          <!-- Milkdown Editor -->
+          <MilkdownEditor v-if="draft.type !== 'project'" v-model="activeTranslation.content" />
         </div>
       </div>
 
@@ -107,16 +106,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, shallowRef } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { getTranslation } from '../../i18n/i18n';
-import EditorJS from '@editorjs/editorjs';
-// @ts-ignore
-import Header from '@editorjs/header';
-// @ts-ignore
-import List from '@editorjs/list';
-// @ts-ignore
-import Quote from '@editorjs/quote';
 import { resolveImageUrl } from '../../lib/images';
+import MilkdownEditor from './MilkdownEditor.vue';
 
 const props = defineProps<{ post: any }>();
 const emit = defineEmits(['close', 'saved']);
@@ -127,7 +120,6 @@ const activeLang = ref('en');
 const saving = ref(false);
 
 const activeTranslation = ref(draft.value.translations.find((t: any) => t.lang === activeLang.value));
-const editorInstance = shallowRef<EditorJS | null>(null);
 
 const projectMeta = ref({
   category: 'Desktop Game',
@@ -139,38 +131,20 @@ const projectMeta = ref({
 const loadProjectMeta = () => {
   if (draft.value.type === 'project') {
     try {
+      // Projects still use JSON in content for their metadata
       const parsed = JSON.parse(activeTranslation.value.content || "{}");
       
-      let initialCategory = parsed.category;
-      let initialStatus = parsed.status;
-      let initialDesc = parsed.description;
-      let initialLink = parsed.link;
-
-      // Backward compatibility with generic Editor.js blocks
-      if (parsed.blocks && parsed.blocks.length > 0) {
-        const paragraphs = parsed.blocks.filter((b: any) => b.type === 'paragraph');
-        initialDesc = paragraphs.map((b: any) => b.data.text.replace(/<[^>]*>?/gm, '').replace(/&nbsp;/g, ' ')).join('\n');
-        
-        const statusMatch = initialDesc.match(/(?:Status|Estado|Statut):\s*([^.]+)/i);
-        if (statusMatch) initialStatus = statusMatch[1].trim();
-
-        const categoryMatch = initialDesc.match(/(?:Category|Categoría|Catégorie|Categoria):\s*([^.]+)/i);
-        if (categoryMatch) initialCategory = categoryMatch[1].trim();
-      }
-
       projectMeta.value = {
-        category: initialCategory || 'Desktop Game',
-        status: initialStatus || 'In Development',
-        description: initialDesc || '',
-        link: initialLink || ''
+        category: parsed.category || 'Desktop Game',
+        status: parsed.status || 'In Development',
+        description: parsed.description || '',
+        link: parsed.link || ''
       };
     } catch(e) {
       projectMeta.value = { category: 'Desktop Game', status: 'In Development', description: '', link: '' };
     }
   }
 };
-
-import { watch } from 'vue';
 
 watch(
   projectMeta,
@@ -191,156 +165,21 @@ watch(
   }
 );
 
-watch(
-  () => draft.value.type,
-  (newType) => {
-    if (newType === 'project') {
-      if (editorInstance.value) {
-        editorInstance.value.destroy();
-        editorInstance.value = null;
-      }
-      loadProjectMeta();
-    } else {
-      setTimeout(() => initEditor(), 50);
-    }
-  }
-);
-
-class SimpleCode {
-  data: any;
-  wrapper: any;
-
-  static get toolbox() {
-    return { title: 'Code', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>' };
-  }
-  constructor({ data }: any) {
-    this.data = { 
-      code: data.code || '',
-      language: data.language || 'gdscript'
-    };
-    this.wrapper = undefined;
-  }
-  render() {
-    this.wrapper = document.createElement('div');
-    this.wrapper.classList.add('flex', 'flex-col', 'gap-2', 'p-4', 'bg-[#171717]', 'rounded-xl', 'border', 'border-[#404040]');
-    
-    const langSelect = document.createElement('select');
-    const languages = [
-      { val: 'gdscript', label: 'GDScript' },
-      { val: 'javascript', label: 'JavaScript' },
-      { val: 'typescript', label: 'TypeScript' },
-      { val: 'vue', label: 'Vue' },
-      { val: 'astro', label: 'Astro' },
-      { val: 'html', label: 'HTML' },
-      { val: 'css', label: 'CSS' },
-      { val: 'json', label: 'JSON' },
-      { val: 'bash', label: 'Bash' },
-      { val: 'csharp', label: 'C#' },
-      { val: 'cpp', label: 'C++' },
-      { val: 'python', label: 'Python' },
-      { val: 'sql', label: 'SQL' },
-      { val: 'yaml', label: 'YAML' }
-    ];
-    
-    languages.forEach(l => {
-      const opt = document.createElement('option');
-      opt.value = l.val;
-      opt.textContent = l.label;
-      if (this.data.language === l.val) opt.selected = true;
-      langSelect.appendChild(opt);
-    });
-    
-    langSelect.style.background = '#262626';
-    langSelect.style.color = 'white';
-    langSelect.style.border = '1px solid #404040';
-    langSelect.style.borderRadius = '4px';
-    langSelect.style.padding = '4px 8px';
-    langSelect.style.fontSize = '12px';
-    langSelect.style.width = 'fit-content';
-    langSelect.style.marginBottom = '8px';
-
-    const textarea = document.createElement('textarea');
-    textarea.value = this.data.code;
-    textarea.placeholder = 'Paste your code here...';
-    textarea.style.width = '100%';
-    textarea.style.minHeight = '150px';
-    textarea.style.background = '#0d1117';
-    textarea.style.color = '#e5e5e5';
-    textarea.style.border = '1px solid #404040';
-    textarea.style.borderRadius = '8px';
-    textarea.style.padding = '12px';
-    textarea.style.fontFamily = 'monospace';
-    textarea.style.fontSize = '14px';
-    textarea.style.outline = 'none';
-    
-    this.wrapper.appendChild(langSelect);
-    this.wrapper.appendChild(textarea);
-    return this.wrapper;
-  }
-  save(wrapper: any) {
-    const textarea = wrapper.querySelector('textarea');
-    const langSelect = wrapper.querySelector('select');
-    return { 
-      code: textarea.value,
-      language: langSelect.value
-    };
-  }
-}
-
-const initEditor = () => {
-  if (editorInstance.value) {
-    editorInstance.value.destroy();
-  }
-
-  const contentStr = activeTranslation.value.content;
-  let data = { blocks: [] };
-  if (contentStr) {
-    try { data = JSON.parse(contentStr); } catch (e) { }
-  }
-
-  editorInstance.value = new EditorJS({
-    holder: `editorjs-${activeLang.value}`,
-    data,
-    tools: {
-      header: { class: Header as any, inlineToolbar: true },
-      list: { class: List as any, inlineToolbar: true },
-      quote: { class: Quote as any, inlineToolbar: true },
-      code: SimpleCode
-    },
-    onChange: async () => {
-      if (editorInstance.value) {
-        const savedData = await editorInstance.value.save();
-        activeTranslation.value.content = JSON.stringify(savedData);
-      }
-    }
-  });
-};
-
 const handleClose = () => {
   emit('close');
 };
 
 const switchLang = async (lang: string) => {
-  if (editorInstance.value) {
-    const savedData = await editorInstance.value.save();
-    activeTranslation.value.content = JSON.stringify(savedData);
-  }
   activeLang.value = lang;
   activeTranslation.value = draft.value.translations.find((t: any) => t.lang === lang);
   
   if (draft.value.type === 'project') {
     loadProjectMeta();
-  } else {
-    setTimeout(() => initEditor(), 50); // delay to let DOM element recreate
   }
 };
 
 const save = async () => {
   saving.value = true;
-  if (editorInstance.value) {
-    const savedData = await editorInstance.value.save();
-    activeTranslation.value.content = JSON.stringify(savedData);
-  }
 
   const endpoint = draft.value.id === 'new' ? '/api/admin/posts' : `/api/admin/posts/${draft.value.id}`;
   const method = draft.value.id === 'new' ? 'POST' : 'PUT';
@@ -358,13 +197,7 @@ const save = async () => {
 onMounted(() => {
   if (draft.value.type === 'project') {
     loadProjectMeta();
-  } else {
-    initEditor();
   }
-});
-
-onBeforeUnmount(() => {
-  if (editorInstance.value) editorInstance.value.destroy();
 });
 </script>
 

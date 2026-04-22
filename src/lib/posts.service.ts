@@ -156,22 +156,37 @@ export async function getPublishedPostBySlug(slug: string, lang: string) {
   let description = "";
   let words = 0;
 
+  const content = post.content as string;
   try {
-    const data = typeof post.content === 'string' ? JSON.parse(post.content) : post.content;
-    htmlContent = await parseEditorJsBlocks(data.blocks || []);
-
-    const textBlock = data.blocks?.find((b: any) => b.type === "paragraph");
-    if (textBlock) {
-      description = textBlock.data.text
-        .replace(/<[^>]*>?/gm, '')
-        .replace(/&nbsp;/g, ' ')
-        .substring(0, 150) + "...";
+    // Try to parse as JSON first (for backward compatibility during migration)
+    const data = JSON.parse(content);
+    if (data && typeof data === 'object' && data.blocks) {
+      htmlContent = await parseEditorJsBlocks(data.blocks || []);
+      const textBlock = data.blocks?.find((b: any) => b.type === "paragraph");
+      if (textBlock) {
+        description = textBlock.data.text
+          .replace(/<[^>]*>?/gm, '')
+          .replace(/&nbsp;/g, ' ')
+          .substring(0, 150) + "...";
+      }
+      const textBlocks = data.blocks?.filter((b: any) => b.type === "paragraph" || b.type === "header");
+      words = textBlocks.reduce((acc: number, b: any) => acc + (b.data.text?.split(/\s+/g).length || 0), 0);
+    } else {
+      // Fallback or non-block JSON
+      htmlContent = await marked.parse(content);
+      description = content.replace(/<[^>]*>?/gm, '').substring(0, 150) + "...";
+      words = content.split(/\s+/g).length;
     }
-
-    const textBlocks = data.blocks?.filter((b: any) => b.type === "paragraph" || b.type === "header");
-    words = textBlocks.reduce((acc: number, b: any) => acc + (b.data.text?.split(/\\s+/g).length || 0), 0);
-  } catch (e) { 
-    console.error("Error in getPublishedPostBySlug parsing:", e);
+  } catch (e) {
+    // It's already Markdown
+    try {
+      htmlContent = await marked.parse(content);
+    } catch (parseError) {
+      console.error("Markdown parse error:", parseError);
+      htmlContent = content; // Fallback to raw content
+    }
+    description = content.replace(/<[^>]*>?/gm, '').substring(0, 150) + "...";
+    words = content.split(/\s+/g).length;
   }
 
   const readingTime = Math.ceil((words || 1) / 200);

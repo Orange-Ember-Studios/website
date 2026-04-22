@@ -8,8 +8,19 @@ export class EnvManager {
    * Checks import.meta.env first (Astro standard) then process.env (Node fallback).
    */
   private static getVar(key: string, required: boolean = true): string | undefined {
-    // @ts-ignore - Handle runtime environments where process or import.meta might be partially available
-    const value = import.meta.env[key] || (typeof process !== 'undefined' ? process.env[key] : undefined);
+    let value: string | undefined = undefined;
+
+    try {
+      // @ts-ignore
+      if (typeof import.meta !== 'undefined' && import.meta.env) {
+        // @ts-ignore
+        value = import.meta.env[key];
+      }
+    } catch (e) {}
+
+    if (value === undefined && typeof process !== 'undefined') {
+      value = process.env[key];
+    }
     
     if (required && value === undefined) {
       console.warn(`[EnvManager] Warning: Environment variable "${key}" is not set.`);
