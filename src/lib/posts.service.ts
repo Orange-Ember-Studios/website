@@ -1,10 +1,11 @@
 import { getDbClient } from './db';
 import { marked } from 'marked';
-import { createHighlighter } from 'shiki';
+import { createHighlighter, createJavaScriptRegexEngine } from 'shiki';
 
 const highlighter = await createHighlighter({
   themes: ['github-dark'],
-  langs: ['gdscript', 'javascript', 'typescript', 'vue', 'astro', 'bash', 'cpp', 'csharp', 'python', 'sql', 'yaml']
+  langs: ['gdscript', 'javascript', 'typescript', 'vue', 'astro', 'bash', 'cpp', 'csharp', 'python', 'sql', 'yaml'],
+  engine: createJavaScriptRegexEngine()
 });
 
 // Configure marked to use shiki for code blocks
@@ -109,7 +110,7 @@ export async function deletePost(id: string) {
   return true;
 }
 
-import { parseEditorJsBlocks } from './editorjs-parser';
+import { parseEditorJsBlocks } from './content-parser';
 
 export async function getPublishedPostsByType(type: string) {
   const db = getDbClient();

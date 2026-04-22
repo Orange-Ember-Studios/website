@@ -1,4 +1,4 @@
-import { createHighlighter } from 'shiki';
+import { createHighlighter, createJavaScriptRegexEngine } from 'shiki';
 
 let highlighter: any;
 
@@ -7,6 +7,7 @@ async function getHighlighter() {
     highlighter = await createHighlighter({
       themes: ['github-dark'],
       langs: ['javascript', 'typescript', 'vue', 'astro', 'html', 'css', 'json', 'markdown', 'bash', 'yaml', 'csharp', 'cpp', 'python', 'sql', 'gdscript'],
+      engine: createJavaScriptRegexEngine()
     });
   }
   return highlighter;
