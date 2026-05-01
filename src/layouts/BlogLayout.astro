@@ -6,7 +6,7 @@ import { SITE_URLS, SOCIAL_URLS } from "../constants/urls";
 import { getTagStyle } from "../components/blog/tagMetadata";
 import { getTranslation } from "../i18n/i18n";
 import { resolveImageUrl } from "../lib/images";
-import { ArrowLeft, Clock, Heart, Linkedin, MessageCircle, Share2, X } from '@lucide/astro';
+import { ArrowLeft, Clock, Heart, MessageCircle, Share2, X } from '@lucide/astro';
 
 interface Props {
   frontmatter: {
@@ -203,7 +203,7 @@ const blogSchema = {
           aria-label={getTranslation("post.shareLinkedIn", lang as any)}
           class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-gray-200 transition-all duration-300 hover:-translate-y-0.5 hover:border-orange-400 hover:bg-orange-500 hover:text-white"
         >
-          <Linkedin class="h-5 w-5" aria-hidden="true" />
+          <span class="font-bold leading-none" aria-hidden="true">in</span>
         </a>
         <a
           href={shareLinks.whatsapp}
