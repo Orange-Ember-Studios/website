@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.14](https://github.com/Orange-Ember-Studios/website/compare/v0.0.12...v0.0.14) (2026-05-01)
+
+
+### Features
+
+* **blog:** add post likes and social share actions ([cb38622](https://github.com/Orange-Ember-Studios/website/commit/cb38622399d27d47c62284adb3f009686b8c52e0))
+
 ### [0.0.13](https://github.com/Orange-Ember-Studios/website/compare/v0.0.12...v0.0.13) (2026-04-25)
 
 ### [0.0.12](https://github.com/Orange-Ember-Studios/website/compare/v0.0.11...v0.0.12) (2026-04-22)
