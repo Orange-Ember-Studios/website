@@ -1,5 +1,6 @@
 ---
 import BlogLayout from "../../../layouts/BlogLayout.astro";
+import { getLikeCount } from "../../../lib/likes.service";
 import { getPublishedPostBySlug } from "../../../lib/posts.service";
 
 const { lang, slug } = Astro.params;
@@ -16,12 +17,20 @@ if (!post) {
 }
 
 const { frontmatter, readingTime, htmlContent } = post;
+
+let initialLikeCount = 0;
+try {
+  initialLikeCount = await getLikeCount(`${lang}/${slug}`);
+} catch {
+  initialLikeCount = 0;
+}
 ---
 
 <BlogLayout
   frontmatter={frontmatter}
   postId={`${lang}/${slug}`}
   readingTime={readingTime}
+  initialLikeCount={initialLikeCount}
 >
   <article
     set:html={htmlContent}

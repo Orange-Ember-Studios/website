@@ -46,6 +46,19 @@ async function init() {
     );
   `);
 
+  await client.execute(`
+    CREATE TABLE IF NOT EXISTS post_likes (
+      id TEXT PRIMARY KEY,
+      post_key TEXT NOT NULL,
+      visitor_hash TEXT NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE(post_key, visitor_hash)
+    );
+  `);
+  await client.execute(
+    `CREATE INDEX IF NOT EXISTS idx_post_likes_post_key ON post_likes(post_key);`,
+  );
+
   console.log('Tables verified.');
 
   const adminRes = await client.execute(`SELECT id FROM users WHERE username = 'admin'`);

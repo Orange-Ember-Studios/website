@@ -18,6 +18,7 @@ describe("Blog Layout", () => {
   it("should render the blog post title", async () => {
     const result = await container.renderToString(BlogLayout, {
       props: {
+        postId: "en/my-awesome-blog-post",
         frontmatter: {
           title: "My Awesome Blog Post",
           description: "A description of the post",
@@ -34,6 +35,7 @@ describe("Blog Layout", () => {
   it("should include the author name", async () => {
     const result = await container.renderToString(BlogLayout, {
       props: {
+        postId: "en/test-post",
         frontmatter: {
           title: "Test Post",
           pubDate: "2024-03-20",
@@ -48,9 +50,11 @@ describe("Blog Layout", () => {
   it("should render an article tag for the content", async () => {
     const result = await container.renderToString(BlogLayout, {
       props: {
+        postId: "en/test-post",
         frontmatter: {
           title: "Test Post",
           pubDate: "2024-03-20",
+          author: "Author",
         }
       },
     });

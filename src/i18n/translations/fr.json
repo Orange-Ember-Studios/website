@@ -223,6 +223,10 @@
     "estReadTime": "Lecture estimée : {time} min",
     "enjoyedPost": "Vous avez aimé cet article ?",
     "stayUpdated": "Restez informé de nos dernières nouvelles et perspectives de développement.",
-    "followX": "Suivez-nous sur"
+    "followX": "Suivez-nous sur",
+    "share": "Partager",
+    "shareOnX": "Partager sur X",
+    "shareOnLinkedIn": "Partager sur LinkedIn",
+    "shareOnWhatsApp": "Partager sur WhatsApp"
   }
 }
