@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.16](https://github.com/Orange-Ember-Studios/website/compare/v0.0.15...v0.0.16) (2026-05-08)
+
+
+### Features
+
+* Added Donation button ([4f04888](https://github.com/Orange-Ember-Studios/website/commit/4f04888e4481128a161a11416cb85c149488e794))
+
 ### [0.0.15](https://github.com/Orange-Ember-Studios/website/compare/v0.0.13...v0.0.15) (2026-05-08)
 
 
