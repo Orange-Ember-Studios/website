@@ -223,6 +223,13 @@
     "estReadTime": "Est. {time} min read",
     "enjoyedPost": "Enjoyed this post?",
     "stayUpdated": "Stay updated with our latest news and game development insights.",
-    "followX": "Follow Us on"
+    "followX": "Follow Us on",
+    "actions": "Post actions",
+    "like": "Like",
+    "liked": "Liked",
+    "share": "Share",
+    "shareX": "Share on X",
+    "shareLinkedIn": "Share on LinkedIn",
+    "shareWhatsApp": "Share on WhatsApp"
   }
 }

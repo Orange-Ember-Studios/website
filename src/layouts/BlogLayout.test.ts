@@ -57,4 +57,23 @@ describe("Blog Layout", () => {
 
     expect(result).includes("<article");
   });
+
+  it("should render like and share controls", async () => {
+    const result = await container.renderToString(BlogLayout, {
+      props: {
+        postId: "en/test-post",
+        frontmatter: {
+          title: "Test Post",
+          pubDate: "2024-03-20",
+          author: "Admin",
+        }
+      },
+    });
+
+    expect(result).includes("data-blog-like-button");
+    expect(result).includes("/api/posts/en/test-post/likes");
+    expect(result).includes("https://x.com/intent/tweet");
+    expect(result).includes("https://www.linkedin.com/sharing/share-offsite/");
+    expect(result).includes("https://wa.me/");
+  });
 });

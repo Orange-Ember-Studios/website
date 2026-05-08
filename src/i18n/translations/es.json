@@ -221,6 +221,13 @@
   "post": {
     "backToBlog": "Volver al Blog",
     "estReadTime": "Lectura estimada: {time} min",
+    "actions": "Acciones del artículo",
+    "like": "Me gusta",
+    "liked": "Te gusta",
+    "share": "Compartir",
+    "shareX": "Compartir en X",
+    "shareLinkedIn": "Compartir en LinkedIn",
+    "shareWhatsApp": "Compartir en WhatsApp",
     "enjoyedPost": "¿Te gustó este artículo?",
     "stayUpdated": "Mantente al día con nuestras últimas noticias y novedades en desarrollo.",
     "followX": "Síguenos en"
