@@ -58,6 +58,18 @@ const { lang = Astro.params.lang || "en" } = Astro.props;
       >
         Work with us
       </a>
+      <a
+        href="https://buymeacoffee.com/seobryn"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-amber-300 bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 hover:border-amber-500/50 transition-all duration-300"
+        title="Support us on Buy Me a Coffee"
+      >
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M2 21h18v-2H2v2zm2-4h14V9H4v8zm2-6h10v2H6V11zm2-4h6v2H8V7z"/>
+        </svg>
+        Donate
+      </a>
       <PremiumLanguageSelector lang={lang} id="desktop-lang-selector" />
       <a
         href="/admin"
@@ -119,12 +131,23 @@ const { lang = Astro.params.lang || "en" } = Astro.props;
       class="mobile-link text-2xl font-bold text-white hover:text-ember-400 transition-colors uppercase tracking-widest"
       >Blog</a
     >
+<a
+        href={`/${lang}/#contact`}
+        data-i18n="nav.workWithUs"
+        class="mobile-link px-8 py-3 mt-4 border border-ember-500/30 rounded-full text-lg font-bold text-white bg-void-500/20 hover:bg-ember-500 transition-all duration-300"
+      >
+        Work with us
+    </a>
     <a
-      href={`/${lang}/#contact`}
-      data-i18n="nav.workWithUs"
-      class="mobile-link px-8 py-3 mt-4 border border-ember-500/30 rounded-full text-lg font-bold text-white bg-void-500/20 hover:bg-ember-500 transition-all duration-300"
-    >
-      Work with us
+        href="https://buymeacoffee.com/seobryn"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mobile-link flex items-center gap-2 px-6 py-3 mt-4 rounded-full text-base font-semibold text-amber-300 bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 transition-all duration-300"
+      >
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M2 21h18v-2H2v2zm2-4h14V9H4v8zm2-6h10v2H6V11zm2-4h6v2H8V7z"/>
+        </svg>
+        Donate
     </a>
     <div class="mt-4 flex flex-col items-center gap-6">
       <PremiumLanguageSelector lang={lang} id="mobile-lang-selector" />
