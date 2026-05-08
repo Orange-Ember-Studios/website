@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.15](https://github.com/Orange-Ember-Studios/website/compare/v0.0.13...v0.0.15) (2026-05-08)
+
+
+### Features
+
+* add opencode GitHub Actions workflow ([0ea635d](https://github.com/Orange-Ember-Studios/website/commit/0ea635da6a282373a57e0905daf358785475db51))
+
 ### [0.0.14](https://github.com/Orange-Ember-Studios/website/compare/v0.0.13...v0.0.14) (2026-05-08)
 
 ### [0.0.13](https://github.com/Orange-Ember-Studios/website/compare/v0.0.12...v0.0.13) (2026-04-25)
