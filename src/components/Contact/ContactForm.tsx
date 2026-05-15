@@ -36,6 +36,8 @@ export function ContactForm() {
   const siteKey =
     EnvManager.PUBLIC_TURNSTILE_SITE_KEY || "1x00000000000000000000AA";
 
+  let widgetIdRef: string | null = null;
+
   const waitForTurnstile = async (): Promise<boolean> => {
     let attempts = 0;
     const maxAttempts = 50; // 5 seconds with 100ms intervals
@@ -51,74 +53,70 @@ export function ContactForm() {
     return false;
   };
 
-  // Render Turnstile widget when element is ready
-  createEffect(() => {
-    let mounted = true;
+  const initializeTurnstile = async () => {
+    const el = document.getElementById("turnstile-widget");
+    if (!el || !siteKey) return;
 
-    (async () => {
-      const el = document.getElementById("turnstile-widget");
-      if (!el || !siteKey || !mounted) return;
+    // Avoid re-rendering if already rendered
+    if (el.hasAttribute("data-rendered")) {
+      return;
+    }
 
-      // Avoid re-rendering if already rendered
-      if (el.hasAttribute("data-rendered")) {
+    try {
+      // Wait for Turnstile to load
+      const hasLoaded = await waitForTurnstile();
+      if (!hasLoaded) {
+        console.warn("Turnstile script failed to load");
+        setErrorMsg(getTranslation("contact.securityCheck"));
         return;
       }
 
-      try {
-        // Wait for Turnstile to load
-        const hasLoaded = await waitForTurnstile();
-        if (!hasLoaded || !mounted) {
-          console.warn("Turnstile script failed to load");
-          setErrorMsg(getTranslation("contact.securityCheck"));
-          return;
-        }
-
-        if (!window.turnstile) {
-          console.error("Turnstile not available after waiting");
-          setErrorMsg(getTranslation("contact.securityCheck"));
-          return;
-        }
-
-        const widgetId = window.turnstile.render(el, {
-          sitekey: siteKey,
-          theme: "dark",
-          callback: (token: string) => {
-            if (mounted) setTurnstileToken(token);
-          },
-          "expired-callback": () => {
-            if (mounted) setTurnstileToken("");
-          },
-          "error-callback": () => {
-            if (mounted) setTurnstileToken("");
-          },
-        });
-
-        if (widgetId && mounted) {
-          el.setAttribute("data-widget-id", widgetId);
-          el.setAttribute("data-rendered", "true");
-        }
-      } catch (e) {
-        if (mounted) {
-          console.error("Turnstile render error:", e);
-          setErrorMsg(getTranslation("contact.securityCheck"));
-        }
+      if (!window.turnstile) {
+        console.error("Turnstile not available after waiting");
+        setErrorMsg(getTranslation("contact.securityCheck"));
+        return;
       }
-    })();
 
-    return () => {
-      mounted = false;
-      const el = document.getElementById("turnstile-widget");
-      const widgetId = el?.getAttribute("data-widget-id");
-      if (widgetId && window.turnstile) {
+      // Clear previous widget if exists
+      if (widgetIdRef && window.turnstile) {
         try {
-          window.turnstile.remove(widgetId);
-          el?.removeAttribute("data-rendered");
-          el?.removeAttribute("data-widget-id");
+          window.turnstile.remove(widgetIdRef);
+          widgetIdRef = null;
         } catch (e) {
-          console.warn("Error removing Turnstile widget:", e);
+          console.warn("Error removing previous Turnstile widget:", e);
         }
       }
-    };
+
+      const widgetId = window.turnstile.render(el, {
+        sitekey: siteKey,
+        theme: "dark",
+        callback: (token: string) => {
+          setTurnstileToken(token);
+        },
+        "expired-callback": () => {
+          setTurnstileToken("");
+        },
+        "error-callback": () => {
+          setTurnstileToken("");
+        },
+      });
+
+      if (widgetId) {
+        widgetIdRef = widgetId;
+        el.setAttribute("data-widget-id", widgetId);
+        el.setAttribute("data-rendered", "true");
+      }
+    } catch (e) {
+      console.error("Turnstile render error:", e);
+      setErrorMsg(getTranslation("contact.securityCheck"));
+    }
+  };
+
+  // Initialize Turnstile on mount
+  createEffect(() => {
+    // Use setTimeout to ensure DOM is fully ready
+    const timer = setTimeout(initializeTurnstile, 0);
+    return () => clearTimeout(timer);
   });
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -181,9 +179,14 @@ export function ContactForm() {
         setEmail("");
         setSubject("");
         setMessage("");
-        const el = document.getElementById("turnstile-widget");
-        const wid = el?.getAttribute("data-widget-id");
-        if (wid && window.turnstile) window.turnstile.reset(wid);
+        // Reset Turnstile widget using stored reference
+        if (widgetIdRef && window.turnstile) {
+          try {
+            window.turnstile.reset(widgetIdRef);
+          } catch (e) {
+            console.warn("Error resetting Turnstile widget:", e);
+          }
+        }
         setTurnstileToken("");
       } else {
         setErrorMsg(result.error || getTranslation("contact.genericError"));
