@@ -59,16 +59,12 @@ export default function AdminDashboard(props: {
     try {
       const res = await fetch("/api/admin/posts", { credentials: "same-origin" });
       if (!res.ok) {
-        if (res.status === 401) {
-          navigate("/admin/login", { replace: true });
-          return;
-        }
         console.error("Failed to fetch posts:", res.status);
         setPosts([]);
         return;
       }
       const data = await res.json();
-      setPosts(Array.isArray(data) ? data as PostSummary[] : []);
+      setPosts(Array.isArray(data) ? (data as PostSummary[]) : []);
     } catch (e) {
       console.error("Error fetching posts:", e);
       setPosts([]);
@@ -92,11 +88,14 @@ export default function AdminDashboard(props: {
     return { ...postDetails, translations };
   };
 
+  // Only fetch posts once auth is confirmed
   createEffect(() => {
+    if (!authChecked()) return;
     void fetchPosts();
   });
 
   createEffect(() => {
+    if (!authChecked()) return;
     const id = props.postId;
     if (!id || props.section === "profile") {
       setEditingPost(null);
