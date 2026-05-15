@@ -38,6 +38,35 @@ export function ContactForm() {
 
   let widgetIdRef: string | null = null;
 
+  const waitForElement = (selector: string, timeout = 5000): Promise<HTMLElement | null> => {
+    return new Promise((resolve) => {
+      const element = document.querySelector(selector);
+      if (element) {
+        resolve(element as HTMLElement);
+        return;
+      }
+
+      const observer = new MutationObserver(() => {
+        const el = document.querySelector(selector);
+        if (el) {
+          observer.disconnect();
+          resolve(el as HTMLElement);
+        }
+      });
+
+      observer.observe(document.documentElement, {
+        childList: true,
+        subtree: true,
+      });
+
+      const timeoutId = setTimeout(() => {
+        observer.disconnect();
+        console.warn(`Element "${selector}" not found after ${timeout}ms`);
+        resolve(null);
+      }, timeout);
+    });
+  };
+
   const waitForTurnstile = async (): Promise<boolean> => {
     let attempts = 0;
     const maxAttempts = 50; // 5 seconds with 100ms intervals
@@ -54,7 +83,8 @@ export function ContactForm() {
   };
 
   const initializeTurnstile = async () => {
-    const el = document.getElementById("turnstile-widget");
+    // Wait for the Turnstile widget container element to be in the DOM
+    const el = await waitForElement("#turnstile-widget", 5000);
     if (!el || !siteKey) return;
 
     // Avoid re-rendering if already rendered
@@ -112,11 +142,9 @@ export function ContactForm() {
     }
   };
 
-  // Initialize Turnstile on mount
+  // Initialize Turnstile when element is added to DOM
   createEffect(() => {
-    // Use setTimeout to ensure DOM is fully ready
-    const timer = setTimeout(initializeTurnstile, 0);
-    return () => clearTimeout(timer);
+    initializeTurnstile();
   });
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
