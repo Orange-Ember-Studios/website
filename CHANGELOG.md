@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.17](https://github.com/Orange-Ember-Studios/website/compare/v0.0.16...v0.0.17) (2026-05-15)
+
+
+### Bug Fixes
+
+* enable language selector functionality ([3abbc55](https://github.com/Orange-Ember-Studios/website/commit/3abbc5558915e5e339774089092c05f5f1abdbb4))
+* gate all admin API fetches behind auth confirmation ([a79f24b](https://github.com/Orange-Ember-Studios/website/commit/a79f24b142e13e706b25dea6b904424fd240fcce))
+* implement admin authentication protection ([b02c71a](https://github.com/Orange-Ember-Studios/website/commit/b02c71a7a93e4e827d9e3be323f9f271847d1eee))
+* improve Cloudflare Turnstile integration ([d96bf72](https://github.com/Orange-Ember-Studios/website/commit/d96bf722626ff56892e86fbac6a1f7d24f13b347))
+* repair admin page blank screen ([5ddec34](https://github.com/Orange-Ember-Studios/website/commit/5ddec34aa88b828dcd4377ed9e34b7720721a9ff))
+* resolve Turnstile widget lifecycle conflicts ([dbece75](https://github.com/Orange-Ember-Studios/website/commit/dbece7595acacd8eaccd43cc1d0dbc4b7e7c45da))
+
 ### [0.0.16](https://github.com/Orange-Ember-Studios/website/compare/v0.0.15...v0.0.16) (2026-05-08)
 
 
