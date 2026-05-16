@@ -3,9 +3,9 @@ import {
   getCurrentLanguage,
   getSupportedLanguages,
   setLanguage,
-} from "../../i18n/i18n";
-import type { SupportedLanguage } from "../../i18n/i18n";
-import PremiumSelect from "../ui/PremiumSelect";
+} from "../../i18n/i18n.ts";
+import type { SupportedLanguage } from "../../i18n/i18n.ts";
+import PremiumSelect from "../ui/PremiumSelect.tsx";
 
 export function PremiumLanguageSelector({
   lang: propLang,

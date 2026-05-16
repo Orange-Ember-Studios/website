@@ -1,4 +1,5 @@
-import { getDbClient } from './db';
+import { getDbClient, type TursoCredentials } from "./db.ts";
+import type { Client } from "@libsql/client";
 
 type PostLikeSummary = {
   count: number;
@@ -9,7 +10,7 @@ type PostRecord = {
   id: string;
 };
 
-async function ensurePostLikesTable(db: ReturnType<typeof getDbClient>) {
+async function ensurePostLikesTable(db: Client) {
   await db.execute(`
     CREATE TABLE IF NOT EXISTS post_likes (
       id TEXT PRIMARY KEY,
@@ -22,8 +23,11 @@ async function ensurePostLikesTable(db: ReturnType<typeof getDbClient>) {
   `);
 }
 
-/** Same visibility as the public blog page: published translation for slug/lang (any post type). */
-async function getPublishedPostForLikes(db: ReturnType<typeof getDbClient>, slug: string, lang: string): Promise<PostRecord | null> {
+async function getPublishedBlogPost(
+  db: Client,
+  slug: string,
+  lang: string,
+): Promise<PostRecord | null> {
   const res = await db.execute({
     sql: `
       SELECT p.id
@@ -32,44 +36,53 @@ async function getPublishedPostForLikes(db: ReturnType<typeof getDbClient>, slug
       WHERE p.slug = ? AND t.lang = ? AND t.published = 1
       LIMIT 1
     `,
-    args: [slug, lang]
+    args: [slug, lang],
   });
 
   if (res.rows.length === 0) return null;
 
   return {
-    id: String(res.rows[0].id)
+    id: String(res.rows[0].id),
   };
 }
 
 async function hashVisitorForPost(postId: string, visitorId: string) {
   const data = new TextEncoder().encode(`${postId}:${visitorId}`);
-  const digest = await crypto.subtle.digest('SHA-256', data);
+  const digest = await crypto.subtle.digest("SHA-256", data);
   return Array.from(new Uint8Array(digest))
-    .map((byte) => byte.toString(16).padStart(2, '0'))
-    .join('');
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
 }
 
-async function getLikeSummary(db: ReturnType<typeof getDbClient>, postId: string, visitorHash: string): Promise<PostLikeSummary> {
+async function getLikeSummary(
+  db: Client,
+  postId: string,
+  visitorHash: string,
+): Promise<PostLikeSummary> {
   const [countRes, likedRes] = await Promise.all([
     db.execute({
-      sql: 'SELECT COUNT(*) AS count FROM post_likes WHERE post_id = ?',
-      args: [postId]
+      sql: "SELECT COUNT(*) AS count FROM post_likes WHERE post_id = ?",
+      args: [postId],
     }),
     db.execute({
-      sql: 'SELECT 1 FROM post_likes WHERE post_id = ? AND visitor_hash = ? LIMIT 1',
-      args: [postId, visitorHash]
-    })
+      sql: "SELECT 1 FROM post_likes WHERE post_id = ? AND visitor_hash = ? LIMIT 1",
+      args: [postId, visitorHash],
+    }),
   ]);
 
   return {
     count: Number(countRes.rows[0]?.count ?? 0),
-    liked: likedRes.rows.length > 0
+    liked: likedRes.rows.length > 0,
   };
 }
 
-export async function getPostLikeStatus(slug: string, lang: string, visitorId: string): Promise<PostLikeSummary | null> {
-  const db = getDbClient();
+export async function getPostLikeStatus(
+  slug: string,
+  lang: string,
+  visitorId: string,
+  creds?: TursoCredentials,
+): Promise<PostLikeSummary | null> {
+  const db = getDbClient(creds);
   await ensurePostLikesTable(db);
 
   const post = await getPublishedPostForLikes(db, slug, lang);
@@ -79,8 +92,13 @@ export async function getPostLikeStatus(slug: string, lang: string, visitorId: s
   return getLikeSummary(db, post.id, visitorHash);
 }
 
-export async function likePost(slug: string, lang: string, visitorId: string): Promise<PostLikeSummary | null> {
-  const db = getDbClient();
+export async function likePost(
+  slug: string,
+  lang: string,
+  visitorId: string,
+  creds?: TursoCredentials,
+): Promise<PostLikeSummary | null> {
+  const db = getDbClient(creds);
   await ensurePostLikesTable(db);
 
   const post = await getPublishedPostForLikes(db, slug, lang);
@@ -89,8 +107,8 @@ export async function likePost(slug: string, lang: string, visitorId: string): P
   const visitorHash = await hashVisitorForPost(post.id, visitorId);
 
   await db.execute({
-    sql: 'INSERT OR IGNORE INTO post_likes (id, post_id, visitor_hash) VALUES (?, ?, ?)',
-    args: [crypto.randomUUID(), post.id, visitorHash]
+    sql: "INSERT OR IGNORE INTO post_likes (id, post_id, visitor_hash) VALUES (?, ?, ?)",
+    args: [crypto.randomUUID(), post.id, visitorHash],
   });
 
   return getLikeSummary(db, post.id, visitorHash);

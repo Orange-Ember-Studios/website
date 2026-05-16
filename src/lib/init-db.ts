@@ -1,76 +1,27 @@
-import { createClient } from '@libsql/client';
-import { hashPassword } from './auth';
-import { EnvManager } from './EnvManager';
-import * as dotenv from 'dotenv';
-dotenv.config({ path: '.env.local' });
-import crypto from 'crypto';
+import { EnvManager } from "./EnvManager.ts";
+import { ensureDatabaseSchema } from "./db-migrations.ts";
+import * as dotenv from "dotenv";
+
+dotenv.config({ path: ".env.local" });
 
 async function init() {
-  const url = EnvManager.TURSO_DATABASE_URL;
-  const authToken = EnvManager.TURSO_AUTH_TOKEN;
+  const url = EnvManager.TURSO_DATABASE_URL?.trim() ?? "";
+  const authToken = EnvManager.TURSO_AUTH_TOKEN ?? "";
 
-  if (!url || !authToken) throw new Error('Missing credentials in .env.local');
-
-  const client = createClient({ url, authToken });
-
-  console.log('Creating tables...');
-  await client.execute(`
-    CREATE TABLE IF NOT EXISTS users (
-      id TEXT PRIMARY KEY,
-      username TEXT UNIQUE NOT NULL,
-      password_hash TEXT NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  if (!url) {
+    throw new Error("Missing TURSO_DATABASE_URL in .env.local");
+  }
+  if (!url.startsWith("file:") && !authToken) {
+    throw new Error(
+      "Missing TURSO_AUTH_TOKEN in .env.local (not required for file: URLs)",
     );
-  `);
-
-  await client.execute(`
-    CREATE TABLE IF NOT EXISTS posts (
-      id TEXT PRIMARY KEY,
-      slug TEXT UNIQUE NOT NULL,
-      type TEXT NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
-  `);
-
-  await client.execute(`
-    CREATE TABLE IF NOT EXISTS post_translations (
-      id TEXT PRIMARY KEY,
-      post_id TEXT NOT NULL,
-      lang TEXT NOT NULL,
-      title TEXT NOT NULL,
-      content TEXT NOT NULL,
-      published BOOLEAN DEFAULT FALSE,
-      FOREIGN KEY(post_id) REFERENCES posts(id) ON DELETE CASCADE,
-      UNIQUE(post_id, lang)
-    );
-  `);
-
-  await client.execute(`
-    CREATE TABLE IF NOT EXISTS post_likes (
-      id TEXT PRIMARY KEY,
-      post_id TEXT NOT NULL,
-      visitor_hash TEXT NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY(post_id) REFERENCES posts(id) ON DELETE CASCADE,
-      UNIQUE(post_id, visitor_hash)
-    );
-  `);
-
-  console.log('Tables verified.');
-
-  const adminRes = await client.execute(`SELECT id FROM users WHERE username = 'admin'`);
-  if (adminRes.rows.length === 0) {
-    console.log('Creating default admin user...');
-    const hash = await hashPassword('admin123'); // Password by default
-    await client.execute({
-      sql: `INSERT INTO users (id, username, password_hash) VALUES (?, ?, ?)`,
-      args: [crypto.randomUUID(), 'admin', hash]
-    });
-    console.log('Admin user created. => admin / admin123');
   }
 
-  console.log('Database initialized successfully.');
+  await ensureDatabaseSchema({
+    TURSO_DATABASE_URL: url,
+    TURSO_AUTH_TOKEN: authToken,
+  });
+  console.log("Database initialized successfully.");
 }
 
 init().catch(console.error);

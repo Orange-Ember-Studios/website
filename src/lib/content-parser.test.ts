@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseEditorJsBlocks } from './content-parser';
+import { parseEditorJsBlocks } from './content-parser.ts';
 
 describe('content-parser', () => {
   it('should parse code blocks and return highlighted HTML', async () => {

@@ -1,42 +1,30 @@
 import { createEffect, createSignal } from "@emberkit/core";
 import { navigate } from "@emberkit/core";
 import type { RouteComponent } from "@emberkit/core";
-import { getTranslation } from "../../i18n/i18n";
+import { getTranslation } from "../../i18n/i18n.ts";
 
 const AdminLogin: RouteComponent = () => {
-  const [username, setUsername] = createSignal("");
-  const [password, setPassword] = createSignal("");
   const [error, setError] = createSignal("");
   const [loading, setLoading] = createSignal(false);
 
-  createEffect(() => {
-    void (async () => {
-      try {
-        const res = await fetch("/api/auth/me", {
-          credentials: "same-origin",
-        });
-        if (res.ok) navigate("/admin", { replace: true });
-      } catch (e) {
-        console.error("Auth check error:", e);
-      }
-    })();
-  });
-
-  const handleLogin = async () => {
+  const handleLogin = async (form: HTMLFormElement) => {
     setError("");
     setLoading(true);
+    const fd = new FormData(form);
+    const username = String(fd.get("username") ?? "").trim();
+    const password = String(fd.get("password") ?? "");
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
-        credentials: "same-origin",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: username(), password: password() }),
+        body: JSON.stringify({ username, password }),
       });
       const data = (await res.json()) as { error?: string };
       if (!res.ok) {
         setError(data.error || getTranslation("admin.login.error_auth"));
       } else {
-        window.location.href = "/admin";
+        navigate("/admin", { replace: true });
       }
     } catch {
       setError(getTranslation("admin.login.error_network"));
@@ -45,44 +33,77 @@ const AdminLogin: RouteComponent = () => {
     }
   };
 
+  createEffect(() => {
+    void (async () => {
+      try {
+        const res = await fetch("/api/auth/me", {
+          credentials: "include",
+        });
+        if (res.ok) navigate("/admin", { replace: true });
+      } catch (e) {
+        console.error("Auth check error:", e);
+      }
+    })();
+  });
+
+  // EmberKit only wires onClick in HTML output; onSubmit/onInput are omitted,
+  // so we attach real DOM listeners. Use FormData + name= so values come from the form.
+  createEffect(() => {
+    let form: HTMLFormElement | null = null;
+    let onSubmit: ((e: SubmitEvent) => void) | null = null;
+    const raf = requestAnimationFrame(() => {
+      form = document.getElementById("admin-login-form") as HTMLFormElement | null;
+      if (!form) return;
+      onSubmit = (e: SubmitEvent) => {
+        e.preventDefault();
+        void handleLogin(e.currentTarget as HTMLFormElement);
+      };
+      form.addEventListener("submit", onSubmit);
+    });
+    return () => {
+      cancelAnimationFrame(raf);
+      if (form && onSubmit) {
+        form.removeEventListener("submit", onSubmit);
+      }
+    };
+  });
+
   return (
     <div className="min-h-screen bg-neutral-900 text-white flex items-center justify-center p-4">
       <div className="bg-neutral-800 p-8 rounded-2xl shadow-2xl border border-neutral-700 w-full max-w-md backdrop-blur-lg bg-opacity-80 transition-all">
         <h2 className="text-3xl font-bold bg-linear-to-r from-orange-400 to-amber-500 bg-clip-text text-transparent mb-6 text-center">
           {getTranslation("admin.login.title")}
         </h2>
-        <form
-          className="space-y-6"
-          onSubmit={(e) => {
-            e.preventDefault();
-            void handleLogin();
-          }}
-        >
+        <form id="admin-login-form" className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-neutral-400 mb-2">
+            <label
+              className="block text-sm font-medium text-neutral-400 mb-2"
+              htmlFor="admin-login-username"
+            >
               {getTranslation("admin.login.username")}
             </label>
             <input
-              value={username()}
-              onInput={(e) =>
-                setUsername((e.target as HTMLInputElement).value)
-              }
+              id="admin-login-username"
+              name="username"
               type="text"
+              autoComplete="username"
               className="w-full bg-neutral-900 border border-neutral-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition duration-200"
               required
               placeholder={getTranslation("admin.login.username")}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-neutral-400 mb-2">
+            <label
+              className="block text-sm font-medium text-neutral-400 mb-2"
+              htmlFor="admin-login-password"
+            >
               {getTranslation("admin.login.password")}
             </label>
             <input
-              value={password()}
-              onInput={(e) =>
-                setPassword((e.target as HTMLInputElement).value)
-              }
+              id="admin-login-password"
+              name="password"
               type="password"
+              autoComplete="current-password"
               className="w-full bg-neutral-900 border border-neutral-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition duration-200"
               required
               placeholder="••••••••"

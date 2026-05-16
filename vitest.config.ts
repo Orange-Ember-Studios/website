@@ -1,26 +1,14 @@
-import { getViteConfig } from 'astro/config';
-import { fileURLToPath } from 'node:url';
+import { defineConfig, mergeConfig, type UserConfig } from "vite";
+import emberkitApp from "./emberkit.config.ts";
 
-const cloudflareWorkersStub = fileURLToPath(
-  new URL('./src/test/cloudflare-workers-stub.ts', import.meta.url),
+export default mergeConfig(
+  emberkitApp.vite as UserConfig,
+  defineConfig({
+    test: {
+      environment: "happy-dom",
+      setupFiles: ["./vitest.setup.ts"],
+      include: ["src/**/*.test.{ts,tsx}"],
+      globals: true,
+    },
+  }),
 );
-
-export default getViteConfig({
-  test: {
-    environment: 'happy-dom',
-    setupFiles: ['./vitest.setup.ts'],
-    include: ['src/**/*.test.{ts,tsx}'],
-    globals: true,
-    server: {
-      deps: {
-        inline: ['@lucide/astro'],
-      },
-    },
-  },
-  resolve: {
-    conditions: ['node'],
-    alias: {
-      'cloudflare:workers': cloudflareWorkersStub,
-    },
-  },
-});

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { loginUser } from './auth.service';
+import { loginUser } from './auth.service.ts';
 import * as dbUtils from './db';
 import * as authUtils from './auth';
 

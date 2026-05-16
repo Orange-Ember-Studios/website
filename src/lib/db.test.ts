@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getDbClient } from './db';
-import { createClient } from '@libsql/client/web';
+import { getDbClient } from './db.ts';
+import { createClient } from '@libsql/client';
 
-vi.mock('@libsql/client/web', () => ({
+vi.mock('@libsql/client', () => ({
   createClient: vi.fn(),
 }));
 
@@ -16,6 +16,13 @@ describe('Database connection (LibSQL)', () => {
     vi.stubEnv('TURSO_DATABASE_URL', '');
     vi.stubEnv('TURSO_AUTH_TOKEN', '');
     expect(() => getDbClient()).toThrow('Database credentials are not configured');
+  });
+
+  it('calls createClient with url only for file: SQLite URLs', () => {
+    vi.stubEnv('TURSO_DATABASE_URL', 'file:./local.db');
+    vi.stubEnv('TURSO_AUTH_TOKEN', '');
+    getDbClient();
+    expect(createClient).toHaveBeenCalledWith({ url: 'file:./local.db' });
   });
 
   it('calls createClient with correct arguments when credentials exist', () => {

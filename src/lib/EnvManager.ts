@@ -1,87 +1,68 @@
 /**
- * EnvManager handles environment variables access across the application.
- * It abstracts the differences between Astro's import.meta.env and Node's process.env.
+ * Environment variables (Vite + optional Cloudflare worker bindings via callers).
  */
 export class EnvManager {
-  /**
-   * Internal helper to get an environment variable with fallback logic.
-   * Checks import.meta.env first (Astro standard) then process.env (Node fallback).
-   */
   private static getVar(key: string, required: boolean = true): string | undefined {
-    let value: string | undefined = undefined;
+    let value: string | undefined;
 
     try {
-      // @ts-ignore
-      if (typeof import.meta !== 'undefined' && import.meta.env) {
-        // @ts-ignore
-        value = import.meta.env[key];
+      if (typeof import.meta !== "undefined" && import.meta.env) {
+        value = (import.meta.env as Record<string, string | undefined>)[key];
       }
-    } catch (e) {}
+    } catch {
+      /* ignore */
+    }
 
-    if (value === undefined && typeof process !== 'undefined') {
+    if (value === undefined && typeof process !== "undefined") {
       value = process.env[key];
     }
-    
+
     if (required && value === undefined) {
       console.warn(`[EnvManager] Warning: Environment variable "${key}" is not set.`);
     }
-    
+
     return value;
   }
 
-  /**
-   * Public key for Cloudflare Turnstile (available on the client)
-   */
   static get PUBLIC_TURNSTILE_SITE_KEY(): string {
-    return this.getVar('PUBLIC_TURNSTILE_SITE_KEY') || '';
+    return this.getVar("PUBLIC_TURNSTILE_SITE_KEY", false) ?? "";
   }
 
-  /**
-   * Secret key for Cloudflare Turnstile (Server-only)
-   */
   static get TURNSTILE_SECRET_KEY(): string {
-    return this.getVar('TURNSTILE_SECRET_KEY') || '';
+    return this.getVar("TURNSTILE_SECRET_KEY", false) ?? "";
   }
 
-  /**
-   * API Key for Resend Email Service (Server-only)
-   */
   static get RESEND_API_KEY(): string {
-    return this.getVar('RESEND_API_KEY') || '';
+    return this.getVar("RESEND_API_KEY", false) ?? "";
   }
 
-  /**
-   * Turso Database URL (Server-only)
-   */
   static get TURSO_DATABASE_URL(): string {
-    return this.getVar('TURSO_DATABASE_URL') || '';
+    return this.getVar("TURSO_DATABASE_URL", false) ?? "";
   }
 
-  /**
-   * Turso Auth Token (Server-only)
-   */
   static get TURSO_AUTH_TOKEN(): string {
-    return this.getVar('TURSO_AUTH_TOKEN') || '';
+    return this.getVar("TURSO_AUTH_TOKEN", false) ?? "";
   }
 
-  /**
-   * Secret key for JWT signing (Server-only)
-   */
   static get JWT_SECRET(): string {
-    return this.getVar('JWT_SECRET') || 'orange-ember-fallback-secret-for-dev';
+    return (
+      this.getVar("JWT_SECRET", false) ?? "orange-ember-fallback-secret-for-dev"
+    );
   }
 
-  /**
-   * Generic check to see if we are in development mode
-   */
   static get IS_DEV(): boolean {
-    return import.meta.env.DEV || (typeof process !== 'undefined' && process.env.NODE_ENV === 'development');
+    return (
+      (typeof import.meta !== "undefined" &&
+        !!(import.meta as any).env?.DEV) ||
+      (typeof process !== "undefined" && process.env.NODE_ENV === "development")
+    );
   }
 
-  /**
-   * Generic check to see if we are in production mode
-   */
   static get IS_PROD(): boolean {
-    return import.meta.env.PROD || (typeof process !== 'undefined' && process.env.NODE_ENV === 'production');
+    return (
+      (typeof import.meta !== "undefined" &&
+        !!(import.meta as any).env?.PROD) ||
+      (typeof process !== "undefined" && process.env.NODE_ENV === "production")
+    );
   }
 }

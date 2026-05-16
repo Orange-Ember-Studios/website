@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { editorJsToMarkdown } from './markdown-migrator';
+import { editorJsToMarkdown } from './markdown-migrator.ts';
 
 describe('editorJsToMarkdown', () => {
   it('should convert paragraphs', () => {

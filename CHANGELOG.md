@@ -2,49 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [0.0.20](https://github.com/Orange-Ember-Studios/website/compare/v0.0.16...v0.0.20) (2026-05-16)
+### [0.0.21](https://github.com/Orange-Ember-Studios/website/compare/v0.0.20...v0.0.21) (2026-05-16)
 
 
 ### Bug Fixes
 
-* align post likes lookup with blog page visibility ([c9c06e2](https://github.com/Orange-Ember-Studios/website/commit/c9c06e2fca6455bcae44abd5b761254b39faf409))
-* enable language selector functionality ([3abbc55](https://github.com/Orange-Ember-Studios/website/commit/3abbc5558915e5e339774089092c05f5f1abdbb4))
-* gate all admin API fetches behind auth confirmation ([a79f24b](https://github.com/Orange-Ember-Studios/website/commit/a79f24b142e13e706b25dea6b904424fd240fcce))
-* implement admin authentication protection ([b02c71a](https://github.com/Orange-Ember-Studios/website/commit/b02c71a7a93e4e827d9e3be323f9f271847d1eee))
-* improve Cloudflare Turnstile integration ([d96bf72](https://github.com/Orange-Ember-Studios/website/commit/d96bf722626ff56892e86fbac6a1f7d24f13b347))
-* repair admin page blank screen ([5ddec34](https://github.com/Orange-Ember-Studios/website/commit/5ddec34aa88b828dcd4377ed9e34b7720721a9ff))
-* resolve Turnstile widget lifecycle conflicts ([dbece75](https://github.com/Orange-Ember-Studios/website/commit/dbece7595acacd8eaccd43cc1d0dbc4b7e7c45da))
-* updated dependencies ([a139861](https://github.com/Orange-Ember-Studios/website/commit/a13986199e7a71885d075d67abf3f2f12c2be467))
-* use Cloudflare worker env for Turso DB credentials ([a20957e](https://github.com/Orange-Ember-Studios/website/commit/a20957e21ec4bc6d6886baf88b798ad7eacd5c5d))
+* **build:** bump EmberKit CLI, add vite.config shim ([13e8db8](https://github.com/Orange-Ember-Studios/website/commit/13e8db81c5206a8e7958e2d48abd592e7bfd1dd0))
 
-### [0.0.19](https://github.com/Orange-Ember-Studios/website/compare/v0.0.16...v0.0.19) (2026-05-16)
+### [0.0.20](https://github.com/Orange-Ember-Studios/website/compare/v0.0.19...v0.0.20) (2026-05-16)
 
 
-### Bug Fixes
+### Features
 
-* align post likes lookup with blog page visibility ([c9c06e2](https://github.com/Orange-Ember-Studios/website/commit/c9c06e2fca6455bcae44abd5b761254b39faf409))
-* enable language selector functionality ([3abbc55](https://github.com/Orange-Ember-Studios/website/commit/3abbc5558915e5e339774089092c05f5f1abdbb4))
-* gate all admin API fetches behind auth confirmation ([a79f24b](https://github.com/Orange-Ember-Studios/website/commit/a79f24b142e13e706b25dea6b904424fd240fcce))
-* implement admin authentication protection ([b02c71a](https://github.com/Orange-Ember-Studios/website/commit/b02c71a7a93e4e827d9e3be323f9f271847d1eee))
-* improve Cloudflare Turnstile integration ([d96bf72](https://github.com/Orange-Ember-Studios/website/commit/d96bf722626ff56892e86fbac6a1f7d24f13b347))
-* repair admin page blank screen ([5ddec34](https://github.com/Orange-Ember-Studios/website/commit/5ddec34aa88b828dcd4377ed9e34b7720721a9ff))
-* resolve Turnstile widget lifecycle conflicts ([dbece75](https://github.com/Orange-Ember-Studios/website/commit/dbece7595acacd8eaccd43cc1d0dbc4b7e7c45da))
-* use Cloudflare worker env for Turso DB credentials ([a20957e](https://github.com/Orange-Ember-Studios/website/commit/a20957e21ec4bc6d6886baf88b798ad7eacd5c5d))
+* migrate Astro→EmberKit, rewrite CMS and public pages ([19e4ba1](https://github.com/Orange-Ember-Studios/website/commit/19e4ba1a7dfe95f41b9cfd37b61f435dc0a57b4b))
 
-### [0.0.18](https://github.com/Orange-Ember-Studios/website/compare/v0.0.16...v0.0.18) (2026-05-16)
+### [0.0.19](https://github.com/Orange-Ember-Studios/website/compare/v0.0.18...v0.0.19) (2026-05-16)
 
+### [0.0.18](https://github.com/Orange-Ember-Studios/website/compare/v0.0.17...v0.0.18) (2026-05-15)
 
-### Bug Fixes
-
-* enable language selector functionality ([3abbc55](https://github.com/Orange-Ember-Studios/website/commit/3abbc5558915e5e339774089092c05f5f1abdbb4))
-* gate all admin API fetches behind auth confirmation ([a79f24b](https://github.com/Orange-Ember-Studios/website/commit/a79f24b142e13e706b25dea6b904424fd240fcce))
-* implement admin authentication protection ([b02c71a](https://github.com/Orange-Ember-Studios/website/commit/b02c71a7a93e4e827d9e3be323f9f271847d1eee))
-* improve Cloudflare Turnstile integration ([d96bf72](https://github.com/Orange-Ember-Studios/website/commit/d96bf722626ff56892e86fbac6a1f7d24f13b347))
-* repair admin page blank screen ([5ddec34](https://github.com/Orange-Ember-Studios/website/commit/5ddec34aa88b828dcd4377ed9e34b7720721a9ff))
-* resolve Turnstile widget lifecycle conflicts ([dbece75](https://github.com/Orange-Ember-Studios/website/commit/dbece7595acacd8eaccd43cc1d0dbc4b7e7c45da))
-* use Cloudflare worker env for Turso DB credentials ([a20957e](https://github.com/Orange-Ember-Studios/website/commit/a20957e21ec4bc6d6886baf88b798ad7eacd5c5d))
-
-### [0.0.17](https://github.com/Orange-Ember-Studios/website/compare/v0.0.16...v0.0.17) (2026-05-16)
+### [0.0.17](https://github.com/Orange-Ember-Studios/website/compare/v0.0.16...v0.0.17) (2026-05-15)
 
 
 ### Bug Fixes
