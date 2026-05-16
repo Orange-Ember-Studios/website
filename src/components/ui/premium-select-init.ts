@@ -18,6 +18,21 @@ export function initPremiumSelects(): void {
 
     const selectedValues = new Set(initialValues);
 
+    const syncTriggerLabel = () => {
+      if (isMultiple) return;
+      const labelEl = container.querySelector(".selected-label");
+      if (!labelEl) return;
+      const currentVal = [...selectedValues][0];
+      if (!currentVal) return;
+      const btn = [...options].find(
+        (o) => o.getAttribute("data-value") === currentVal,
+      );
+      const textSpan = btn?.querySelector("span");
+      if (textSpan?.textContent) {
+        labelEl.textContent = textSpan.textContent.trim();
+      }
+    };
+
     const updateUI = (skipDispatch = false) => {
       options.forEach((opt) => {
         const val = opt.getAttribute("data-value");
@@ -28,9 +43,13 @@ export function initPremiumSelects(): void {
         }
       });
 
+      syncTriggerLabel();
+
       if (!skipDispatch) {
         container.dispatchEvent(
           new CustomEvent("change", {
+            bubbles: true,
+            composed: true,
             detail: {
               id: selectId,
               values: Array.from(selectedValues),

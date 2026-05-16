@@ -30,45 +30,34 @@ export function PremiumLanguageSelector({
   }));
 
   const currentLangLabel =
-    supportedLanguages.find((l) => l.code === selectedLang())?.label || "English";
+    supportedLanguages.find((l) => l.code === selectedLang())?.label ||
+    "English";
 
-  // Wait for the select to be initialized and attach listener
+  /** Bubble-phase listener on document — survives timing vs initPremiumSelects(). */
   createEffect(() => {
-    let retries = 0;
-    const maxRetries = 50; // 5 seconds with 100ms intervals
+    const handler = (e: Event) => {
+      if (!(e instanceof CustomEvent)) return;
+      const ce = e as CustomEvent<{
+        values?: string[];
+        id?: string;
+      }>;
+      if (ce.detail?.id !== "lang-selector") return;
 
-    const attachListener = () => {
-      const el = document.getElementById(id);
-      if (!el) {
-        if (retries < maxRetries) {
-          retries++;
-          setTimeout(attachListener, 100);
-        }
-        return;
-      }
+      const container = document.getElementById(id);
+      if (!container || e.target !== container) return;
 
-      const handler = (e: Event) => {
-        const ce = e as CustomEvent<{ values?: string[]; id?: string }>;
-        const selectedId = ce.detail?.id;
-        
-        // Only handle events from this selector
-        if (selectedId && selectedId !== "lang-selector") {
-          return;
-        }
+      const raw = ce.detail.values?.[0];
+      const newLang = raw as SupportedLanguage | undefined;
+      const codes = supportedLanguages.map((l) => l.code);
+      if (!newLang || !codes.includes(newLang)) return;
+      if (newLang === selectedLang()) return;
 
-        const newLang = ce.detail?.values?.[0] as SupportedLanguage | undefined;
-        if (newLang && newLang !== selectedLang()) {
-          setSelectedLang(newLang);
-          setLanguage(newLang, true);
-        }
-      };
-
-      el.addEventListener("change", handler);
-      
-      return () => el.removeEventListener("change", handler);
+      setSelectedLang(newLang);
+      setLanguage(newLang, true);
     };
 
-    return attachListener();
+    document.addEventListener("change", handler);
+    return () => document.removeEventListener("change", handler);
   });
 
   return (

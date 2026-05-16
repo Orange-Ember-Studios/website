@@ -81,7 +81,7 @@ export const PremiumSelect: FC<PremiumSelectProps> = ({
         </button>
 
         <div
-          className={`select-dropdown flex-col hidden absolute top-full mt-4 bg-[#0d0d0d]/98 border border-white/10 rounded-3xl shadow-[0_45px_100px_rgba(0,0,0,0.95)] z-100 transition-all duration-500 origin-top scale-95 opacity-0 w-max overflow-x-hidden backdrop-blur-3xl ${isNavbar ? "right-0 max-w-[180px]" : "left-0 max-w-[250px]"}`}
+          className={`select-dropdown flex-col hidden absolute top-full mt-4 bg-[#0d0d0d]/98 border border-white/10 rounded-3xl shadow-[0_45px_100px_rgba(0,0,0,0.95)] z-[110] transition-all duration-500 origin-top scale-95 opacity-0 w-max overflow-x-hidden backdrop-blur-3xl ${isNavbar ? "right-0 max-w-[180px]" : "left-0 max-w-[250px]"}`}
         >
           <div
             className={`max-h-[440px] overflow-y-auto overflow-x-hidden custom-scrollbar flex flex-col gap-1 w-full ${isNavbar ? "p-1.5" : "p-3"}`}
