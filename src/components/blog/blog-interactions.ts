@@ -1,7 +1,56 @@
-/** DOM listeners for blog post page (copy buttons).
- * Like button is now handled directly in BlogPost.tsx using createEffect pattern.
- */
+/** Wires the #blog-like-btn element: fetches initial count and handles click → POST. */
+export function setupLikeButton(): void {
+  const btn = document.getElementById(
+    "blog-like-btn",
+  ) as HTMLButtonElement | null;
+  if (!btn) return;
+  if (btn.dataset.likeWired === "true") return;
 
+  const endpoint = btn.dataset.likeEndpoint;
+  if (!endpoint) {
+    console.error("[blog-like] Missing data-like-endpoint on #blog-like-btn");
+    return;
+  }
+
+  btn.dataset.likeWired = "true";
+
+  const labels = {
+    like: btn.dataset.likeLabel ?? "Like",
+    liked: btn.dataset.likedLabel ?? "Liked",
+  };
+
+  const applyPayload = (payload: { count: number; liked: boolean }) => {
+    const countEl = btn.querySelector("[data-like-count]");
+    const labelEl = btn.querySelector("[data-like-label]");
+    if (countEl) countEl.textContent = String(payload.count);
+    if (labelEl)
+      labelEl.textContent = payload.liked ? labels.liked : labels.like;
+    btn.disabled = payload.liked;
+    btn.setAttribute("aria-pressed", payload.liked ? "true" : "false");
+  };
+
+  void fetch(endpoint, { credentials: "include" })
+    .then((r) => (r.ok ? (r.json() as Promise<{ count: number; liked: boolean }>) : null))
+    .then((payload) => { if (payload) applyPayload(payload); })
+    .catch(() => {});
+
+  btn.addEventListener("click", (e: MouseEvent) => {
+    e.preventDefault();
+    if (!btn || btn.disabled) return;
+    btn.disabled = true;
+
+    void fetch(endpoint, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((r) => (r.ok ? (r.json() as Promise<{ count: number; liked: boolean }>) : null))
+      .then((payload) => { if (payload) applyPayload(payload); })
+      .catch(() => { btn.disabled = false; });
+  });
+}
+
+/** DOM listeners for blog post page (copy buttons). */
 function setupCopyButtons() {
   const buttons = document.querySelectorAll(".copy-button");
   buttons.forEach((button) => {

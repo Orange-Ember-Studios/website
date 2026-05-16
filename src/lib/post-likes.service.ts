@@ -23,7 +23,7 @@ async function ensurePostLikesTable(db: Client) {
   `);
 }
 
-async function getPublishedBlogPost(
+async function getPublishedPostForLikes(
   db: Client,
   slug: string,
   lang: string,
