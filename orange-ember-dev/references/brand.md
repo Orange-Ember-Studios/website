@@ -16,5 +16,5 @@
 ## Services
 1. **Desktop Games:** PC/Steam, Godot 4.
 2. **Mobile Games:** Android (iOS coming soon).
-3. **Web Apps:** Modern frameworks (Astro, Vue).
+3. **Web Apps:** Modern frameworks (EmberKit, React, Flutter web).
 4. **Mobile Apps:** Flutter, React Native/Expo.
