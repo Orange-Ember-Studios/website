@@ -9,6 +9,14 @@ global.fetch = vi.fn();
 describe('Contact Form Submission', () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        (window as any).turnstile = {
+            render: (_el: HTMLElement, opts: { callback: (token: string) => void }) => {
+                opts.callback('fake-token');
+                return 'test-widget-id';
+            },
+            remove: vi.fn(),
+            reset: vi.fn(),
+        };
         // Mock success response
         (fetch as any).mockResolvedValue({
             ok: true,
@@ -18,13 +26,6 @@ describe('Contact Form Submission', () => {
 
     it('submits the form to the API and shows a success message', async () => {
         const wrapper = mount(ContactForm);
-        
-        // Mock turnstile token
-        // In the real component, turnstileToken is a ref that changes when window.onTurnstileSuccess is called
-        // We can manually set it if I can access the internal state or if I trigger the callback
-        (window as any).onTurnstileSuccess('fake-token');
-        
-        // Wait for vue to update
         await wrapper.vm.$nextTick();
 
         // Fill valid form fields
@@ -60,8 +61,6 @@ describe('Contact Form Submission', () => {
         });
 
         const wrapper = mount(ContactForm);
-        
-        (window as any).onTurnstileSuccess('fake-token');
         await wrapper.vm.$nextTick();
 
         await wrapper.find('input[name="name"]').setValue('John Doe');

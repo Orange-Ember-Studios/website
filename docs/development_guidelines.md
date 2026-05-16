@@ -2,70 +2,83 @@
 
 These guidelines establish the core rules, aesthetic standards, and technical practices for developing the Orange Ember Studios website. Adhering to these rules ensures a premium, maintainable, and highly performant product.
 
-## 1. Core Technology Stack
-- **Framework:** Astro (for static-site generation, incredible performance, and zero-JS by default).
-- **Styling:** **Tailwind CSS**. We will use Tailwind as our primary utility-first CSS framework for rapid and consistent styling across the application.
-- **Logic:** Vanilla JavaScript / TypeScript. If complex client-side interactivity is required, we will use **Vue.js** for dynamic frontend components.
-- **Testing:** Driven by TDD (See `TDD_Guidelines.md`).
+## 1. Core technology stack
 
-## 2. Design & Aesthetic Standards (CRITICAL)
+**Canonical EmberKit docs:** [https://emberkit.orangeember.com](https://emberkit.orangeember.com) — configuration and scripts are defined there (e.g. [Installation](https://emberkit.orangeember.com/docs/installation) uses **`emberkit.config.ts`** and **`@emberkit/cli`**, not a root **`vite.config.ts`**, as the primary app config).
+
+| Layer | Technology |
+| --- | --- |
+| **Runtime** | Node.js **≥ 22.12** |
+| **Framework** | **EmberKit** — `@emberkit/core`, `@emberkit/icons`; **`@emberkit/cli`** for `emberkit dev` / `emberkit build` / `emberkit preview` |
+| **Project config** | **`emberkit.config.ts`** at the repo root (`defineConfig` from `@emberkit/core`) |
+| **Interactivity** | **Vue 3** for existing Vue components; **TSX** / EmberKit patterns for JSX routes and islands |
+| **Language** | **TypeScript** (strict; `jsxImportSource: "@emberkit/core"`, `moduleResolution: "bundler"` per EmberKit docs) |
+| **Styling** | **Tailwind CSS v4** via **`@tailwindcss/vite`** — utilities in components; **design tokens** in `src/styles/global.css` (`@import "tailwindcss"` and `@theme { ... }`). There is **no** `tailwind.config.mjs` in this repo; extend branding via `@theme`, not a separate legacy config unless we add one intentionally. |
+| **Data** | **LibSQL** (`@libsql/client`) with access abstracted in `src/lib/db.ts` and **`*.service.ts`** modules |
+| **Hosting** | **Cloudflare Workers** + static assets — **`wrangler.jsonc`** (`pnpm deploy` / `pnpm preview` as configured) |
+| **Auth / crypto** | **jose** (JWT), env-driven secrets on the worker |
+| **Content / i18n** | i18n JSON under `src/i18n/`; Markdown/MDX per [EmberKit Markdown/MDX](https://emberkit.orangeember.com/docs/markdown) when used |
+| **SEO** | Follow [EmberKit meta/head docs](https://emberkit.orangeember.com/docs/meta) and per-page requirements in this guide |
+| **Testing** | **Vitest** + **happy-dom**, colocated `*.test.ts` — see `TDD_Guidelines.md` (test runner config may use `vitest.config.ts` separately from app build config) |
+
+**Package manager:** **pnpm** (use `pnpm add`, not `npm install`, in documentation examples for this project).
+
+**Architecture note:** Prefer **hexagonal-style boundaries** — business rules and data orchestration in `src/lib/` (especially services), HTTP/API adapters in `src/server/` (and the worker entrypoint as configured), and keep I/O (DB, env) behind thin adapters so logic stays testable.
+
+**DRY:** Share validation, parsing, and mapping through `src/lib/` (or small modules) instead of duplicating across routes or components.
+
+## 2. Design & aesthetic standards (CRITICAL)
+
 Orange Ember Studios is a premier development studio specializing in **desktop and mobile video games**, as well as **web and mobile applications**. The website MUST reflect a premium, state-of-the-art aesthetic that appeals to clients looking for high-end digital products and immersive experiences.
-- **Visual Impact:** Avoid generic layouts and colors. Use harmonious, tailored color palettes (e.g., custom HSL values), elegant dark modes, and subtle gradients.
-- **Dynamic & Alive:** Interfaces must respond to user interactions. Make heavy use of **hover effects, micro-animations, and smooth transitions** on buttons, cards, and links.
+
+- **Visual impact:** Avoid generic layouts and colors. This project uses **OKLCH-based** brand scales in `src/styles/global.css` (e.g. ember / void palettes); keep new colors consistent with that system or extend `@theme` deliberately.
+- **Dynamic & alive:** Interfaces must respond to user interactions. Make heavy use of **hover effects, micro-animations, and smooth transitions** on buttons, cards, and links.
 - **Typography:** Use modern, high-quality typography (e.g., Inter, Outfit, or standard Google Fonts). Do NOT use default browser fonts.
 - **Placeholders:** Do not use generic placeholders. Use AI tools (like image generation) to create realistic demo assets if real assets are not yet available.
 
-## 3. Styling & Tailwind CSS Rules
-- **Architecture:** Use Tailwind CSS utility classes directly within Astro components for layout and styling. Custom animations or complex keyframes not covered by Tailwind can be scoped in the `<style>` tag.
-- **Responsive Design:** Mobile-first approach using Tailwind's responsive modifiers (`md:`, `lg:`, etc.). The layout must fluidly adapt to all screen sizes.
-- **Configuration:** Maintain color palettes, typography, and specific branding metrics inside `tailwind.config.mjs` to ensure total consistency across the project.
+## 3. Styling & Tailwind CSS (v4) rules
 
-### Official Tailwind Setup (Vite Plugin for Astro)
-According to the official [Tailwind CSS documentation](https://tailwindcss.com/docs/installation/framework-guides/astro), Tailwind is configured via its Vite plugin.
-1. **Install Dependencies:** Run `npm install tailwindcss @tailwindcss/vite`
-2. **Configure Vite Plugin:** In your `astro.config.mjs`, import and add the Vite plugin:
-   ```javascript
-   import { defineConfig } from "astro/config";
-   import tailwindcss from "@tailwindcss/vite";
+- **Architecture:** Use Tailwind utility classes in Vue/TSX components. Custom animations or keyframes can live in scoped styles or in `global.css` alongside `@theme`.
+- **Responsive design:** Mobile-first (`md:`, `lg:`, etc.); layouts must adapt fluidly across screen sizes.
+- **Tokens:** **Brand colors, fonts, and radii belong in `src/styles/global.css` inside `@theme { ... }`** so the whole app stays consistent.
 
-   export default defineConfig({
-     vite: {
-       plugins: [tailwindcss()],
-     },
-   });
-   ```
-3. **Import Tailwind Globally:** Create `src/styles/global.css` with the following content:
-   ```css
-   @import "tailwindcss";
-   ```
-4. **Link the Stylesheet:** Make sure to import this CSS file in your main Astro layout or components:
-   ```astro
-   ---
-   import "../styles/global.css";
-   ---
-   ```
+### Tailwind v4 + EmberKit (this repo)
 
-## 4. Component Architecture
-- **Modularity:** Build small, reusable components (e.g., `<Button />`, `<ProjectCard />`).
-- **Structure:** Every component MUST have its own dedicated folder. This directory will group the component source file (`Component.astro` or `Component.vue`) together with its test file (`Component.test.ts`). Example: `src/components/Hero/Hero.astro` and `src/components/Hero/Hero.test.ts`.
-- **Naming Conventions:**
-  - Astro Components/Files: `PascalCase.astro` (e.g., `HeroSection.astro`).
-  - Directories: `kebab-case` (e.g., `components/ui-elements/`).
-  - CSS Classes: Follow Tailwind's utility class convention. If writing custom scoped CSS, use `kebab-case`.
+EmberKit is Vite-powered; Tailwind v4 is registered as a **Vite plugin** (`tailwindcss()` from `@tailwindcss/vite`). Wire plugins through **`emberkit.config.ts`** as EmberKit documents for your version—do **not** add a separate root **`vite.config.ts`** as the primary app configuration ([Installation](https://emberkit.orangeember.com/docs/installation)).
 
-## 5. SEO & Accessibility (A11y) Best Practices
+1. **Dependencies:** `tailwindcss` and `@tailwindcss/vite`.
+2. **Global CSS:** `src/styles/global.css` starts with `@import "tailwindcss";` and defines `@theme { ... }`.
+3. **Entry:** Import the stylesheet from the EmberKit entry/layout (e.g. `src/index.tsx` or `src/routes/_layout.tsx`).
+
+## 4. Component architecture
+
+- **Modularity:** Build small, reusable components (e.g. `<Button />`, `<ProjectCard />`).
+- **Structure:** Every component MUST have its own dedicated folder, grouping the source (`.vue` or `.tsx` as appropriate) with **`Component.test.ts`**. Routes live under `src/routes/` per [EmberKit Routing](https://emberkit.orangeember.com/docs/routing).
+- **Naming conventions:**
+  - Astro/Vue/TSX files: `PascalCase` with matching extension.
+  - Directories: **`PascalCase`** for feature components (e.g. `Hero/`, `Contact/`) to match the repo; use **`kebab-case`** for generic UI buckets if added (e.g. `ui-elements/`).
+  - CSS classes: Tailwind utilities; custom scoped CSS in `kebab-case` if needed.
+
+## 5. SEO & accessibility (a11y) best practices
+
 - **Semantic HTML:** Use proper HTML5 elements (`<header>`, `<main>`, `<article>`, `<section>`, `<footer>`).
-- **Headings:** Ensure strict heading hierarchy. Only ONE `<h1>` per page.
-- **Meta Tags:** Every page MUST have dynamic, accurately descriptive `<title>` and `<meta name="description">` tags.
-- **Unique IDs:** Ensure all interactive elements have unique IDs for testing and accessibility linking.
-- **Alt Text:** All images must include descriptive `alt` attributes.
+- **Headings:** Strict hierarchy; only ONE `<h1>` per page.
+- **Meta tags:** Every page MUST have dynamic, accurate `<title>` and `<meta name="description">`.
+- **Unique IDs:** Interactive elements should have stable IDs where needed for testing and accessibility.
+- **Alt text:** All images need descriptive `alt` attributes.
 
-## 6. Security Practices (Cloudflare & Frontend)
-- **Security Headers (`_headers`):** Serve strong Content-Security-Policy (CSP), Strict-Transport-Security (HSTS), X-Frame-Options, and X-Content-Type-Options.
-- **Form Anti-Spam:** Since we don't have a backend CAPTCHA, implement "Honeypot" fields in Vue-based forms (e.g., `<input name="_honey" type="text" style="display:none" />`). The form should silently drop the submission if this field is filled.
+## 6. Security practices (Cloudflare & frontend)
 
-## 7. Development Workflow
-1. Look at the `docs/planning/00-Index.md` board to pick up the next `.md` User Story.
-2. Move the story's status to 🟡 `in-progress`.
-3. Follow the strict Red-Green-Refactor cycle from `TDD_Guidelines.md`.
-4. Review against the Aesthetic Standards before considering it 🟢 `done`.
+- **Security headers (`public/_headers`):** CSP, HSTS, `X-Frame-Options`, `X-Content-Type-Options`, and related hardening as deployed on Cloudflare.
+- **Form anti-spam:** Use honeypot (and/or Turnstile where configured) on public forms; drop submissions when bots trip hidden fields.
+- **Secrets:** Never commit credentials; use **Wrangler** / Cloudflare dashboard and local `.dev.vars` for development as documented for Workers.
+
+## 7. Development workflow
+
+1. Pick up work from the team backlog, issues, or internal planning docs under `docs/` when available.
+2. Follow the **strict red → green → refactor** cycle in `TDD_Guidelines.md`.
+3. Run **`pnpm test`** before considering logic changes done.
+4. For production parity locally: **`pnpm build`** then **`pnpm preview`** (per `package.json`; often `emberkit preview` and/or Wrangler with built assets).
+5. Review against the aesthetic standards before marking work complete.
+
+For agent-oriented stack summary (Emberkit, Cloudflare, TDD, hexagonal layout), see **`AGENTS.md`** at the repository root.

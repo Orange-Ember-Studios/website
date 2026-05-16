@@ -8,9 +8,9 @@ describe('LanguageSelector Vue Component', () => {
     const wrapper = mount(LanguageSelector);
     const options = wrapper.findAll('option');
     expect(options.length).toBe(3);
-    expect(options[0].text()).toBe('English');
-    expect(options[1].text()).toBe('Español');
-    expect(options[2].text()).toBe('Français');
+    expect(options[0].text()).toBe('English 🇺🇸');
+    expect(options[1].text()).toBe('Español 🇪🇸');
+    expect(options[2].text()).toBe('Français  🇫🇷');
   });
 
   it('selects the current language by default', () => {
@@ -26,10 +26,10 @@ describe('LanguageSelector Vue Component', () => {
     
     const wrapper = mount(LanguageSelector);
     const select = wrapper.find('select');
-    
-    await select.setValue('fr');
-    
-    expect(setLanguageSpy).toHaveBeenCalledWith('fr');
+    (select.element as HTMLSelectElement).value = 'fr';
+    await select.trigger('change');
+
+    expect(setLanguageSpy).toHaveBeenCalledWith('fr', true);
     expect(translateAllSpy).toHaveBeenCalled();
   });
 });

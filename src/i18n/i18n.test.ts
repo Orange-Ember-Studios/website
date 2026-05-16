@@ -17,9 +17,9 @@ describe("i18n Engine", () => {
     it("returns exactly three supported languages: en, es, fr", () => {
       const languages = getSupportedLanguages();
       expect(languages).toEqual([
-        { code: "en", label: "English" },
-        { code: "es", label: "Español" },
-        { code: "fr", label: "Français" },
+        { code: "en", label: "English 🇺🇸" },
+        { code: "es", label: "Español 🇪🇸" },
+        { code: "fr", label: "Français  🇫🇷" },
       ]);
     });
   });

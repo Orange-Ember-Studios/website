@@ -1,11 +1,12 @@
 {
-	"compatibility_date": "2026-04-03",
-	"compatibility_flags": ["global_fetch_strictly_public", "nodejs_compat"],
+	// Mirrors apps/docs/wrangler.toml in the emberkit monorepo (static SPA on Workers).
 	"name": "website",
-	"main": "@astrojs/cloudflare/entrypoints/server",
+	"compatibility_date": "2024-12-01",
+	"compatibility_flags": ["nodejs_compat"],
 	"assets": {
 		"directory": "./dist",
-		"binding": "ASSETS"
+		"html_handling": "auto-trailing-slash",
+		"not_found_handling": "single-page-application"
 	},
 	"observability": {
 		"enabled": true

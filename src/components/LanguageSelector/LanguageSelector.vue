@@ -1,7 +1,7 @@
 <template>
   <div class="relative group">
     <label for="lang-select" class="sr-only">Select Language</label>
-    <select id="lang-select" v-model="selectedLanguage" @input="onLanguageChange"
+    <select id="lang-select" v-model="selectedLanguage" @change="onLanguageChange"
       class="appearance-none bg-void-500/20 border border-ember-500/30 rounded-full px-4 py-2 pr-10 text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-ember-400/30 hover:bg-void-500/40 transition-all duration-300 cursor-pointer">
       <option v-for="lang in supportedLanguages" :key="lang.code" :value="lang.code" class="bg-ash-950 text-white">
         {{ lang.label }}

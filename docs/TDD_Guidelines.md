@@ -6,57 +6,83 @@ These guidelines outline the Test-Driven Development (TDD) process to be followe
 
 We follow the standard TDD cycle for all feature development and bug fixes:
 
-### 🔴 RED: Write a Failing Test
+### RED: Write a failing test
+
 - **Goal:** Define the requirement.
 - Write a test for the smallest possible unit of work.
-- Run the test suite and confirm it **fails**. This ensures the test is valid and actually testing something that hasn't been implemented yet.
+- Run the test suite and confirm it **fails**. This ensures the test is valid and actually testing something that has not been implemented yet.
 
-### 🟢 GREEN: Make it Pass
-- **Goal:** Get to "Green" as quickly as possible.
+### GREEN: Make it pass
+
+- **Goal:** Get to green as quickly as possible.
 - Write the **minimum amount of code** necessary to satisfy the test.
-- Don't worry about perfect architecture or performance at this stage.
+- Do not worry about perfect architecture or performance at this stage.
 
-### 🔵 REFACTOR: Clean Up
+### REFACTOR: Clean up
+
 - **Goal:** Improve the code without changing its behavior.
-- Remove duplication, improve variable names, and optimize the structure.
+- Remove duplication, improve names, and optimize structure (aligns with **DRY** and clear **TypeScript** types).
 - Run tests after every change to ensure they stay green.
 
 ---
 
-## 2. AI Collaboration Workflow
+## 2. AI collaboration workflow
 
-When asking me (the AI) to help with development, use these specific patterns to maintain a TDD flow:
+When working with an AI assistant, use these patterns to maintain a TDD flow:
 
-### Starting a Feature
+### Starting a feature
+
 - **Prompt:** *"I want to implement [Feature Name]. Let's start with a failing test for [Specific Behavior]."*
-- **My Action:** I will create the test file and write the initial test case. I will run it to show it fails.
+- **Expected:** A new or updated test that fails for the right reason before production code is added.
 
-### Implementing Logic
+### Implementing logic
+
 - **Prompt:** *"The test is failing as expected. Now, write the minimum code to make it pass."*
-- **My Action:** I will implement the feature logic in the target file.
+- **Expected:** Implementation only sufficient to satisfy the test.
 
 ### Refactoring
-- **Prompt:** *"The tests are passing. Can you refactor [File/Function] for better readability/performance while keeping it green?"*
-- **My Action:** I will suggest improvements and verify them with the existing tests.
+
+- **Prompt:** *"The tests are passing. Refactor [File/Function] for readability or structure while keeping the suite green."*
+- **Expected:** Structural improvements with no behavior change; all tests still pass.
 
 ---
 
-## 3. General Principles
+## 3. General principles
 
-1.  **Small Increments:** Tackle one small behavior at a time. A TDD cycle should ideally take only a few minutes.
-2.  **Test Location:**
-    - Place unit tests in the same directory as the source file (e.g., `src/utils/math.ts` and `src/utils/math.test.ts`).
-    - Keep integration or E2E tests in a dedicated `tests/` or `e2e/` folder.
-3.  **Meaningful Test Names:** Use descriptive names like `it('should calculate the total price including tax')` instead of `it('works')`.
-4.  **No Implementation Without a Test:** Never write production code unless it is to make a failing test pass.
+1. **Small increments:** One behavior per cycle; each cycle should be short.
+2. **Test placement:**
+   - **Colocate** unit tests with sources: `src/.../foo.ts` → `src/.../foo.test.ts` (and `*.test.tsx` where applicable).
+   - Reserve a top-level `tests/` or `e2e/` folder only if we add integration or Playwright suites later.
+3. **Naming:** Use descriptive names, e.g. `it('should calculate the total price including tax')`, not `it('works')`.
+4. **No implementation without a test:** Do not add production behavior except to make a failing test pass (or to adjust tests when requirements change intentionally).
 
 ---
 
-## 4. Suggested Tooling for this Astro Project
+## 4. Tooling in this repository
 
-As we are using **Astro**, we recommend:
-- **Vitest:** For fast unit and component testing.
-- **Playwright:** For end-to-end testing of the final rendered site.
+The app is built with **EmberKit** ([docs](https://emberkit.orangeember.com)); **Vitest** runs tests using **`vitest.config.ts`** (that file is for the test runner only—not a replacement for **`emberkit.config.ts`**, which is the primary app configuration per [Installation](https://emberkit.orangeember.com/docs/installation)).
 
-> [!TIP]
-> If you haven't installed Vitest yet, let me know and I can help set up the environment.
+| Tool | Role |
+| --- | --- |
+| **Vitest** | Unit and component tests; **`pnpm test`** runs `vitest --run` |
+| **happy-dom** | Default DOM environment for tests |
+| **@testing-library/vue** / **@vue/test-utils** | Vue component testing |
+| **@testing-library/dom** + **@testing-library/jest-dom** | DOM assertions where used |
+| **Stub** | `src/test/cloudflare-workers-stub.ts` aliases `cloudflare:workers` so logic can run outside the Worker |
+
+**Commands:**
+
+- **`pnpm test`** — run the full suite once (CI-style).
+- Use **`pnpm exec vitest`** (watch mode) during active TDD if you prefer continuous runs.
+
+**Optional future tooling:** **Playwright** (or similar) for end-to-end tests against the deployed or preview site — not required for the core strict TDD loop but recommended before large releases once a suite exists.
+
+---
+
+## 5. Architecture and testability
+
+- Put **use cases** in **`src/lib/*.service.ts`** (and related modules); **test them** without spinning up Astro or Cloudflare when possible.
+- Keep **HTTP glue** (`src/server/api-router.ts`, `src/pages/api/*`) **thin** so tests focus on behavior, not framework wiring.
+- Prefer **injecting** env or small ports where it makes tests deterministic; avoid global Worker-only APIs deep inside domain logic.
+
+This matches **hexagonal** boundaries: tests target the **core**; adapters stay replaceable.

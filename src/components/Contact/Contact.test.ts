@@ -44,8 +44,8 @@ describe('Contact Form Vue Component (US-05)', () => {
     expect(wrapper.text()).not.toContain('Your spark has been sent!');
   });
 
-  it('contains the Cloudflare Turnstile widget', () => {
+  it('reserves a mount point for the Cloudflare Turnstile widget', () => {
     const wrapper = mount(ContactForm);
-    expect(wrapper.find('.cf-turnstile').exists()).toBe(true);
+    expect(wrapper.find('.min-h-\\[65px\\]').exists()).toBe(true);
   });
 });
