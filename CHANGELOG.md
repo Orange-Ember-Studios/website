@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.22](https://github.com/Orange-Ember-Studios/website/compare/v0.0.21...v0.0.22) (2026-05-16)
+
+
+### Bug Fixes
+
+* **admin:** sync profile signals to DOM for password managers ([95300e0](https://github.com/Orange-Ember-Studios/website/commit/95300e025980e5a797a0c18c68c866c1405ef1fe))
+* align post likes lookup with blog page visibility ([c9c06e2](https://github.com/Orange-Ember-Studios/website/commit/c9c06e2fca6455bcae44abd5b761254b39faf409))
+* **api:** pass Turso credentials into post likes handlers ([9499e87](https://github.com/Orange-Ember-Studios/website/commit/9499e872a4012e87821ed217d84ef0770f9ea706))
+* **contact:** use explicit Turnstile render and harden widget init ([09f3e9b](https://github.com/Orange-Ember-Studios/website/commit/09f3e9be3e47d73bcff17d53cb6fb6f999a65d25))
+* **ui:** sync premium select label and bubble change events ([5f85d29](https://github.com/Orange-Ember-Studios/website/commit/5f85d294128a85435a29453024f7e9d3511a404e))
+* updated dependencies ([a139861](https://github.com/Orange-Ember-Studios/website/commit/a13986199e7a71885d075d67abf3f2f12c2be467))
+* use Cloudflare worker env for Turso DB credentials ([a20957e](https://github.com/Orange-Ember-Studios/website/commit/a20957e21ec4bc6d6886baf88b798ad7eacd5c5d))
+
 ### [0.0.21](https://github.com/Orange-Ember-Studios/website/compare/v0.0.20...v0.0.21) (2026-05-16)
 
 
