@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.1.0](https://github.com/Orange-Ember-Studios/website/compare/v0.0.16...v0.1.0) (2026-05-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* Worker main removed; edge /api must be wired again
+if production still depends on it.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+### Bug Fixes
+
+* align post likes lookup with blog page visibility ([c9c06e2](https://github.com/Orange-Ember-Studios/website/commit/c9c06e2fca6455bcae44abd5b761254b39faf409))
+* enable language selector functionality ([3abbc55](https://github.com/Orange-Ember-Studios/website/commit/3abbc5558915e5e339774089092c05f5f1abdbb4))
+* gate all admin API fetches behind auth confirmation ([a79f24b](https://github.com/Orange-Ember-Studios/website/commit/a79f24b142e13e706b25dea6b904424fd240fcce))
+* implement admin authentication protection ([b02c71a](https://github.com/Orange-Ember-Studios/website/commit/b02c71a7a93e4e827d9e3be323f9f271847d1eee))
+* improve Cloudflare Turnstile integration ([d96bf72](https://github.com/Orange-Ember-Studios/website/commit/d96bf722626ff56892e86fbac6a1f7d24f13b347))
+* repair admin page blank screen ([5ddec34](https://github.com/Orange-Ember-Studios/website/commit/5ddec34aa88b828dcd4377ed9e34b7720721a9ff))
+* resolve Turnstile widget lifecycle conflicts ([dbece75](https://github.com/Orange-Ember-Studios/website/commit/dbece7595acacd8eaccd43cc1d0dbc4b7e7c45da))
+* updated dependencies ([a139861](https://github.com/Orange-Ember-Studios/website/commit/a13986199e7a71885d075d67abf3f2f12c2be467))
+* use Cloudflare worker env for Turso DB credentials ([a20957e](https://github.com/Orange-Ember-Studios/website/commit/a20957e21ec4bc6d6886baf88b798ad7eacd5c5d))
+
+
+### build
+
+* migrate app toolchain to EmberKit + Workers SPA ([4e2398b](https://github.com/Orange-Ember-Studios/website/commit/4e2398b0778a9ed522155b9b0cc01cd1cb90bb20))
+
 ### [0.0.20](https://github.com/Orange-Ember-Studios/website/compare/v0.0.16...v0.0.20) (2026-05-16)
 
 
