@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.21](https://github.com/Orange-Ember-Studios/website/compare/v0.0.20...v0.0.21) (2026-05-16)
+
+
+### Bug Fixes
+
+* **build:** bump EmberKit CLI, add vite.config shim ([13e8db8](https://github.com/Orange-Ember-Studios/website/commit/13e8db81c5206a8e7958e2d48abd592e7bfd1dd0))
+
 ### [0.0.20](https://github.com/Orange-Ember-Studios/website/compare/v0.0.19...v0.0.20) (2026-05-16)
 
 
