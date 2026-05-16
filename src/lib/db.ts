@@ -1,13 +1,29 @@
 import { createClient } from '@libsql/client/web';
+import { env as cloudflareEnv } from 'cloudflare:workers';
 import { EnvManager } from './EnvManager';
 
-export function getDbClient() {
+function getTursoCredentials(): { url: string; authToken: string } {
+  const fromWorker = cloudflareEnv.TURSO_DATABASE_URL && cloudflareEnv.TURSO_AUTH_TOKEN
+    ? {
+        url: String(cloudflareEnv.TURSO_DATABASE_URL),
+        authToken: String(cloudflareEnv.TURSO_AUTH_TOKEN),
+      }
+    : null;
+
+  if (fromWorker) return fromWorker;
+
   const url = EnvManager.TURSO_DATABASE_URL;
   const authToken = EnvManager.TURSO_AUTH_TOKEN;
 
   if (!url || !authToken) {
     throw new Error('Database credentials are not configured');
   }
+
+  return { url, authToken };
+}
+
+export function getDbClient() {
+  const { url, authToken } = getTursoCredentials();
 
   return createClient({
     url,

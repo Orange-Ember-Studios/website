@@ -1,4 +1,9 @@
 import { getViteConfig } from 'astro/config';
+import { fileURLToPath } from 'node:url';
+
+const cloudflareWorkersStub = fileURLToPath(
+  new URL('./src/test/cloudflare-workers-stub.ts', import.meta.url),
+);
 
 export default getViteConfig({
   test: {
@@ -14,5 +19,8 @@ export default getViteConfig({
   },
   resolve: {
     conditions: ['node'],
+    alias: {
+      'cloudflare:workers': cloudflareWorkersStub,
+    },
   },
 });
