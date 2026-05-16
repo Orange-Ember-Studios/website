@@ -31,6 +31,7 @@
     "shiki": "^2.5.0"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260516.1",
     "@emberkit/cli": "^0.6.9",
     "@emberkit/edge": "^0.2.4",
     "@tailwindcss/vite": "^4.3.0",

@@ -11,18 +11,12 @@ export default defineConfig({
   mode: "ssr",
   server: {
     port: 4321,
-    host: "localhost",
   },
   build: {
-    outDir: "dist",
     target: "esnext",
   },
   vite: {
-    envDir: ".",
     envPrefix: ["VITE_", "PUBLIC_"],
-    define: {
-      __PUBLIC_TURNSTILE_SITE_KEY__: JSON.stringify(process.env.PUBLIC_TURNSTILE_SITE_KEY || ""),
-    },
     plugins: [
       emberkitVitePlugin(),
       tailwindcss(),
@@ -64,15 +58,5 @@ export default defineConfig({
         },
       },
     ],
-    esbuild: {
-      jsxImportSource: "@emberkit/core",
-    },
-    build: {
-      rollupOptions: {
-        input: {
-          main: "./index.html",
-        },
-      },
-    },
   },
 });
