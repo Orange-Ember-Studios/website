@@ -16,8 +16,8 @@
     "auto-version": "node scripts/auto-version.mjs"
   },
   "dependencies": {
-    "@emberkit/core": "^0.2.9",
-    "@emberkit/icons": "^0.2.7",
+    "@emberkit/core": "^0.3.0",
+    "@emberkit/icons": "^1.0.0",
     "@libsql/client": "^0.17.2",
     "@milkdown/core": "^7.20.0",
     "@milkdown/ctx": "^7.20.0",
