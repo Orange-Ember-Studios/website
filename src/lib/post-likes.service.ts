@@ -33,7 +33,7 @@ async function getPublishedBlogPost(
       SELECT p.id
       FROM posts p
       JOIN post_translations t ON p.id = t.post_id
-      WHERE p.slug = ? AND p.type = 'blog' AND t.lang = ? AND t.published = 1
+      WHERE p.slug = ? AND t.lang = ? AND t.published = 1
       LIMIT 1
     `,
     args: [slug, lang],
@@ -85,7 +85,7 @@ export async function getPostLikeStatus(
   const db = getDbClient(creds);
   await ensurePostLikesTable(db);
 
-  const post = await getPublishedBlogPost(db, slug, lang);
+  const post = await getPublishedPostForLikes(db, slug, lang);
   if (!post) return null;
 
   const visitorHash = await hashVisitorForPost(post.id, visitorId);
@@ -101,7 +101,7 @@ export async function likePost(
   const db = getDbClient(creds);
   await ensurePostLikesTable(db);
 
-  const post = await getPublishedBlogPost(db, slug, lang);
+  const post = await getPublishedPostForLikes(db, slug, lang);
   if (!post) return null;
 
   const visitorHash = await hashVisitorForPost(post.id, visitorId);

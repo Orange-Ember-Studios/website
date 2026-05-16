@@ -28,6 +28,12 @@ export function getDbClient(creds?: TursoCredentials): Client {
     throw new Error("Database credentials are not configured");
   }
 
+  return { url, authToken };
+}
+
+export function getDbClient() {
+  const { url, authToken } = getTursoCredentials();
+
   return createClient({
     url,
     authToken,

@@ -310,7 +310,7 @@ export async function handleApiRequest(
 
     if (method === "GET") {
       try {
-        const likeStatus = await getPostLikeStatus(slug, lang, visitorId, tc);
+        const likeStatus = await getPostLikeStatus(slug, lang, visitorId);
         if (!likeStatus) return json({ error: "Post not found" }, { status: 404, cookies: outCookies });
         return json(likeStatus, { cookies: outCookies });
       } catch {
@@ -319,7 +319,7 @@ export async function handleApiRequest(
     }
     if (method === "POST") {
       try {
-        const likeStatus = await likePost(slug, lang, visitorId, tc);
+        const likeStatus = await likePost(slug, lang, visitorId);
         if (!likeStatus) return json({ error: "Post not found" }, { status: 404, cookies: outCookies });
         return json(likeStatus, { cookies: outCookies });
       } catch {
