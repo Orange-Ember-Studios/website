@@ -2,21 +2,29 @@ import { createElement, createEffect, createSignal } from "@emberkit/core";
 import { getTranslation } from "../../i18n/i18n.ts";
 
 export default function AdminProfile() {
-  const [user, setUser] = createSignal<{
-    userId: string;
-    username: string;
-  } | null>(null);
-  const [loadingUser, setLoadingUser] = createSignal(true);
-  const [updating, setUpdating] = createSignal(false);
-  const [error, setError] = createSignal("");
-  const [success, setSuccess] = createSignal("");
+  const loadingUserSig = createSignal(true);
+  const loadingUser = loadingUserSig[0];
+  const setLoadingUser = loadingUserSig[1];
+
+  const updatingSig = createSignal(false);
+  const updating = updatingSig[0];
+  const setUpdating = updatingSig[1];
+
+  const errorSig = createSignal("");
+  const setError = errorSig[1];
+
+  const successSig = createSignal("");
+  const setSuccess = successSig[1];
+
+  const userSig = createSignal<{ userId: string; username: string } | null>(
+    null,
+  );
+  const setUser = userSig[1];
 
   createEffect(() => {
     void (async () => {
       try {
-        const res = await fetch("/api/auth/me", {
-          credentials: "include",
-        });
+        const res = await fetch("/api/auth/me", { credentials: "include" });
         if (res.ok) {
           const data = (await res.json()) as {
             user: { userId: string; username: string };
@@ -29,6 +37,62 @@ export default function AdminProfile() {
         setLoadingUser(false);
       }
     })();
+  });
+
+  // Push user data into the DOM when the signal resolves
+  createEffect(() => {
+    const unsub = userSig.subscribe((u) => {
+      const usernameEl = document.getElementById("profile-username");
+      const userIdEl = document.getElementById("profile-userid");
+      const passwordFormUsername = document.getElementById(
+        "profile-password-username",
+      ) as HTMLInputElement | null;
+      if (usernameEl) usernameEl.textContent = u?.username ?? "–";
+      if (userIdEl) {
+        userIdEl.textContent = u?.userId ?? "–";
+        userIdEl.title = u?.userId ?? "";
+      }
+      // Keeps password-manager / browser heuristics happy (username + password in same form)
+      if (passwordFormUsername && u?.username) {
+        passwordFormUsername.value = u.username;
+      }
+    });
+    return () => unsub();
+  });
+
+  // Reflect error / success messages in the DOM
+  createEffect(() => {
+    const unsubErr = errorSig.subscribe((e) => {
+      const el = document.getElementById("profile-error");
+      if (!el) return;
+      el.textContent = e;
+      el.classList.toggle("hidden", !e);
+    });
+    const unsubOk = successSig.subscribe((s) => {
+      const el = document.getElementById("profile-success");
+      if (!el) return;
+      el.textContent = s;
+      el.classList.toggle("hidden", !s);
+    });
+    return () => {
+      unsubErr();
+      unsubOk();
+    };
+  });
+
+  // Keep button text / disabled state in sync
+  createEffect(() => {
+    const unsub = updatingSig.subscribe((busy) => {
+      const btn = document.getElementById(
+        "profile-save-btn",
+      ) as HTMLButtonElement | null;
+      if (!btn) return;
+      btn.disabled = busy;
+      btn.textContent = busy
+        ? getTranslation("admin.profile.updating")
+        : getTranslation("admin.profile.updatePassword");
+    });
+    return () => unsub();
   });
 
   const handleChangePassword = async () => {
@@ -60,19 +124,21 @@ export default function AdminProfile() {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          currentPassword: currentPw,
-          newPassword: newPw,
-        }),
+        body: JSON.stringify({ currentPassword: currentPw, newPassword: newPw }),
       });
       const data = (await res.json()) as { error?: string };
       if (res.ok) {
         setSuccess(getTranslation("admin.profile.success"));
         form.reset();
+        const usernameInput = document.getElementById(
+          "profile-password-username",
+        ) as HTMLInputElement | null;
+        const currentUser = userSig.peek();
+        if (usernameInput && currentUser?.username) {
+          usernameInput.value = currentUser.username;
+        }
       } else {
-        setError(
-          data.error || getTranslation("admin.profile.updatePassword"),
-        );
+        setError(data.error || getTranslation("admin.profile.updatePassword"));
       }
     } catch {
       setError(getTranslation("admin.profile.error_network"));
@@ -98,43 +164,68 @@ export default function AdminProfile() {
             <h3 className="text-xs font-semibold uppercase tracking-wider text-orange-600 mb-4">
               {getTranslation("admin.profile.basicInfo")}
             </h3>
-            {loadingUser() ? (
-              <div className="animate-pulse flex space-x-4">
-                <div className="flex-1 space-y-4 py-1">
-                  <div className="h-4 bg-neutral-800 rounded w-3/4"></div>
-                  <div className="h-4 bg-neutral-800 rounded w-1/2"></div>
+
+            {/* Skeleton — visible while loading */}
+            <div
+              data-ek-bind={loadingUser}
+              data-ek-show-when="true"
+              data-ek-hide-class="hidden"
+              className="animate-pulse flex space-x-4"
+            >
+              <div className="flex-1 space-y-4 py-1">
+                <div className="h-4 bg-neutral-800 rounded w-3/4" />
+                <div className="h-4 bg-neutral-800 rounded w-1/2" />
+              </div>
+            </div>
+
+            {/* User info — revealed after load; text populated via subscribe */}
+            <div
+              data-ek-bind={loadingUser}
+              data-ek-show-when="false"
+              data-ek-hide-class="hidden"
+              className="grid grid-cols-1 md:grid-cols-2 gap-6 hidden"
+            >
+              <div>
+                <label className="block text-xs font-medium text-neutral-400 mb-1">
+                  {getTranslation("admin.login.username")}
+                </label>
+                <div className="text-white font-medium bg-neutral-950 px-4 py-2.5 rounded-lg border border-neutral-700">
+                  <span id="profile-username">–</span>
                 </div>
               </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-xs font-medium text-neutral-400 mb-1">
-                    {getTranslation("admin.login.username")}
-                  </label>
-                  <div className="text-white font-medium bg-neutral-950 px-4 py-2.5 rounded-lg border border-neutral-700">
-                    {user()?.username || "..."}
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-neutral-400 mb-1">
-                    {getTranslation("admin.profile.userId")}
-                  </label>
-                  <div
-                    className="text-neutral-400 text-sm bg-neutral-950 px-4 py-2.5 rounded-lg border border-neutral-700 font-mono truncate"
-                    title={user()?.userId}
-                  >
-                    {user()?.userId || "..."}
-                  </div>
+              <div>
+                <label className="block text-xs font-medium text-neutral-400 mb-1">
+                  {getTranslation("admin.profile.userId")}
+                </label>
+                <div className="text-neutral-400 text-sm bg-neutral-950 px-4 py-2.5 rounded-lg border border-neutral-700 font-mono truncate">
+                  <span id="profile-userid">–</span>
                 </div>
               </div>
-            )}
+            </div>
           </section>
 
           <section>
             <h3 className="text-xs font-semibold uppercase tracking-wider text-orange-600 mb-4">
               {getTranslation("admin.profile.changePassword")}
             </h3>
-            <form id="profile-password-form" className="space-y-4">
+            <form id="profile-password-form" className="space-y-4" autoComplete="on">
+              {/* Required by browsers for password forms: associate credentials with account */}
+              <label
+                htmlFor="profile-password-username"
+                className="sr-only"
+              >
+                {getTranslation("admin.login.username")}
+              </label>
+              <input
+                id="profile-password-username"
+                name="username"
+                type="text"
+                autoComplete="username"
+                readOnly
+                tabIndex={-1}
+                className="sr-only"
+              />
+
               <div>
                 <label
                   htmlFor="currentPassword"
@@ -190,26 +281,23 @@ export default function AdminProfile() {
                 </div>
               </div>
 
-              {error() ? (
-                <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-300 text-sm">
-                  {error()}
-                </div>
-              ) : null}
-              {success() ? (
-                <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-300 text-sm">
-                  {success()}
-                </div>
-              ) : null}
+              <div
+                id="profile-error"
+                className="hidden p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-300 text-sm"
+              />
+              <div
+                id="profile-success"
+                className="hidden p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-300 text-sm"
+              />
 
               <div className="pt-2">
                 <button
+                  id="profile-save-btn"
                   type="button"
-                  onClick={handleChangePassword}
+                  onClick={() => void handleChangePassword()}
                   className="bg-orange-500 hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-2.5 rounded-lg text-sm font-medium shadow-sm hover:shadow-md transition-all"
                 >
-                  {updating()
-                    ? getTranslation("admin.profile.updating")
-                    : getTranslation("admin.profile.updatePassword")}
+                  {getTranslation("admin.profile.updatePassword")}
                 </button>
               </div>
             </form>

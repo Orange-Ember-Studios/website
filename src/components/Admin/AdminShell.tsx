@@ -97,7 +97,7 @@ export default function AdminShell(props: AdminShellProps) {
         className="admin-page min-h-screen bg-neutral-950 text-neutral-200 flex hidden"
       >
         {/* ── Desktop sidebar ── */}
-        <aside className="hidden md:flex w-64 flex-col fixed inset-y-0 left-0 z-30 bg-slate-900 border-r border-neutral-800">
+        <aside className="hidden md:flex w-64 flex-col fixed inset-y-0 left-0 z-30 bg-neutral-900 border-r border-neutral-800">
           <div className="p-6 border-b border-neutral-800">
             <h1 className="text-xl font-bold bg-linear-to-r from-orange-400 to-amber-500 bg-clip-text text-transparent">
               OE Studios
@@ -115,7 +115,7 @@ export default function AdminShell(props: AdminShellProps) {
                 className={
                   isActive(item.id)
                     ? "flex items-center gap-3 px-4 py-3 rounded-lg transition-all bg-orange-500/10 text-orange-400 font-medium border-l-2 border-orange-500"
-                    : "flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-neutral-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent"
+                    : "flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-neutral-400 hover:text-neutral-100 hover:bg-neutral-800 border-l-2 border-transparent"
                 }
               >
                 <item.Icon className="w-5 h-5 shrink-0" />
@@ -129,8 +129,8 @@ export default function AdminShell(props: AdminShellProps) {
               href="/admin/profile"
               className={
                 isActive("profile")
-                  ? "flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all bg-orange-500/10 text-orange-400 font-medium"
-                  : "flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all text-neutral-400 hover:text-white hover:bg-white/5"
+                  ? "flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all bg-orange-500/10 text-orange-400 font-medium border-l-2 border-orange-500"
+                  : "flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all text-neutral-400 hover:text-neutral-100 hover:bg-neutral-800 border-l-2 border-transparent"
               }
             >
               <IconUser className="w-5 h-5 shrink-0" />
@@ -159,7 +159,7 @@ export default function AdminShell(props: AdminShellProps) {
             onClick={closeMobile}
           />
 
-          <aside className="absolute inset-y-0 left-0 w-72 bg-slate-900 shadow-2xl flex flex-col">
+          <aside className="absolute inset-y-0 left-0 w-72 bg-neutral-900 border-r border-neutral-800 shadow-2xl shadow-black/40 flex flex-col">
             <div className="p-6 border-b border-neutral-800 flex items-center justify-between">
               <h1 className="text-xl font-bold bg-linear-to-r from-orange-400 to-amber-500 bg-clip-text text-transparent">
                 OE Studios
@@ -180,8 +180,8 @@ export default function AdminShell(props: AdminShellProps) {
                   href={item.href}
                   className={
                     isActive(item.id)
-                      ? "flex items-center gap-3 px-4 py-3 rounded-lg transition-all bg-orange-500/10 text-orange-400 font-medium"
-                      : "flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-neutral-400 hover:text-white hover:bg-white/5"
+                      ? "flex items-center gap-3 px-4 py-3 rounded-lg transition-all bg-orange-500/10 text-orange-400 font-medium border-l-2 border-orange-500"
+                      : "flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-neutral-400 hover:text-neutral-100 hover:bg-neutral-800 border-l-2 border-transparent"
                   }
                 >
                   <item.Icon className="w-5 h-5 shrink-0" />
@@ -195,8 +195,8 @@ export default function AdminShell(props: AdminShellProps) {
                 href="/admin/profile"
                 className={
                   isActive("profile")
-                    ? "flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all bg-orange-500/10 text-orange-400 font-medium"
-                    : "flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all text-neutral-400 hover:text-white hover:bg-white/5"
+                    ? "flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all bg-orange-500/10 text-orange-400 font-medium border-l-2 border-orange-500"
+                    : "flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all text-neutral-400 hover:text-neutral-100 hover:bg-neutral-800 border-l-2 border-transparent"
                 }
               >
                 <IconUser className="w-5 h-5 shrink-0" />
@@ -217,7 +217,7 @@ export default function AdminShell(props: AdminShellProps) {
         {/* ── Main content area ── */}
         <div className="flex-1 flex flex-col min-h-screen md:ml-64">
           {/* Header */}
-          <header className="h-16 border-b border-neutral-800 bg-neutral-900/80 backdrop-blur-md flex items-center justify-between px-4 md:px-6 sticky top-0 z-20">
+          <header className="h-16 border-b border-neutral-800 bg-neutral-900 flex items-center justify-between px-4 md:px-6 sticky top-0 z-20">
             <div className="flex items-center gap-3">
               <button
                 type="button"
