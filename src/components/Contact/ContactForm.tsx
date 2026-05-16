@@ -1,7 +1,7 @@
 import { createEffect, createSignal } from "@emberkit/core";
-import { API_URLS } from "../../constants/urls";
-import { getTranslation } from "../../i18n/i18n";
-import { EnvManager } from "../../lib/EnvManager";
+import { API_URLS } from "../../constants/urls.ts";
+import { getTranslation } from "../../i18n/i18n.ts";
+import { EnvManager } from "../../lib/EnvManager.ts";
 import { IconLoader, IconSend } from "@emberkit/icons";
 
 declare global {

@@ -1,4 +1,4 @@
-import { SITE_URLS } from '../constants/urls';
+import { SITE_URLS } from '../constants/urls.ts';
 
 /**
  * Resolves an image path to its full URL.

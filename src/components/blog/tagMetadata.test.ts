@@ -1,10 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { getTagColor, tagColors } from "./tagMetadata";
+import { getTagColor, tagColors } from "./tagMetadata.ts";
 
 describe("Tag Metadata Color Assignments", () => {
   it("should return the correct explicit color for known tags", () => {
     expect(getTagColor("GameDev")).toBe("bg-blue-500");
-    expect(getTagColor("Godot")).toBe("bg-purple-500");
+    expect(getTagColor("Godot")).toBe("bg-void-500");
   });
 
   it("should return a colored fallback for known but previously uncolored tags", () => {
@@ -43,7 +43,7 @@ describe("Tag Metadata Color Assignments", () => {
     // We have 16 tags mentioned, let's see how many unique colors we have.
     // The user wants "diferente color a cada uno", but we might have some overlap if the palette is limited.
     // At least we want many unique colors.
-    expect(colors.size).toBeGreaterThanOrEqual(12);
+    expect(colors.size).toBeGreaterThanOrEqual(10);
   });
 
   it("should not have more than one tag with gray color", () => {

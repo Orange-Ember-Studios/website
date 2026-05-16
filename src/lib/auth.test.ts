@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { createToken, verifyToken, hashPassword, verifyPassword } from './auth';
+import { createToken, verifyToken, hashPassword, verifyPassword } from './auth.ts';
 
 describe('Auth Utilities', () => {
   it('should hash and verify passwords correctly', async () => {

@@ -6,8 +6,8 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "emberkit dev",
+    "build": "emberkit build",
     "preview": "pnpm build && wrangler dev",
     "test": "vitest --run",
     "generate-types": "wrangler types",
@@ -16,8 +16,8 @@
     "auto-version": "node scripts/auto-version.mjs"
   },
   "dependencies": {
-    "@emberkit/core": "^0.3.7",
-    "@emberkit/icons": "^1.0.7",
+    "@emberkit/core": "^0.4.0",
+    "@emberkit/icons": "^2.0.0",
     "@libsql/client": "^0.17.3",
     "@milkdown/core": "^7.21.1",
     "@milkdown/ctx": "^7.21.1",
@@ -31,7 +31,7 @@
     "shiki": "^2.5.0"
   },
   "devDependencies": {
-    "@emberkit/cli": "^0.6.7",
+    "@emberkit/cli": "^0.6.8",
     "@emberkit/edge": "^0.2.4",
     "@tailwindcss/vite": "^4.3.0",
     "@testing-library/dom": "^10.4.1",

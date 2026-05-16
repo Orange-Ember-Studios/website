@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { getVisiblePosts } from "./blogPaginationLogic";
+import { getVisiblePosts } from "./blogPaginationLogic.ts";
 
 describe("blogPaginationLogic", () => {
   const mockPosts = [

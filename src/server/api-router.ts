@@ -1,7 +1,7 @@
-import { API_URLS } from "../constants/urls";
-import { loginUser } from "../lib/auth.service";
-import { verifyToken } from "../lib/auth";
-import { updatePassword } from "../lib/auth.service";
+import { API_URLS } from "../constants/urls.ts";
+import { loginUser } from "../lib/auth.service.ts";
+import { verifyToken } from "../lib/auth.ts";
+import { updatePassword } from "../lib/auth.service.ts";
 import {
   getAllPosts,
   createPost,
@@ -10,11 +10,12 @@ import {
   deletePost,
   getPublishedPostsByType,
   getPublishedPostBySlug,
-} from "../lib/posts.service";
-import { getPostLikeStatus, likePost } from "../lib/post-likes.service";
-import { mapPortfolioProjects } from "../lib/map-portfolio";
-import type { SiteEnv, SupportedLang } from "./site-env";
-import { tursoCreds } from "./site-env";
+} from "../lib/posts.service.ts";
+import { getPostLikeStatus, likePost } from "../lib/post-likes.service.ts";
+import { mapPortfolioProjects } from "../lib/map-portfolio.ts";
+import { ensureDatabaseSchema } from "../lib/db-migrations.ts";
+import type { SiteEnv, SupportedLang } from "./site-env.ts";
+import { tursoCreds } from "./site-env.ts";
 
 const VISITOR_COOKIE = "blog_like_visitor";
 const VISITOR_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
@@ -69,17 +70,51 @@ function secureCookies(request: Request) {
   return request.url.startsWith("https:");
 }
 
-export async function getAdminUserFromRequest(request: Request, env: SiteEnv) {
+export type AdminAuthFailureReason = "no_cookie" | "invalid_token";
+
+export async function readAdminAuth(
+  request: Request,
+  env: SiteEnv,
+): Promise<
+  | { ok: true; user: { userId: string; username: string } }
+  | { ok: false; reason: AdminAuthFailureReason }
+> {
   const cookies = parseCookies(request.headers.get("cookie"));
   const token = cookies["admin_token"];
-  if (!token) return null;
-  return verifyToken(token, env.JWT_SECRET);
+  if (!token) return { ok: false, reason: "no_cookie" };
+  const payload = await verifyToken(token, env.JWT_SECRET);
+  if (!payload) return { ok: false, reason: "invalid_token" };
+  const userId = String((payload as { userId?: unknown }).userId ?? "");
+  const username = String((payload as { username?: unknown }).username ?? "");
+  if (!userId || !username) return { ok: false, reason: "invalid_token" };
+  return {
+    ok: true,
+    user: { userId, username },
+  };
+}
+
+export async function getAdminUserFromRequest(request: Request, env: SiteEnv) {
+  const r = await readAdminAuth(request, env);
+  return r.ok ? r.user : null;
 }
 
 export async function handleApiRequest(
   request: Request,
   env: SiteEnv,
 ): Promise<Response> {
+  try {
+    await ensureDatabaseSchema({
+      TURSO_DATABASE_URL: env.TURSO_DATABASE_URL,
+      TURSO_AUTH_TOKEN: env.TURSO_AUTH_TOKEN,
+    });
+  } catch (e) {
+    console.error("[db-migrations]", e);
+    return json(
+      { error: "Database temporarily unavailable" },
+      { status: 503 },
+    );
+  }
+
   const url = new URL(request.url);
   const path = url.pathname;
   const method = request.method;
@@ -123,11 +158,17 @@ export async function handleApiRequest(
   }
 
   if (path === "/api/auth/me" && method === "GET") {
-    const user = await getAdminUserFromRequest(request, env);
-    if (!user) {
-      return json({ error: "Not authenticated" }, { status: 401 });
+    const auth = await readAdminAuth(request, env);
+    if (!auth.ok) {
+      return json(
+        {
+          error: "Not authenticated",
+          reason: auth.reason,
+        },
+        { status: 401 },
+      );
     }
-    return json({ user });
+    return json({ user: auth.user });
   }
 
   if (path === "/api/auth/change-password" && method === "POST") {
@@ -247,7 +288,9 @@ export async function handleApiRequest(
 
   const likesMatch = path.match(/^\/api\/posts\/([^/]+)\/([^/]+)\/likes$/);
   if (likesMatch) {
-    const [, lang, slug] = likesMatch;
+    const [, langRaw, slugRaw] = likesMatch;
+    const lang = decodeURIComponent(langRaw);
+    const slug = decodeURIComponent(slugRaw);
     const cookiesHeader = request.headers.get("cookie");
     const parsed = parseCookies(cookiesHeader);
     let visitorId = parsed[VISITOR_COOKIE];
@@ -283,6 +326,7 @@ export async function handleApiRequest(
         return json({ error: "Failed to like post" }, { status: 500, cookies: outCookies });
       }
     }
+    return json({ error: "Method not allowed" }, { status: 405, cookies: outCookies });
   }
 
   if (path === "/api/portfolio/projects" && method === "GET") {
@@ -338,7 +382,12 @@ export async function handleApiRequest(
 
     if (method === "GET") {
       try {
-        const posts = await getAllPosts(tc);
+        const url = new URL(request.url);
+        const type = url.searchParams.get("type")?.trim();
+        const posts = await getAllPosts(
+          tc,
+          type ? { type } : undefined,
+        );
         return json(posts);
       } catch {
         return json({ error: "Failed to fetch posts" }, { status: 500 });
@@ -385,11 +434,13 @@ export async function handleApiRequest(
     if (method === "PUT") {
       try {
         const data = (await request.json()) as any;
+        const existing = await getPostById(id, tc);
+        if (!existing) return json({ error: "Post not found" }, { status: 404 });
         const updatedPost = await updatePost(
           id,
           {
             slug: data.slug,
-            type: data.type,
+            type: data.type ?? existing.type,
             author: data.author,
             image: data.image,
           },

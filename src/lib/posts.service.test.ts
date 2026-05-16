@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import * as postsService from './posts.service';
-import { getDbClient } from './db';
+import { getDbClient } from './db.ts';
 
 vi.mock('./db', () => ({
   getDbClient: vi.fn(),
@@ -25,6 +25,19 @@ describe('Posts Service', () => {
       expect(posts).toHaveLength(1);
       expect(posts[0].slug).toBe('test-slug');
     });
+
+    it('filters by type when options.type is set', async () => {
+      executeMock.mockResolvedValue({
+        rows: [{ id: '2', slug: 'game', type: 'project' }],
+      });
+
+      const posts = await postsService.getAllPosts(undefined, { type: 'project' });
+      expect(posts).toHaveLength(1);
+      expect(executeMock).toHaveBeenCalledWith({
+        sql: 'SELECT * FROM posts WHERE type = ? ORDER BY created_at DESC',
+        args: ['project'],
+      });
+    });
   });
 
   describe('getPostById', () => {
@@ -43,6 +56,25 @@ describe('Posts Service', () => {
       expect(post).not.toBeNull();
       expect(post?.translations).toHaveLength(1);
       expect(post?.translations[0].lang).toBe('en');
+    });
+  });
+
+  describe('excerptFromPostContent', () => {
+    it('extracts plain text from markdown content', () => {
+      const excerpt = postsService.excerptFromPostContent(
+        '**Hello** world\n\nSecond paragraph here.',
+      );
+      expect(excerpt).toContain('Hello');
+      expect(excerpt).toContain('world');
+    });
+
+    it('extracts from Editor.js paragraph blocks', () => {
+      const excerpt = postsService.excerptFromPostContent(
+        JSON.stringify({
+          blocks: [{ type: 'paragraph', data: { text: '<p>Editor body</p>' } }],
+        }),
+      );
+      expect(excerpt).toContain('Editor body');
     });
   });
 });

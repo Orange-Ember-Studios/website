@@ -1,8 +1,13 @@
-import { getDbClient } from './db';
-import { verifyPassword, createToken, hashPassword } from './auth';
+import { getDbClient, type TursoCredentials } from "./db.ts";
+import { verifyPassword, createToken, hashPassword } from "./auth.ts";
 
-export async function loginUser(username: string, passwordPlain: string) {
-  const db = getDbClient();
+export async function loginUser(
+  username: string,
+  passwordPlain: string,
+  creds?: TursoCredentials,
+  jwtSecret?: string,
+) {
+  const db = getDbClient(creds);
   const res = await db.execute({
     sql: 'SELECT id, password_hash FROM users WHERE username = ?',
     args: [username]
@@ -14,12 +19,20 @@ export async function loginUser(username: string, passwordPlain: string) {
   const isValid = await verifyPassword(passwordPlain, user.password_hash as string);
   if (!isValid) return null;
 
-  const token = await createToken({ userId: user.id as string, username });
+  const token = await createToken(
+    { userId: user.id as string, username },
+    jwtSecret,
+  );
   return { token, userId: user.id as string, username };
 }
 
-export async function updatePassword(userId: string, currentPasswordPlain: string, newPasswordPlain: string) {
-  const db = getDbClient();
+export async function updatePassword(
+  userId: string,
+  currentPasswordPlain: string,
+  newPasswordPlain: string,
+  creds?: TursoCredentials,
+) {
+  const db = getDbClient(creds);
   const res = await db.execute({
     sql: 'SELECT password_hash FROM users WHERE id = ?',
     args: [userId]

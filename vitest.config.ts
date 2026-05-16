@@ -1,18 +1,14 @@
-import { getViteConfig } from 'astro/config';
+import { defineConfig, mergeConfig, type UserConfig } from "vite";
+import emberkitApp from "./emberkit.config.ts";
 
-export default getViteConfig({
-  test: {
-    environment: 'happy-dom',
-    setupFiles: ['./vitest.setup.ts'],
-    include: ['src/**/*.test.{ts,tsx}'],
-    globals: true,
-    server: {
-      deps: {
-        inline: ['@lucide/astro'],
-      },
+export default mergeConfig(
+  emberkitApp.vite as UserConfig,
+  defineConfig({
+    test: {
+      environment: "happy-dom",
+      setupFiles: ["./vitest.setup.ts"],
+      include: ["src/**/*.test.{ts,tsx}"],
+      globals: true,
     },
-  },
-  resolve: {
-    conditions: ['node'],
-  },
-});
+  }),
+);

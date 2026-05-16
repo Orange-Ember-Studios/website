@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getDbClient } from './db';
-import { getPostLikeStatus, likePost } from './post-likes.service';
+import { getDbClient } from './db.ts';
+import { getPostLikeStatus, likePost } from './post-likes.service.ts';
 
 vi.mock('./db', () => ({
   getDbClient: vi.fn(),

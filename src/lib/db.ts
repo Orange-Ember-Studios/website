@@ -1,43 +1,35 @@
-import { createClient } from '@libsql/client/web';
-import { EnvManager } from './EnvManager';
+import { createClient, type Client } from "@libsql/client";
+import { EnvManager } from "./EnvManager.ts";
 
-export function getDbClient() {
-  const url = EnvManager.TURSO_DATABASE_URL;
-  const authToken = EnvManager.TURSO_AUTH_TOKEN;
+export type TursoCredentials = {
+  TURSO_DATABASE_URL?: string;
+  TURSO_AUTH_TOKEN?: string;
+};
 
-  if (!url || !authToken) {
-    throw new Error('Database credentials are not configured');
+function isFileUrl(url: string): boolean {
+  return url.startsWith("file:");
+}
+
+export function getDbClient(creds?: TursoCredentials): Client {
+  const url = creds?.TURSO_DATABASE_URL ?? EnvManager.TURSO_DATABASE_URL;
+  const authToken = creds?.TURSO_AUTH_TOKEN ?? EnvManager.TURSO_AUTH_TOKEN;
+
+  if (!url) {
+    throw new Error("Database credentials are not configured");
+  }
+
+  // Local SQLite: use the Node client (package `"."` resolves to node.js here).
+  // `@libsql/client/web` does not support `file:` URLs.
+  if (isFileUrl(url)) {
+    return createClient({ url });
+  }
+
+  if (!authToken) {
+    throw new Error("Database credentials are not configured");
   }
 
   return createClient({
     url,
     authToken,
-    // Explicitly bypass @libsql's internal node-fetch polyfill by passing the global fetch
-    fetch: async (requestOrUrl: string | URL | Request | any, init?: RequestInit) => {
-      // If the request is a Request object (likely from cross-fetch/node-fetch),
-      // we extract the properties. Cloudflare edge fetch throws "Invalid URL: [object Request]" 
-      // if it receives an alien Request object it didn't mint itself.
-      if (typeof requestOrUrl === 'object' && 'url' in requestOrUrl) {
-        const headers = new Headers();
-        if (requestOrUrl.headers && typeof requestOrUrl.headers.forEach === 'function') {
-          requestOrUrl.headers.forEach((value: string, key: string) => headers.set(key, value));
-        }
-
-        let body: ArrayBuffer | undefined = undefined;
-        // Extract body safely as ArrayBuffer to avoid passing Node readable streams to Edge native fetch
-        if (requestOrUrl.method !== 'GET' && requestOrUrl.method !== 'HEAD') {
-          body = await requestOrUrl.clone().arrayBuffer();
-        }
-
-        return fetch(requestOrUrl.url, {
-          method: requestOrUrl.method,
-          headers,
-          body,
-        });
-      }
-
-      // @ts-ignore - Fallback for string/URL representations
-      return fetch(requestOrUrl, init);
-    }
   });
 }
