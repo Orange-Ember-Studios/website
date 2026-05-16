@@ -22,13 +22,14 @@ async function ensurePostLikesTable(db: ReturnType<typeof getDbClient>) {
   `);
 }
 
-async function getPublishedBlogPost(db: ReturnType<typeof getDbClient>, slug: string, lang: string): Promise<PostRecord | null> {
+/** Same visibility as the public blog page: published translation for slug/lang (any post type). */
+async function getPublishedPostForLikes(db: ReturnType<typeof getDbClient>, slug: string, lang: string): Promise<PostRecord | null> {
   const res = await db.execute({
     sql: `
       SELECT p.id
       FROM posts p
       JOIN post_translations t ON p.id = t.post_id
-      WHERE p.slug = ? AND p.type = 'blog' AND t.lang = ? AND t.published = 1
+      WHERE p.slug = ? AND t.lang = ? AND t.published = 1
       LIMIT 1
     `,
     args: [slug, lang]
@@ -71,7 +72,7 @@ export async function getPostLikeStatus(slug: string, lang: string, visitorId: s
   const db = getDbClient();
   await ensurePostLikesTable(db);
 
-  const post = await getPublishedBlogPost(db, slug, lang);
+  const post = await getPublishedPostForLikes(db, slug, lang);
   if (!post) return null;
 
   const visitorHash = await hashVisitorForPost(post.id, visitorId);
@@ -82,7 +83,7 @@ export async function likePost(slug: string, lang: string, visitorId: string): P
   const db = getDbClient();
   await ensurePostLikesTable(db);
 
-  const post = await getPublishedBlogPost(db, slug, lang);
+  const post = await getPublishedPostForLikes(db, slug, lang);
   if (!post) return null;
 
   const visitorHash = await hashVisitorForPost(post.id, visitorId);
