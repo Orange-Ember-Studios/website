@@ -26,19 +26,27 @@ export function ContactForm() {
     subject: false,
     message: false,
   });
-  const [turnstileToken, setTurnstileToken] = createSignal("");
-  const [isBotDetected, setIsBotDetected] = createSignal(false);
-  const [isSubmitting, setIsSubmitting] = createSignal(false);
-  const [successMsg, setSuccessMsg] = createSignal("");
-  const [errorMsg, setErrorMsg] = createSignal("");
-  const [turnstileLoaded, setTurnstileLoaded] = createSignal(false);
+  const turnstileSig = createSignal("");
+  const turnstileToken = turnstileSig[0];
+  const setTurnstileToken = turnstileSig[1];
 
+  const botSig = createSignal(false);
+  const setIsBotDetected = botSig[1];
+
+  const submittingSig = createSignal(false);
+  const setIsSubmitting = submittingSig[1];
+
+  const successSig = createSignal("");
+  const setSuccessMsg = successSig[1];
+
+  const errorSig = createSignal("");
+  const setErrorMsg = errorSig[1];
+
+  /** Visible dummy site key pairs with dummy secret `1x0000000000000000000000000000000AA` for local testing (Cloudflare docs). */
   const siteKey =
     EnvManager.PUBLIC_TURNSTILE_SITE_KEY || "1x00000000000000000000AA";
 
-  let widgetIdRef: string | null = null;
-
-  const waitForElement = (selector: string, timeout = 5000): Promise<HTMLElement | null> => {
+  const waitForElement = (selector: string, timeout = 8000): Promise<HTMLElement | null> => {
     return new Promise((resolve) => {
       const element = document.querySelector(selector);
       if (element) {
@@ -69,7 +77,7 @@ export function ContactForm() {
 
   const waitForTurnstile = async (): Promise<boolean> => {
     let attempts = 0;
-    const maxAttempts = 50; // 5 seconds with 100ms intervals
+    const maxAttempts = 100; // ~10s with 100ms intervals (explicit render + defer)
 
     while (attempts < maxAttempts) {
       if (window.turnstile) {
@@ -83,17 +91,14 @@ export function ContactForm() {
   };
 
   const initializeTurnstile = async () => {
-    // Wait for the Turnstile widget container element to be in the DOM
-    const el = await waitForElement("#turnstile-widget", 5000);
+    const el = await waitForElement("#turnstile-widget");
     if (!el || !siteKey) return;
 
-    // Avoid re-rendering if already rendered
-    if (el.hasAttribute("data-rendered")) {
-      return;
-    }
+    if (el.getAttribute("data-rendered") === "true") return;
+    if (el.getAttribute("data-turnstile-loading") === "1") return;
 
+    el.setAttribute("data-turnstile-loading", "1");
     try {
-      // Wait for Turnstile to load
       const hasLoaded = await waitForTurnstile();
       if (!hasLoaded) {
         console.warn("Turnstile script failed to load");
@@ -107,15 +112,7 @@ export function ContactForm() {
         return;
       }
 
-      // Clear previous widget if exists
-      if (widgetIdRef && window.turnstile) {
-        try {
-          window.turnstile.remove(widgetIdRef);
-          widgetIdRef = null;
-        } catch (e) {
-          console.warn("Error removing previous Turnstile widget:", e);
-        }
-      }
+      if (el.getAttribute("data-rendered") === "true") return;
 
       const widgetId = window.turnstile.render(el, {
         sitekey: siteKey,
@@ -128,23 +125,102 @@ export function ContactForm() {
         },
         "error-callback": () => {
           setTurnstileToken("");
+          setErrorMsg(getTranslation("contact.securityCheck"));
         },
       });
 
       if (widgetId) {
-        widgetIdRef = widgetId;
         el.setAttribute("data-widget-id", widgetId);
         el.setAttribute("data-rendered", "true");
       }
     } catch (e) {
       console.error("Turnstile render error:", e);
       setErrorMsg(getTranslation("contact.securityCheck"));
+    } finally {
+      el.removeAttribute("data-turnstile-loading");
     }
   };
 
-  // Initialize Turnstile when element is added to DOM
   createEffect(() => {
-    initializeTurnstile();
+    queueMicrotask(() => void initializeTurnstile());
+  });
+
+  /**
+   * EmberKit `createEffect` runs once on mount (it does not re-run when signals change).
+   * Use `.subscribe()` like AdminProfile so Turnstile/async updates refresh the DOM.
+   */
+  /**
+   * Do not combine Tailwind `hidden` with `inline-flex` on the same node (`display`
+   * conflicts). Use an outer wrapper for visibility and an inner wrapper for layout.
+   */
+  const syncSubmitUi = () => {
+    const token = String(turnstileSig.peek() ?? "").trim();
+    const submitting = submittingSig.peek();
+    const bot = botSig.peek();
+
+    const awaitingTurnstile = !submitting && token.length === 0 && !bot;
+    const showReadyCta = !submitting && token.length > 0;
+    const showSending = submitting;
+
+    const btn = document.getElementById(
+      "contact-submit-btn",
+    ) as HTMLButtonElement | null;
+    if (btn) {
+      const locked = (token.length === 0 && !bot) || submitting;
+      btn.disabled = locked;
+      btn.setAttribute(
+        "aria-busy",
+        submitting || awaitingTurnstile ? "true" : "false",
+      );
+    }
+
+    document
+      .getElementById("contact-submit-ts-loading")
+      ?.classList.toggle("hidden", !awaitingTurnstile);
+    document
+      .getElementById("contact-submit-ready-wrap")
+      ?.classList.toggle("hidden", !showReadyCta);
+    document
+      .getElementById("contact-submit-sending-wrap")
+      ?.classList.toggle("hidden", !showSending);
+  };
+
+  createEffect(() => {
+    const u1 = turnstileSig.subscribe(syncSubmitUi);
+    const u2 = submittingSig.subscribe(syncSubmitUi);
+    const u3 = botSig.subscribe(syncSubmitUi);
+    queueMicrotask(syncSubmitUi);
+    return () => {
+      u1();
+      u2();
+      u3();
+    };
+  });
+
+  const syncFeedbackBanners = () => {
+    const ok = successSig.peek();
+    const err = errorSig.peek();
+
+    const okEl = document.getElementById("contact-success-banner");
+    const errEl = document.getElementById("contact-error-banner");
+    if (okEl) {
+      okEl.textContent = ok;
+      okEl.classList.toggle("hidden", !ok);
+    }
+    if (errEl) {
+      errEl.textContent = err;
+      errEl.classList.toggle("hidden", !err);
+    }
+  };
+
+  createEffect(() => {
+    const u1 = successSig.subscribe(syncFeedbackBanners);
+    const u2 = errorSig.subscribe(syncFeedbackBanners);
+    queueMicrotask(syncFeedbackBanners);
+    return () => {
+      u1();
+      u2();
+    };
   });
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -207,10 +283,12 @@ export function ContactForm() {
         setEmail("");
         setSubject("");
         setMessage("");
-        // Reset Turnstile widget using stored reference
-        if (widgetIdRef && window.turnstile) {
+        const widgetId = document
+          .getElementById("turnstile-widget")
+          ?.getAttribute("data-widget-id");
+        if (widgetId && window.turnstile?.reset) {
           try {
-            window.turnstile.reset(widgetIdRef);
+            window.turnstile.reset(widgetId);
           } catch (e) {
             console.warn("Error resetting Turnstile widget:", e);
           }
@@ -383,45 +461,53 @@ export function ContactForm() {
         <div id="turnstile-widget" className="min-h-[65px]" />
       </div>
       <button
+        id="contact-submit-btn"
         type="submit"
-        disabled={(!turnstileToken() && !isBotDetected()) || isSubmitting()}
+        disabled
+        aria-busy="false"
         className="w-full md:w-auto px-10 py-4 bg-linear-to-r from-ember-500 to-ember-700 hover:from-ember-400 hover:to-ember-500 text-white font-bold rounded-xl transition-all duration-400 transform hover:scale-[1.02] shadow-[0_0_20px_rgba(255,91,13,0.3)] hover:shadow-[0_0_35px_rgba(255,91,13,0.5)] mt-4 flex items-center justify-center gap-3 mx-auto disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 group"
       >
-        {!isSubmitting() ? (
-          <>
+        <span id="contact-submit-ts-loading">
+          <span className="inline-flex items-center justify-center" aria-hidden="true">
+            <IconLoader className="animate-spin h-5 w-5 text-white" />
+          </span>
+        </span>
+        <span id="contact-submit-ready-wrap" className="hidden">
+          <span className="inline-flex items-center justify-center gap-3">
             <span
+              id="contact-submit-ready"
               data-i18n="contact.submitButton"
               className="tracking-widest uppercase text-sm"
             >
               Ignite Conversation
             </span>
             <IconSend className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-          </>
-        ) : (
-          <>
+          </span>
+        </span>
+        <span id="contact-submit-sending-wrap" className="hidden">
+          <span className="inline-flex items-center justify-center gap-3">
             <span
+              id="contact-submit-sending"
               data-i18n="contact.sending"
               className="tracking-widest uppercase text-sm"
             >
               Sending...
             </span>
             <IconLoader className="animate-spin h-5 w-5 text-white" />
-          </>
-        )}
+          </span>
+        </span>
       </button>
-      {successMsg() ? (
-        <div
-          data-i18n="contact.successMessage"
-          className="mt-4 p-4 rounded-xl bg-green-500/10 border border-green-500/30 text-green-400 text-center font-medium shadow-lg animate-fade-in"
-        >
-          {successMsg()}
-        </div>
-      ) : null}
-      {errorMsg() ? (
-        <div className="mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-500 text-center font-medium shadow-lg animate-fade-in">
-          {errorMsg()}
-        </div>
-      ) : null}
+      <div
+        id="contact-success-banner"
+        role="status"
+        data-i18n="contact.successMessage"
+        className="hidden mt-4 p-4 rounded-xl bg-green-500/10 border border-green-500/30 text-green-400 text-center font-medium shadow-lg animate-fade-in"
+      />
+      <div
+        id="contact-error-banner"
+        role="alert"
+        className="hidden mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-500 text-center font-medium shadow-lg animate-fade-in"
+      />
     </form>
   );
 }
