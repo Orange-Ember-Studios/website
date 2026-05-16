@@ -49,8 +49,8 @@ importers:
         version: 2.5.0
     devDependencies:
       '@emberkit/cli':
-        specifier: ^0.6.8
-        version: 0.6.8(@types/node@22.19.19)(vite@6.4.2(@types/node@22.19.19)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.0))
+        specifier: ^0.6.9
+        version: 0.6.9(@types/node@22.19.19)(vite@6.4.2(@types/node@22.19.19)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.0))
       '@emberkit/edge':
         specifier: ^0.2.4
         version: 0.2.4
@@ -219,8 +219,8 @@ packages:
     resolution: {integrity: sha512-QxULHAm7cNu72w97JUNCBFODFaXpbDg+dP8b/oWFAZ2MTRppA3U00Y2L1HqaS4J6yBqxwa/Y3nMBaxVKbB/NsA==}
     engines: {node: '>=20.19.0'}
 
-  '@emberkit/cli@0.6.8':
-    resolution: {integrity: sha512-KFg4TnFO7vCAvJkZZ1iNHjfzIySIOOLuE8Qcutk+RdCMrYGs43YACqMLHMVNnQjXPZgWSQDyallA51uVpILpJQ==}
+  '@emberkit/cli@0.6.9':
+    resolution: {integrity: sha512-oXaR3SKnnTx2+qPqIe9fL4PSM0Jjjxdma3AQZfLPOhAIgnUCC4kUdYc+KqaXaq2qDCwOtrhvw3jRSIi6N5laqQ==}
     hasBin: true
     peerDependencies:
       vite: ^5.0.0 || ^6.0.0
@@ -3346,7 +3346,7 @@ snapshots:
 
   '@csstools/css-tokenizer@4.0.0': {}
 
-  '@emberkit/cli@0.6.8(@types/node@22.19.19)(vite@6.4.2(@types/node@22.19.19)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.0))':
+  '@emberkit/cli@0.6.9(@types/node@22.19.19)(vite@6.4.2(@types/node@22.19.19)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.0))':
     dependencies:
       inquirer: 9.3.8(@types/node@22.19.19)
       vite: 6.4.2(@types/node@22.19.19)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.0)

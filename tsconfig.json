@@ -18,6 +18,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "worker.ts", "vitest.config.ts", "vitest.setup.ts", "emberkit.config.ts"],
+  "include": ["src", "worker.ts", "vitest.config.ts", "vitest.setup.ts", "emberkit.config.ts", "vite.config.ts"],
   "exclude": ["node_modules", "dist"]
 }
