@@ -331,11 +331,16 @@ export async function handleApiRequest(
 
   if (path === "/api/portfolio/projects" && method === "GET") {
     const lang = url.searchParams.get("lang") ?? "en";
-    const dbProjects = (await getPublishedPostsByType(
-      "project",
-      tc,
-    )) as import("../lib/map-portfolio").PortfolioPostRow[];
-    return json(mapPortfolioProjects(dbProjects, lang));
+    try {
+      const dbProjects = (await getPublishedPostsByType(
+        "project",
+        tc,
+      )) as import("../lib/map-portfolio").PortfolioPostRow[];
+      return json(mapPortfolioProjects(dbProjects, lang));
+    } catch (e) {
+      console.error("[api] portfolio/projects error:", e);
+      return json({ error: "Failed to fetch projects" }, { status: 500 });
+    }
   }
 
   const blogPostMatch = path.match(/^\/api\/blog\/([^/]+)\/([^/]+)$/);
@@ -355,25 +360,30 @@ export async function handleApiRequest(
   if (path === "/api/blog/list" && method === "GET") {
     const lang = url.searchParams.get("lang") ?? "en";
     const sortOrder = url.searchParams.get("sort") || "desc";
-    const allPosts = await getPublishedPostsByType("blog", tc);
-    const posts = allPosts.filter((p) => {
-      if (lang === "en") return !p.id.startsWith("es/") && !p.id.startsWith("fr/");
-      return p.id.startsWith(`${lang}/`);
-    });
-    posts.sort((a, b) => {
-      const dateA = new Date(a.data.pubDate).getTime();
-      const dateB = new Date(b.data.pubDate).getTime();
-      return sortOrder === "desc" ? dateB - dateA : dateA - dateB;
-    });
-    return json(
-      posts.map((p) => ({
-        ...p,
-        data: {
-          ...p.data,
-          pubDate: p.data.pubDate.toISOString(),
-        },
-      })),
-    );
+    try {
+      const allPosts = await getPublishedPostsByType("blog", tc);
+      const posts = allPosts.filter((p) => {
+        if (lang === "en") return !p.id.startsWith("es/") && !p.id.startsWith("fr/");
+        return p.id.startsWith(`${lang}/`);
+      });
+      posts.sort((a, b) => {
+        const dateA = new Date(a.data.pubDate).getTime();
+        const dateB = new Date(b.data.pubDate).getTime();
+        return sortOrder === "desc" ? dateB - dateA : dateA - dateB;
+      });
+      return json(
+        posts.map((p) => ({
+          ...p,
+          data: {
+            ...p.data,
+            pubDate: p.data.pubDate.toISOString(),
+          },
+        })),
+      );
+    } catch (e) {
+      console.error("[api] blog/list error:", e);
+      return json({ error: "Failed to fetch posts" }, { status: 500 });
+    }
   }
 
   if (path === "/api/admin/posts") {
