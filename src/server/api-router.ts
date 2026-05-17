@@ -291,6 +291,7 @@ export async function handleApiRequest(
     const [, langRaw, slugRaw] = likesMatch;
     const lang = decodeURIComponent(langRaw);
     const slug = decodeURIComponent(slugRaw);
+    const ray = request.headers.get("cf-ray") ?? "";
     const cookiesHeader = request.headers.get("cookie");
     const parsed = parseCookies(cookiesHeader);
     let visitorId = parsed[VISITOR_COOKIE];
@@ -310,19 +311,49 @@ export async function handleApiRequest(
 
     if (method === "GET") {
       try {
+        console.log(
+          `[likes] GET lang=${lang} slug=${slug} hasVisitor=${Boolean(visitorId)} ray=${ray}`,
+        );
         const likeStatus = await getPostLikeStatus(slug, lang, visitorId, tc);
-        if (!likeStatus) return json({ error: "Post not found" }, { status: 404, cookies: outCookies });
+        if (!likeStatus) {
+          console.log(
+            `[likes] GET not-found lang=${lang} slug=${slug} ray=${ray}`,
+          );
+          return json(
+            { error: "Post not found" },
+            { status: 404, cookies: outCookies },
+          );
+        }
         return json(likeStatus, { cookies: outCookies });
-      } catch {
+      } catch (e) {
+        console.error(
+          `[likes] GET failed lang=${lang} slug=${slug} ray=${ray}`,
+          e,
+        );
         return json({ error: "Failed to fetch likes" }, { status: 500, cookies: outCookies });
       }
     }
     if (method === "POST") {
       try {
+        console.log(
+          `[likes] POST lang=${lang} slug=${slug} hasVisitor=${Boolean(visitorId)} ray=${ray}`,
+        );
         const likeStatus = await likePost(slug, lang, visitorId, tc);
-        if (!likeStatus) return json({ error: "Post not found" }, { status: 404, cookies: outCookies });
+        if (!likeStatus) {
+          console.log(
+            `[likes] POST not-found lang=${lang} slug=${slug} ray=${ray}`,
+          );
+          return json(
+            { error: "Post not found" },
+            { status: 404, cookies: outCookies },
+          );
+        }
         return json(likeStatus, { cookies: outCookies });
-      } catch {
+      } catch (e) {
+        console.error(
+          `[likes] POST failed lang=${lang} slug=${slug} ray=${ray}`,
+          e,
+        );
         return json({ error: "Failed to like post" }, { status: 500, cookies: outCookies });
       }
     }
