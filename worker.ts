@@ -12,6 +12,18 @@ export interface Env {
   JWT_SECRET: string;
   TURNSTILE_SECRET_KEY: string;
   RESEND_API_KEY: string;
+  PUBLIC_TURNSTILE_SITE_KEY?: string;
+}
+
+async function injectPublicEnv(response: Response, env: Env): Promise<Response> {
+  const ct = response.headers.get("content-type") ?? "";
+  if (!ct.includes("text/html")) return response;
+  const html = await response.text();
+  const payload = JSON.stringify({
+    PUBLIC_TURNSTILE_SITE_KEY: env.PUBLIC_TURNSTILE_SITE_KEY ?? "",
+  });
+  const injected = html.replace("<head>", `<head><script>window.__CF_ENV__=${payload}</script>`);
+  return new Response(injected, { status: response.status, statusText: response.statusText, headers: response.headers });
 }
 
 function toSiteEnv(env: Env): SiteEnv {
@@ -65,6 +77,6 @@ export default {
       }
     }
 
-    return env.ASSETS.fetch(request);
+    return injectPublicEnv(await env.ASSETS.fetch(request), env);
   },
 };

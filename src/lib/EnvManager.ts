@@ -25,6 +25,9 @@ export class EnvManager {
   }
 
   static get PUBLIC_TURNSTILE_SITE_KEY(): string {
+    if (typeof window !== "undefined" && (window as any).__CF_ENV__?.PUBLIC_TURNSTILE_SITE_KEY) {
+      return (window as any).__CF_ENV__.PUBLIC_TURNSTILE_SITE_KEY;
+    }
     return this.getVar("PUBLIC_TURNSTILE_SITE_KEY", false) ?? "";
   }
 
