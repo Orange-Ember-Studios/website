@@ -2,13 +2,7 @@ import {
   createEffect,
   createSignal,
 } from "@emberkit/core";
-import {
-  IconLogIn,
-  IconLogOut,
-  IconMenu,
-  IconUser,
-  IconX,
-} from "@emberkit/icons";
+import { IconLogIn, IconMenu, IconUser, IconX } from "@emberkit/icons";
 import type { SupportedLanguage } from "../../i18n/i18n.ts";
 import PremiumLanguageSelector from "../LanguageSelector/PremiumLanguageSelector.tsx";
 
@@ -22,9 +16,6 @@ function useLangFromPath(): SupportedLanguage {
 export function Navbar() {
   const lang = useLangFromPath();
   const [menuOpen, setMenuOpen] = createSignal(false);
-  const [adminUser, setAdminUser] = createSignal<{
-    username: string;
-  } | null>(null);
   const [scrolled, setScrolled] = createSignal(false);
 
   createEffect(() => {
@@ -35,20 +26,6 @@ export function Navbar() {
     window.addEventListener("scroll", onScroll);
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
-  });
-
-  createEffect(() => {
-    if (typeof window === "undefined") return;
-    // Admin routes use their own session checks; skip to avoid duplicate /api/auth/me
-    // (EmberKit createEffect runs on every route mount — each 401 is normal when logged out).
-    if (window.location.pathname.startsWith("/admin")) {
-      setAdminUser(null);
-      return;
-    }
-    fetch("/api/auth/me", { credentials: "include" })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d) => setAdminUser(d?.user ?? null))
-      .catch(() => setAdminUser(null));
   });
 
   const handleLinkClick = (e: any) => {
@@ -99,8 +76,6 @@ export function Navbar() {
       document.body.style.overflow = "";
     }
   };
-
-  const loggedIn = () => adminUser() != null;
 
   return (
     <>
@@ -182,13 +157,9 @@ export function Navbar() {
             <a
               href="/admin"
               className="flex items-center justify-center w-10 h-10 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-ember-400 hover:border-ember-500/50 transition-all duration-300 group/nav-login"
-              title={loggedIn() ? "Dashboard" : "Login"}
+              title="Admin"
             >
-              {loggedIn() ? (
-                <IconLogOut className="h-5 w-5 group-hover/nav-login:scale-110 transition-transform" />
-              ) : (
-                <IconLogIn className="h-5 w-5 group-hover/nav-login:scale-110 transition-transform" />
-              )}
+              <IconLogIn className="h-5 w-5 group-hover/nav-login:scale-110 transition-transform" />
             </a>
           </div>
 
@@ -261,7 +232,7 @@ export function Navbar() {
               onClick={() => menuOpen() && toggleMenu()}
             >
               <IconUser className="h-6 w-6" />
-              {loggedIn() ? "Dashboard" : "Admin Login"}
+              Admin
             </a>
           </div>
         </div>
