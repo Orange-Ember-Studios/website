@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.23](https://github.com/Orange-Ember-Studios/website/compare/v0.0.22...v0.0.23) (2026-05-17)
+
+
+### Bug Fixes
+
+* **api:** guard portfolio and blog list routes against DB errors ([f6d7f56](https://github.com/Orange-Ember-Studios/website/commit/f6d7f56b038c7514dccac853cea7a5df52709f0c))
+* **deploy:** enable SPA fallback and align CSP for Cloudflare ([78db160](https://github.com/Orange-Ember-Studios/website/commit/78db160a8d5cf8da97339b8a67b5dae9c9b2948a))
+
 ### [0.0.22](https://github.com/Orange-Ember-Studios/website/compare/v0.0.21...v0.0.22) (2026-05-16)
 
 
