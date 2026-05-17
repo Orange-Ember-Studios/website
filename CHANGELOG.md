@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.27](https://github.com/Orange-Ember-Studios/website/compare/v0.0.26...v0.0.27) (2026-05-17)
+
+
+### Bug Fixes
+
+* removed user validation in blog, only needed in cms ([f4fe6a6](https://github.com/Orange-Ember-Studios/website/commit/f4fe6a6ebce529cf50c5b9a6fe585fa75c0b15ee))
+
 ### [0.0.26](https://github.com/Orange-Ember-Studios/website/compare/v0.0.25...v0.0.26) (2026-05-17)
 
 
