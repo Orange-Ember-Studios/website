@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.25](https://github.com/Orange-Ember-Studios/website/compare/v0.0.24...v0.0.25) (2026-05-17)
+
+
+### Features
+
+* added logs to trace better the api calls ([9243070](https://github.com/Orange-Ember-Studios/website/commit/924307079ed56acda1914cd42f4de91dcce621d7))
+
 ### [0.0.24](https://github.com/Orange-Ember-Studios/website/compare/v0.0.23...v0.0.24) (2026-05-17)
 
 
