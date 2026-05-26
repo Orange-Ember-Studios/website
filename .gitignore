@@ -1,5 +1,7 @@
 # build output
 dist/
+# content folder
+content/
 
 # dependencies
 node_modules/
