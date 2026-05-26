@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.28](https://github.com/Orange-Ember-Studios/website/compare/v0.0.27...v0.0.28) (2026-05-26)
+
+
+### Features
+
+* **admin:** Editor.js CMS and blog seed pipeline ([4297f89](https://github.com/Orange-Ember-Studios/website/commit/4297f895ebe43b1a59fb43351a2abc411d21e8f3))
+
+
+### Bug Fixes
+
+* **admin:** hide loader on new post editor page ([cbe0b80](https://github.com/Orange-Ember-Studios/website/commit/cbe0b805bfa00838f2b1052f68b398eccb70863b))
+
 ### [0.0.27](https://github.com/Orange-Ember-Studios/website/compare/v0.0.26...v0.0.27) (2026-05-17)
 
 
