@@ -428,6 +428,7 @@ export default function PostEditor(props: PostEditorProps) {
         data-ek-bind={loading}
         data-ek-show-when="true"
         data-ek-hide-class="hidden"
+        className={loading() ? "" : "hidden"}
       >
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
@@ -442,7 +443,7 @@ export default function PostEditor(props: PostEditorProps) {
         data-ek-bind={loading}
         data-ek-show-when="false"
         data-ek-hide-class="hidden"
-        className={isNew ? "" : "hidden"}
+        className={loading() ? "hidden" : ""}
       >
         {/* Back button */}
         <button
