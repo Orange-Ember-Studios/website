@@ -20,7 +20,7 @@ Marketing site and CMS for **Orange Ember Studios** — a premium game and app d
 | Runtime / deploy | Cloudflare Workers + static assets (`wrangler.jsonc`, `worker.ts` entry) |
 | Database | Turso / libSQL via `@libsql/client` |
 | Auth | JWT (`jose`) — admin sessions via HTTP-only cookies |
-| Markdown (admin) | Milkdown 7 |
+| Rich text (admin) | Editor.js |
 | Markdown (public) | `marked` + Shiki |
 | Icons | `@emberkit/icons` |
 | Testing | Vitest 4 + happy-dom + Testing Library |

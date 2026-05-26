@@ -1,5 +1,10 @@
 import { createElement, createEffect, createSignal, navigate } from "@emberkit/core";
-import { MilkdownField } from "./MilkdownField.tsx";
+import {
+  EditorJsField,
+  flushEditorContent,
+} from "./EditorJsField.tsx";
+import type { OutputData } from "@editorjs/editorjs";
+import { parseStoredContentToEditorJs } from "../../lib/editorjs-content.ts";
 import { IconChevronLeft } from "@emberkit/icons";
 /** CDN paths under Orange-Ember-Studios/cdn-resources (see SITE_URLS.CDN_BASE). */
 const CDN_IMAGE_OPTIONS = {
@@ -84,8 +89,11 @@ export default function PostEditor(props: PostEditorProps) {
   const [translations, setTranslations] =
     createSignal<Record<Lang, TranslationData>>(emptyTranslations());
 
-  const milkdownGetters: Record<string, (() => string) | null> = {};
-  const milkdownSetters: Record<string, ((md: string) => void) | null> = {};
+  const editorSavers: Record<string, (() => Promise<OutputData>) | null> = {};
+  const editorRenderers: Record<
+    string,
+    ((data: OutputData) => Promise<void>) | null
+  > = {};
 
   const contentRootIds: Record<Lang, string> = {
     en: nextRootId("editor-content-en"),
@@ -131,26 +139,16 @@ export default function PostEditor(props: PostEditorProps) {
     return partial;
   }
 
-  function flushMilkdownContent(lang: Lang): string | undefined {
+  async function flushEditorForLang(lang: Lang): Promise<string | undefined> {
     const key =
-      props.type === "project"
-        ? `desc-${lang}`
-        : `content-${lang}`;
-    const getter = milkdownGetters[key];
-    if (getter) {
-      try {
-        return getter();
-      } catch {
-        return undefined;
-      }
-    }
-    return undefined;
+      props.type === "project" ? `desc-${lang}` : `content-${lang}`;
+    return flushEditorContent(editorSavers[key]);
   }
 
-  function storeCurrentLang() {
+  async function storeCurrentLang() {
     const lang = activeLang();
     const formVals = readCurrentFormValues();
-    const md = flushMilkdownContent(lang);
+    const json = await flushEditorForLang(lang);
 
     setTranslations((prev) => {
       const cur = prev[lang];
@@ -158,7 +156,15 @@ export default function PostEditor(props: PostEditorProps) {
       if (formVals.title !== undefined) updated.title = formVals.title;
       if (formVals.published !== undefined)
         updated.published = formVals.published;
-      if (md !== undefined) updated.content = md;
+      if (json !== undefined) {
+        if (props.type === "project") {
+          const meta = parseProjectContent(cur.content);
+          meta.description = json;
+          updated.content = JSON.stringify(meta);
+        } else {
+          updated.content = json;
+        }
+      }
       return { ...prev, [lang]: updated };
     });
   }
@@ -179,14 +185,17 @@ export default function PostEditor(props: PostEditorProps) {
         populateLangFields(lang);
 
         const data = t[lang];
-        if (props.type === "project") {
-          const meta = parseProjectContent(data.content);
-          const setter = milkdownSetters[`desc-${lang}`];
-          if (setter) setter(meta.description);
-        } else {
-          const setter = milkdownSetters[`content-${lang}`];
-          if (setter) setter(data.content);
-        }
+        const render =
+          props.type === "project"
+            ? editorRenderers[`desc-${lang}`]
+            : editorRenderers[`content-${lang}`];
+        const initial =
+          props.type === "project"
+            ? parseStoredContentToEditorJs(
+                parseProjectContent(data.content).description,
+              )
+            : parseStoredContentToEditorJs(data.content);
+        if (render) void render(initial);
       }
     });
   }
@@ -217,9 +226,10 @@ export default function PostEditor(props: PostEditorProps) {
 
   function switchLang(lang: Lang) {
     if (lang === activeLang()) return;
-    storeCurrentLang();
-    setActiveLang(lang);
-    populateLangFields(lang);
+    void storeCurrentLang().then(() => {
+      setActiveLang(lang);
+      populateLangFields(lang);
+    });
   }
 
   createEffect(() => {
@@ -278,7 +288,7 @@ export default function PostEditor(props: PostEditorProps) {
     setSaveSuccess("");
 
     try {
-      storeCurrentLang();
+      await storeCurrentLang();
       const t = translations();
 
       const form = document.getElementById(
@@ -290,7 +300,8 @@ export default function PostEditor(props: PostEditorProps) {
       const finalAuthor = (fd?.get("author") as string) || author();
       const finalImage = (fd?.get("image") as string) || image();
 
-      const translationPayload = LANGS.map((lang) => {
+      const translationPayload = [];
+      for (const lang of LANGS) {
         const data = t[lang];
         let content = data.content;
 
@@ -313,12 +324,12 @@ export default function PostEditor(props: PostEditorProps) {
             link: linkEl?.value || existing.link,
           };
 
-          const freshDesc = flushMilkdownContent(lang);
+          const freshDesc = await flushEditorForLang(lang);
           if (freshDesc !== undefined) meta.description = freshDesc;
 
           content = JSON.stringify(meta);
         } else {
-          const freshContent = flushMilkdownContent(lang);
+          const freshContent = await flushEditorForLang(lang);
           if (freshContent !== undefined) content = freshContent;
         }
 
@@ -329,13 +340,13 @@ export default function PostEditor(props: PostEditorProps) {
           `input[name="published-${lang}"]`,
         );
 
-        return {
+        translationPayload.push({
           lang,
           title: titleEl?.value ?? data.title,
           content,
           published: pubEl ? pubEl.checked : data.published,
-        };
-      });
+        });
+      }
 
       const payload = {
         ...(props.postId ? { id: props.postId } : {}),
@@ -565,7 +576,7 @@ export default function PostEditor(props: PostEditorProps) {
                 props.type === "project"
                   ? parseProjectContent(current.content)
                   : null;
-              const milkdownInitial =
+              const editorInitial =
                 props.type === "project"
                   ? projectMeta?.description ?? ""
                   : current.content;
@@ -666,16 +677,17 @@ export default function PostEditor(props: PostEditorProps) {
 
                           <div>
                             <label className={labelCls}>Description</label>
-                            <MilkdownField
+                            <EditorJsField
                               rootId={descRootIds[l]}
                               langKey={`desc-${l}`}
-                              initialMarkdown={milkdownInitial}
-                              onMarkdownChange={(md) => {
+                              initialContent={editorInitial}
+                              minimal
+                              onContentChange={(json) => {
                                 setTranslations((prev) => {
                                   const existing = parseProjectContent(
                                     prev[l].content,
                                   );
-                                  existing.description = md;
+                                  existing.description = json;
                                   return {
                                     ...prev,
                                     [l]: {
@@ -685,11 +697,11 @@ export default function PostEditor(props: PostEditorProps) {
                                   };
                                 });
                               }}
-                              registerGetMarkdown={(fn) => {
-                                milkdownGetters[`desc-${l}`] = fn;
+                              registerSave={(fn) => {
+                                editorSavers[`desc-${l}`] = fn;
                               }}
-                              registerSetMarkdown={(fn) => {
-                                milkdownSetters[`desc-${l}`] = fn;
+                              registerRender={(fn) => {
+                                editorRenderers[`desc-${l}`] = fn;
                               }}
                             />
                           </div>
@@ -697,21 +709,21 @@ export default function PostEditor(props: PostEditorProps) {
                       ) : (
                         <div>
                           <label className={labelCls}>Content</label>
-                          <MilkdownField
+                          <EditorJsField
                             rootId={contentRootIds[l]}
                             langKey={`content-${l}`}
-                            initialMarkdown={milkdownInitial}
-                            onMarkdownChange={(md) => {
+                            initialContent={editorInitial}
+                            onContentChange={(json) => {
                               setTranslations((prev) => ({
                                 ...prev,
-                                [l]: { ...prev[l], content: md },
+                                [l]: { ...prev[l], content: json },
                               }));
                             }}
-                            registerGetMarkdown={(fn) => {
-                              milkdownGetters[`content-${l}`] = fn;
+                            registerSave={(fn) => {
+                              editorSavers[`content-${l}`] = fn;
                             }}
-                            registerSetMarkdown={(fn) => {
-                              milkdownSetters[`content-${l}`] = fn;
+                            registerRender={(fn) => {
+                              editorRenderers[`content-${l}`] = fn;
                             }}
                           />
                         </div>

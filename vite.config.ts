@@ -2,9 +2,8 @@ import { defineConfig } from "vite";
 import { appVitePlugins } from "./vite.plugins.ts";
 
 /**
- * Ensures `virtual:emberkit-routes` resolves when `emberkit.config.ts`
- * cannot be loaded (e.g. some CI/Cloudflare environments).
- * Merged with emberkit.config.ts `vite` block by `emberkit build`.
+ * CI / fallback when `emberkit.config.ts` cannot be loaded.
+ * Dev server uses `emberkit.config.ts` only (no duplicate config file load).
  */
 export default defineConfig({
   plugins: appVitePlugins,

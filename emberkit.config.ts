@@ -1,8 +1,6 @@
 import { defineConfig } from "@emberkit/core";
 import dotenv from "dotenv";
-import { devApiPlugin } from "./vite.dev-api-plugin.ts";
 import { appVitePlugins } from "./vite.plugins.ts";
-
 dotenv.config({ path: ".env.local" });
 dotenv.config();
 
@@ -16,6 +14,9 @@ export default defineConfig({
   },
   vite: {
     envPrefix: ["VITE_", "PUBLIC_"],
-    plugins: [...appVitePlugins, devApiPlugin()],
+    plugins: [...appVitePlugins],
+    esbuild: {
+      jsxImportSource: "@emberkit/core",
+    },
   },
 });

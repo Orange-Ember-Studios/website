@@ -76,5 +76,17 @@ describe('Posts Service', () => {
       );
       expect(excerpt).toContain('Editor body');
     });
+
+    it('extracts from Editor.js in project meta description', () => {
+      const excerpt = postsService.excerptFromPostContent(
+        JSON.stringify({
+          category: 'Web App',
+          description: JSON.stringify({
+            blocks: [{ type: 'paragraph', data: { text: 'Portfolio blurb' } }],
+          }),
+        }),
+      );
+      expect(excerpt).toContain('Portfolio blurb');
+    });
   });
 });

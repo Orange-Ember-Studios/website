@@ -1,7 +1,11 @@
 import { createEffect, createSignal, untrack } from "@emberkit/core";
 import { getTranslation } from "../../i18n/i18n.ts";
 import { resolveImageUrl } from "../../lib/images.ts";
-import { MilkdownField } from "./MilkdownField.tsx";
+import {
+  EditorJsField,
+  flushEditorContent,
+} from "./EditorJsField.tsx";
+import type { OutputData } from "@editorjs/editorjs";
 import { IconChevronDown, IconChevronLeft } from "@emberkit/icons";
 
 type Translation = {
@@ -20,10 +24,10 @@ export type AdminPostDraft = {
   translations: Translation[];
 };
 
-let milkdownUid = 0;
-function nextMilkdownId() {
-  milkdownUid += 1;
-  return `milkdown-field-${milkdownUid}`;
+let editorUid = 0;
+function nextEditorHolderId() {
+  editorUid += 1;
+  return `editorjs-field-${editorUid}`;
 }
 
 const LANGS = ["en", "es", "fr"] as const;
@@ -40,18 +44,20 @@ export default function AdminEditor(props: {
   const [saving, setSaving] = createSignal(false);
   const [saveError, setSaveError] = createSignal("");
   
-  const milkdownContentRef: { current: (() => string) | null } = {
+  const contentSaveRef: { current: (() => Promise<OutputData>) | null } = {
     current: null,
   };
-  const milkdownDescriptionRefs: { current: Record<string, (() => string) | null> } = {
+  const descriptionSaveRefs: {
+    current: Record<string, (() => Promise<OutputData>) | null>;
+  } = {
     current: { en: null, es: null, fr: null },
   };
-  
-  const milkRootId = nextMilkdownId();
+
+  const contentRootId = nextEditorHolderId();
   const descriptionRootIds: Record<string, string> = {
-    en: nextMilkdownId(),
-    es: nextMilkdownId(),
-    fr: nextMilkdownId(),
+    en: nextEditorHolderId(),
+    es: nextEditorHolderId(),
+    fr: nextEditorHolderId(),
   };
 
   type ProjectMeta = {
@@ -142,16 +148,21 @@ export default function AdminEditor(props: {
 
       const d = draft();
 
-      // If blog/case_study, flush Milkdown to get latest content
-      if (d.type !== "project") {
-        const gm = milkdownGetMarkdownRef.current;
-        if (gm) {
-          try {
-            const md = gm();
-            updateTranslation(activeLang(), { content: md });
-          } catch (e) {
-            console.error("[AdminEditor] milkdown flush", e);
-          }
+      const lang = activeLang();
+      let flushedDescription = projectMeta().description;
+      let flushedContent: string | undefined;
+      if (d.type === "project") {
+        const descJson = await flushEditorContent(
+          descriptionSaveRefs.current[lang],
+        );
+        if (descJson !== undefined) {
+          flushedDescription = descJson;
+          setProjectMeta((m) => ({ ...m, description: descJson }));
+        }
+      } else {
+        flushedContent = await flushEditorContent(contentSaveRef.current);
+        if (flushedContent !== undefined) {
+          updateTranslation(lang, { content: flushedContent });
         }
       }
 
@@ -167,17 +178,22 @@ export default function AdminEditor(props: {
           const existing = d.translations.find((t) => t.lang === lang);
           if (lang === activeLang()) {
             // Active language: read from form
-            let content = existing?.content || '{"blocks":[]}';
+            let content =
+              flushedContent ?? existing?.content ?? '{"blocks":[]}';
             if (postType === "project") {
               const meta: ProjectMeta = {
-                category: fd.get(`project-category-${lang}`) as string || "Desktop Game",
-                status: fd.get(`project-status-${lang}`) as string || "In Development",
-                description: fd.get(`project-description-${lang}`) as string || "",
-                link: fd.get(`project-link-${lang}`) as string || "",
+                category:
+                  (fd.get(`project-category-${lang}`) as string) ||
+                  "Desktop Game",
+                status:
+                  (fd.get(`project-status-${lang}`) as string) ||
+                  "In Development",
+                description: flushedDescription,
+                link: (fd.get(`project-link-${lang}`) as string) || "",
               };
               content = JSON.stringify(meta);
             } else {
-              // For blog/case_study, use Milkdown (already flushed above)
+              // For blog/case_study, content was flushed from Editor.js above
               const titleField = fd.get("post-title");
               if (titleField) {
                 return {
@@ -253,8 +269,7 @@ export default function AdminEditor(props: {
   };
 
   const tr = activeTranslation();
-  const mdInitial =
-    draft().type === "project" ? "" : tr.content || '{"blocks":[]}';
+  const contentInitial = tr.content || '{"blocks":[]}';
   const descriptionInitial = projectMeta().description;
 
   return (
@@ -452,15 +467,16 @@ export default function AdminEditor(props: {
                     <label className="block text-sm font-medium text-neutral-400 mb-2">
                       {getTranslation("admin.editor.shortDescription")}
                     </label>
-                    <MilkdownField
+                    <EditorJsField
                       rootId={descriptionRootIds[activeLang()]}
                       langKey={`project-description-${activeLang()}`}
-                      initialMarkdown={descriptionInitial}
-                      onMarkdownChange={(markdown) => {
-                        setProjectMeta((m) => ({ ...m, description: markdown }));
+                      initialContent={descriptionInitial}
+                      minimal
+                      onContentChange={(json) => {
+                        setProjectMeta((m) => ({ ...m, description: json }));
                       }}
-                      registerGetMarkdown={(fn) => {
-                        milkdownDescriptionRefs.current[activeLang()] = fn;
+                      registerSave={(fn) => {
+                        descriptionSaveRefs.current[activeLang()] = fn;
                       }}
                     />
                   </div>
@@ -478,15 +494,15 @@ export default function AdminEditor(props: {
                   </div>
                 </div>
               ) : (
-                <MilkdownField
-                  rootId={milkRootId}
+                <EditorJsField
+                  rootId={contentRootId}
                   langKey={`${activeLang()}-${draft().type}`}
-                  initialMarkdown={tr.content || '{"blocks":[]}'}
-                  onMarkdownChange={(markdown) =>
-                    updateTranslation(activeLang(), { content: markdown })
+                  initialContent={contentInitial}
+                  onContentChange={(json) =>
+                    updateTranslation(activeLang(), { content: json })
                   }
-                  registerGetMarkdown={(fn) => {
-                    milkdownContentRef.current = fn;
+                  registerSave={(fn) => {
+                    contentSaveRef.current = fn;
                   }}
                 />
               )}

@@ -11,11 +11,16 @@ describe('Database connection (LibSQL)', () => {
     vi.unstubAllEnvs();
   });
 
-  it('throws an error if TURSO_DATABASE_URL or TURSO_AUTH_TOKEN is missing', () => {
-    // We stub process.env because vitest maps import.meta.env to process.env
+  it('throws when TURSO_DATABASE_URL is missing', () => {
     vi.stubEnv('TURSO_DATABASE_URL', '');
     vi.stubEnv('TURSO_AUTH_TOKEN', '');
     expect(() => getDbClient()).toThrow('Database credentials are not configured');
+  });
+
+  it('throws when remote URL is set but TURSO_AUTH_TOKEN is missing', () => {
+    vi.stubEnv('TURSO_DATABASE_URL', 'libsql://test.turso.io');
+    vi.stubEnv('TURSO_AUTH_TOKEN', '');
+    expect(() => getDbClient()).toThrow('TURSO_AUTH_TOKEN is required');
   });
 
   it('calls createClient with url only for file: SQLite URLs', () => {

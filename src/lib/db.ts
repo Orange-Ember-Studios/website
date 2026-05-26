@@ -24,9 +24,12 @@ export function getDbClient(creds?: TursoCredentials): Client {
     return createClient({ url });
   }
 
-  if (!authToken) {
-    throw new Error("Database credentials are not configured");
+  if (!authToken?.trim()) {
+    throw new Error(
+      "TURSO_AUTH_TOKEN is required for remote Turso URLs (libsql:// or https://). " +
+        "Create a token in the Turso dashboard and add it to .env.local.",
+    );
   }
 
-  return createClient({ url, authToken });
+  return createClient({ url, authToken: authToken.trim() });
 }

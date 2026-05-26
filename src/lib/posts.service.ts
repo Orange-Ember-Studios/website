@@ -210,6 +210,18 @@ export function excerptFromPostContent(content: string): string {
       return "";
     }
     if (typeof data?.description === "string" && data.description.trim()) {
+      try {
+        const desc = JSON.parse(data.description) as { blocks?: { type?: string; data?: { text?: string } }[] };
+        if (desc?.blocks) {
+          const textBlock = desc.blocks.find((b) => b.type === "paragraph");
+          if (textBlock?.data?.text) {
+            return plainTextExcerpt(String(textBlock.data.text));
+          }
+          return "";
+        }
+      } catch {
+        /* plain markdown / text */
+      }
       return plainTextExcerpt(data.description);
     }
   } catch {

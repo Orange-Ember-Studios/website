@@ -14,11 +14,17 @@ function cacheKey(creds: TursoCredentials): string {
  * distinct DB URL (cached). Safe to call from every API request.
  * No-ops when `TURSO_DATABASE_URL` is missing (e.g. contact-only API without DB).
  */
+function skipMigrations(): boolean {
+  const flag = process.env.TURSO_SKIP_MIGRATIONS?.trim().toLowerCase();
+  return flag === "1" || flag === "true" || flag === "yes";
+}
+
 export async function ensureDatabaseSchema(
   creds: TursoCredentials,
 ): Promise<void> {
   const url = creds.TURSO_DATABASE_URL?.trim() ?? "";
   if (!url) return;
+  if (skipMigrations()) return;
 
   const key = cacheKey(creds);
   let pending = schemaReady.get(key);
