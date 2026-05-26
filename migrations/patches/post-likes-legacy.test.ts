@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import type { Client } from "@libsql/client";
-import { migratePostLikesTable } from "./db-migrations.ts";
+import { migratePostLikesTable } from "./post-likes-legacy.ts";
 
 function tableInfoRows(cols: string[]) {
   return cols.map((name) => ({ name }));
@@ -8,7 +8,7 @@ function tableInfoRows(cols: string[]) {
 
 describe("migratePostLikesTable", () => {
   it("no-ops when post_likes already has post_id + visitor_hash", async () => {
-    const execute = vi.fn(async (sql: any) => {
+    const execute = vi.fn(async (sql: unknown) => {
       if (sql === "PRAGMA table_info(post_likes)") {
         return { rows: tableInfoRows(["id", "post_id", "visitor_hash", "created_at"]) };
       }
@@ -23,8 +23,8 @@ describe("migratePostLikesTable", () => {
 
   it("rebuilds legacy post_likes missing post_id", async () => {
     const calls: string[] = [];
-    const execute = vi.fn(async (sql: any) => {
-      const text = typeof sql === "string" ? sql : String(sql?.sql ?? "");
+    const execute = vi.fn(async (sql: unknown) => {
+      const text = typeof sql === "string" ? sql : String((sql as { sql?: string })?.sql ?? "");
       calls.push(text);
       if (text === "PRAGMA table_info(post_likes)") {
         return { rows: tableInfoRows(["id", "slug", "lang", "visitor_hash", "created_at"]) };
@@ -44,4 +44,3 @@ describe("migratePostLikesTable", () => {
     expect(calls).toContain("COMMIT");
   });
 });
-

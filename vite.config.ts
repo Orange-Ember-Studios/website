@@ -1,6 +1,5 @@
 import { defineConfig } from "vite";
-import { emberkitVitePlugin } from "@emberkit/core/vite-plugin";
-import tailwindcss from "@tailwindcss/vite";
+import { appVitePlugins } from "./vite.plugins.ts";
 
 /**
  * Ensures `virtual:emberkit-routes` resolves when `emberkit.config.ts`
@@ -8,7 +7,7 @@ import tailwindcss from "@tailwindcss/vite";
  * Merged with emberkit.config.ts `vite` block by `emberkit build`.
  */
 export default defineConfig({
-  plugins: [emberkitVitePlugin(), tailwindcss()],
+  plugins: appVitePlugins,
   esbuild: {
     jsxImportSource: "@emberkit/core",
   },

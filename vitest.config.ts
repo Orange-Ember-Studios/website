@@ -1,13 +1,15 @@
 import { defineConfig, mergeConfig, type UserConfig } from "vite";
-import emberkitApp from "./emberkit.config.ts";
+import { appVitePlugins } from "./vite.plugins.ts";
 
 export default mergeConfig(
-  emberkitApp.vite as UserConfig,
+  defineConfig({
+    plugins: appVitePlugins,
+  }),
   defineConfig({
     test: {
       environment: "happy-dom",
       setupFiles: ["./vitest.setup.ts"],
-      include: ["src/**/*.test.{ts,tsx}"],
+      include: ["src/**/*.test.{ts,tsx}", "migrations/**/*.test.ts"],
       globals: true,
     },
   }),

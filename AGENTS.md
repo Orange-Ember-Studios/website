@@ -52,7 +52,8 @@ Marketing site and CMS for **Orange Ember Studios** — a premium game and app d
 │   ├── i18n/               # en, es, fr translations
 │   ├── styles/global.css   # Tailwind + brand tokens
 │   └── constants/urls.ts   # External and API URL constants
-└── scripts/                # Migrations, versioning utilities
+├── migrations/             # SQL schema, legacy patches, init seeds
+└── scripts/                # One-off data scripts, versioning utilities
 ```
 
 ## Routing
@@ -121,7 +122,7 @@ Use `.env.local` for local development (gitignored). Cloudflare: `.dev.vars` / d
 | `TURNSTILE_SECRET_KEY` | Turnstile verify (server) |
 | `RESEND_API_KEY` | Contact email via Resend |
 
-Migrations run automatically when the dev server starts (`ensureDatabaseSchema` in `emberkit.config.ts`).
+Migrations live in `migrations/` (SQL under `migrations/sql/`, init seeds under `migrations/init/`). They run automatically when the dev server starts and on each API request via `ensureDatabaseSchema` (`src/lib/db-migrations.ts`).
 
 ## Commands
 
