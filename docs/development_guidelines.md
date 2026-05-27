@@ -24,7 +24,7 @@ These guidelines establish the core rules, aesthetic standards, and technical pr
 Orange Ember Studios is a premier studio for **desktop and mobile games** and **web and mobile applications**. The site must feel premium and state-of-the-art.
 
 - **Visual impact:** Custom palettes (OKLCH ember/void tokens in `src/styles/global.css`), dark mode, subtle gradients — not generic templates.
-- **Dynamic and alive:** Hover effects, micro-animations, view transitions (`src/lib/view-transitions.ts`).
+- **Dynamic and alive:** Hover effects, micro-animations, view transitions via `render(..., { viewTransitions: true })`.
 - **Typography:** **Outfit** (Google Fonts) — no default system UI fonts for marketing UI.
 - **Assets:** Avoid obvious placeholders; use on-brand imagery from the CDN or realistic demo assets.
 

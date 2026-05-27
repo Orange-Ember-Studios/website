@@ -151,7 +151,7 @@ Orange Ember Studios targets a **premium, dark, high-end** aesthetic (games + ap
 
 - **Tagline:** Create. Ignite. Play.
 - **Palette:** Dark backgrounds (`#0b0f19`, ash/void tokens), **ember orange** accents, Outfit typography.
-- **Motion:** Hover states, micro-animations, view transitions (`src/lib/view-transitions.ts`).
+- **Motion:** Hover states, micro-animations, view transitions (`render(..., { viewTransitions: true })` from `@emberkit/core`).
 - **Reference:** https://orangeember.com and `orange-ember-dev/references/brand.md`
 
 Avoid generic layouts, default system fonts, and placeholder-looking assets.
