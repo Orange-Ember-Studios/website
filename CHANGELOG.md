@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.31](https://github.com/Orange-Ember-Studios/website/compare/v0.0.30...v0.0.31) (2026-05-27)
+
+
+### Features
+
+* **admin:** Editor.js toolbar, markdown paste, inline styles ([886a81f](https://github.com/Orange-Ember-Studios/website/commit/886a81f3ee6efef4f980b01a0f0727e0e94d5a82))
+
 ### [0.0.30](https://github.com/Orange-Ember-Studios/website/compare/v0.0.29...v0.0.30) (2026-05-27)
 
 
