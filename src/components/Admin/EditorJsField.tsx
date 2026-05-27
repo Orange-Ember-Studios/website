@@ -1,10 +1,17 @@
-import { createEffect } from "@emberkit/core";
+import { createEffect, createSignal } from "@emberkit/core";
 import type EditorJS from "@editorjs/editorjs";
 import type { OutputData } from "@editorjs/editorjs";
 import {
   parseStoredContentToEditorJs,
   serializeEditorJs,
 } from "../../lib/editorjs-content.ts";
+import type { EditorJsInlineHintId, EditorJsToolbarTool } from "../../lib/editorjs-tools.ts";
+import {
+  applyEditorJsInlineFormat,
+  resolveImageInsertData,
+} from "../../lib/editorjs-tools.ts";
+import { attachEditorJsMarkdownPaste } from "../../lib/editorjs-paste.ts";
+import { EditorJsToolsHeader } from "./EditorJsToolsHeader.tsx";
 
 type EditorInstance = EditorJS;
 
@@ -36,7 +43,7 @@ async function createEditor(
     header: {
       class: Header,
       config: {
-        levels: minimal ? [2, 3] : [2, 3, 4],
+        levels: minimal ? [1, 2, 3] : [1, 2, 3, 4],
         defaultLevel: 2,
       },
     },
@@ -69,6 +76,7 @@ async function createEditor(
       ? "Short description…"
       : "Start writing, or press Tab for tools…",
     tools,
+    inlineToolbar: true,
     onChange: () => onChange(),
   });
 }
@@ -80,6 +88,31 @@ async function destroyEditor(editor: EditorInstance | null) {
   } catch {
     /* already destroyed */
   }
+}
+
+function insertIndex(editor: EditorInstance): number | undefined {
+  const current = editor.blocks.getCurrentBlockIndex();
+  if (current < 0) return undefined;
+  return current + 1;
+}
+
+async function insertToolbarBlock(
+  editor: EditorInstance,
+  tool: EditorJsToolbarTool,
+): Promise<void> {
+  let data = { ...tool.defaultData };
+
+  if (tool.needsUrl) {
+    const url = window.prompt("Image URL");
+    if (!url?.trim()) return;
+    data = resolveImageInsertData(url);
+  }
+
+  const index = insertIndex(editor);
+  await editor.blocks.insert(tool.blockType, data, {}, index, true);
+  const focusIndex =
+    index !== undefined ? index : editor.blocks.getBlocksCount() - 1;
+  editor.caret.setToBlock(focusIndex, "end");
 }
 
 export function EditorJsField(props: {
@@ -96,12 +129,19 @@ export function EditorJsField(props: {
   /** Fewer block types for project descriptions */
   minimal?: boolean;
 }) {
+  const [editorReady, setEditorReady] = createSignal(false);
+  const editorRef: { current: EditorInstance | null } = { current: null };
+
   createEffect(() => {
     void props.langKey;
     const initial = parseStoredContentToEditorJs(props.initialContent);
     const id = props.rootId;
     let editor: EditorInstance | null = null;
+    let detachPaste: (() => void) | null = null;
     let cancelled = false;
+
+    setEditorReady(false);
+    editorRef.current = null;
 
     const flushToParent = async () => {
       if (!editor || cancelled) return;
@@ -132,6 +172,23 @@ export function EditorJsField(props: {
           return;
         }
 
+        await editor.isReady;
+
+        if (cancelled) {
+          await destroyEditor(editor);
+          editor = null;
+          return;
+        }
+
+        editorRef.current = editor;
+        setEditorReady(true);
+
+        detachPaste = attachEditorJsMarkdownPaste(holder, {
+          minimal: !!props.minimal,
+          getEditor: () => editorRef.current,
+          onInserted: () => void flushToParent(),
+        });
+
         props.registerSave?.(() => editor!.save());
         props.registerRender?.(async (data) => {
           if (editor) await editor.render(data);
@@ -143,6 +200,10 @@ export function EditorJsField(props: {
 
     return () => {
       cancelled = true;
+      detachPaste?.();
+      detachPaste = null;
+      setEditorReady(false);
+      editorRef.current = null;
       props.registerSave?.(null);
       props.registerRender?.(null);
       void destroyEditor(editor);
@@ -150,7 +211,35 @@ export function EditorJsField(props: {
     };
   });
 
-  return <div className="editorjs-wrapper" id={props.rootId} />;
+  const handleInsert = (tool: EditorJsToolbarTool) => {
+    const editor = editorRef.current;
+    if (!editor) return;
+    void insertToolbarBlock(editor, tool).catch((e) => {
+      console.error("[EditorJsField] insert block", e);
+    });
+  };
+
+  const handleInline = (format: EditorJsInlineHintId) => {
+    const holder = document.getElementById(props.rootId);
+    if (!holder) return;
+    applyEditorJsInlineFormat(holder, format);
+  };
+
+  return (
+    <div
+      class={`editorjs-field${editorReady() ? " editorjs-field--ready" : ""}`}
+    >
+      <EditorJsToolsHeader
+        minimal={props.minimal}
+        ready={editorReady()}
+        onInsertBlock={handleInsert}
+        onInlineFormat={handleInline}
+      />
+      <div class="editorjs-wrapper">
+        <div id={props.rootId} />
+      </div>
+    </div>
+  );
 }
 
 /** Await latest blocks before POST. */

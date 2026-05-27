@@ -1,4 +1,5 @@
 import type { OutputData } from "@editorjs/editorjs";
+import { markdownInlineToHtml } from "./markdown-inline.ts";
 import { editorJsToMarkdown } from "./markdown-migrator.ts";
 
 export const EMPTY_EDITOR_JS = '{"blocks":[]}';
@@ -47,6 +48,10 @@ export function serializeEditorJs(data: OutputData): string {
  * Best-effort markdown → Editor.js for posts edited as markdown under Milkdown.
  * Uses the same block types as `parseEditorJsBlocks` / `editorJsToMarkdown`.
  */
+function inlineMd(text: string): string {
+  return markdownInlineToHtml(text);
+}
+
 export function markdownToEditorJs(markdown: string): OutputData {
   const blocks: EditorJsBlock[] = [];
   const lines = markdown.replace(/\r\n/g, "\n").split("\n");
@@ -82,7 +87,7 @@ export function markdownToEditorJs(markdown: string): OutputData {
     if (header) {
       blocks.push({
         type: "header",
-        data: { text: header[2], level: header[1].length },
+        data: { text: inlineMd(header[2]), level: header[1].length },
       } as EditorJsBlock);
       i += 1;
       continue;
@@ -91,8 +96,14 @@ export function markdownToEditorJs(markdown: string): OutputData {
     if (trimmed.startsWith("> ")) {
       blocks.push({
         type: "quote",
-        data: { text: trimmed.slice(2), caption: "" },
+        data: { text: inlineMd(trimmed.slice(2)), caption: "" },
       } as EditorJsBlock);
+      i += 1;
+      continue;
+    }
+
+    if (/^(-{3,}|\*{3,}|_{3,})$/.test(trimmed)) {
+      blocks.push({ type: "delimiter", data: {} } as EditorJsBlock);
       i += 1;
       continue;
     }
@@ -100,7 +111,7 @@ export function markdownToEditorJs(markdown: string): OutputData {
     if (/^[-*]\s+/.test(trimmed)) {
       const items: string[] = [];
       while (i < lines.length && /^[-*]\s+/.test(lines[i].trim())) {
-        items.push(lines[i].trim().replace(/^[-*]\s+/, ""));
+        items.push(inlineMd(lines[i].trim().replace(/^[-*]\s+/, "")));
         i += 1;
       }
       blocks.push({
@@ -113,7 +124,7 @@ export function markdownToEditorJs(markdown: string): OutputData {
     if (/^\d+\.\s+/.test(trimmed)) {
       const items: string[] = [];
       while (i < lines.length && /^\d+\.\s+/.test(lines[i].trim())) {
-        items.push(lines[i].trim().replace(/^\d+\.\s+/, ""));
+        items.push(inlineMd(lines[i].trim().replace(/^\d+\.\s+/, "")));
         i += 1;
       }
       blocks.push({
@@ -131,6 +142,7 @@ export function markdownToEditorJs(markdown: string): OutputData {
       !lines[i].trim().startsWith("#") &&
       !lines[i].trim().startsWith("```") &&
       !lines[i].trim().startsWith("> ") &&
+      !/^(-{3,}|\*{3,}|_{3,})$/.test(lines[i].trim()) &&
       !/^[-*]\s+/.test(lines[i].trim()) &&
       !/^\d+\.\s+/.test(lines[i].trim())
     ) {
@@ -139,7 +151,7 @@ export function markdownToEditorJs(markdown: string): OutputData {
     }
     blocks.push({
       type: "paragraph",
-      data: { text: paraLines.join("\n") },
+      data: { text: inlineMd(paraLines.join("\n")) },
     } as EditorJsBlock);
   }
 

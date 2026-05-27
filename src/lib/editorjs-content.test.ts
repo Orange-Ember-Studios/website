@@ -54,4 +54,12 @@ describe("markdownToEditorJs", () => {
       data: { code: "const x = 1", language: "ts" },
     });
   });
+
+  it("converts **bold** inline markup to HTML in paragraphs", () => {
+    const data = markdownToEditorJs("**Hello** world");
+    expect(data.blocks?.[0]).toMatchObject({
+      type: "paragraph",
+      data: { text: "<b>Hello</b> world" },
+    });
+  });
 });

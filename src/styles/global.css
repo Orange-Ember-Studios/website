@@ -193,8 +193,125 @@ body {
 }
 
 /* Admin Editor.js shell */
+.editorjs-field {
+  @apply flex flex-col;
+}
+
+.editorjs-tools-header {
+  @apply relative z-10 rounded-t-2xl border border-b-0 border-ash-800/50 bg-ash-900/90 px-3 py-3 md:px-4 md:py-3.5 backdrop-blur-sm;
+}
+
+.editorjs-tools-header__row {
+  @apply flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3;
+}
+
+.editorjs-tools-header__row--inline {
+  @apply mt-3 pt-3 border-t border-ash-800/60;
+}
+
+.editorjs-tools-header__section-label {
+  @apply shrink-0 text-[10px] font-bold uppercase tracking-widest text-ash-500 w-full sm:w-14;
+}
+
+.editorjs-tools-header__hint {
+  @apply flex-1 text-xs text-ash-500 m-0;
+}
+
+.editorjs-tools-header__footnote {
+  @apply mt-2 mb-0 text-[11px] text-ash-500;
+}
+
+.editorjs-tools-header__actions {
+  @apply flex flex-wrap items-center gap-1.5 flex-1 min-w-0;
+}
+
+.editorjs-tools-header__actions--hints {
+  @apply gap-2;
+}
+
+.editorjs-tool-btn {
+  @apply inline-flex items-center gap-1.5 rounded-lg border border-ash-700/80 bg-ash-950/60 px-2 py-1.5 text-xs font-medium text-ash-200 transition-colors;
+  @apply hover:border-ember-500/40 hover:bg-ash-800 hover:text-white;
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember-500/50;
+  @apply disabled:opacity-40 disabled:pointer-events-none;
+}
+
+.editorjs-tool-btn__icon {
+  @apply flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-ash-800/80 text-ash-300;
+}
+
+.editorjs-tool-btn:hover .editorjs-tool-btn__icon {
+  @apply bg-ember-500/20 text-ember-300;
+}
+
+.editorjs-tool-btn__label {
+  @apply pr-0.5;
+}
+
+.editorjs-inline-hint {
+  @apply inline-flex items-center gap-1.5 rounded-lg border border-ash-800/80 bg-ash-950/40 px-2 py-1 text-[11px] text-ash-400;
+}
+
+.editorjs-inline-hint--btn {
+  @apply cursor-pointer transition-colors;
+  @apply hover:border-ember-500/40 hover:bg-ash-800 hover:text-ash-200;
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember-500/50;
+  @apply disabled:opacity-40 disabled:pointer-events-none;
+}
+
+.editorjs-inline-hint__mark {
+  @apply flex h-5 min-w-5 items-center justify-center rounded bg-ash-800/90 px-1 text-[10px] font-bold text-ash-300;
+}
+
+.editorjs-inline-hint__shortcut {
+  @apply font-mono text-[10px] text-ash-500;
+}
+
+.editorjs-field .editorjs-wrapper {
+  @apply relative z-0 rounded-t-none border-t-0;
+}
+
 .editorjs-wrapper {
   @apply bg-ash-950/50 rounded-2xl p-4 md:p-6 min-h-[320px] md:min-h-[500px] border border-ash-800/50 transition-all focus-within:border-ember-500/30;
+}
+
+/* Editor.js built-in UI uses light CSS variables — override inside admin fields */
+.editorjs-field .codex-editor {
+  --selectionColor: rgba(249, 115, 22, 0.22);
+  --inlineSelectionColor: rgba(249, 115, 22, 0.16);
+  --bg-light: rgb(30 35 48);
+  --grayText: rgb(156 163 175);
+  --color-line-gray: rgb(55 65 81);
+}
+
+.editorjs-field .ce-popover,
+.editorjs-field .ce-inline-toolbar {
+  --color-border: rgb(55 65 81);
+  --color-shadow: rgba(0, 0, 0, 0.45);
+  --color-background: rgb(24 28 38);
+  --color-text-primary: rgb(229 231 235);
+  --color-text-secondary: rgb(156 163 175);
+  --color-border-icon: rgb(75 85 99);
+  --color-border-icon-disabled: rgb(55 65 81);
+  --color-text-icon-active: rgb(251 146 60);
+  --color-background-icon-active: rgba(249, 115, 22, 0.18);
+  --color-background-item-focus: rgba(249, 115, 22, 0.14);
+  --color-shadow-item-focus: rgba(249, 115, 22, 0.12);
+  --color-background-item-hover: rgb(38 44 58);
+  --color-background-item-confirm: rgb(220 38 38);
+  --color-background-item-confirm-hover: rgb(185 28 28);
+}
+
+.editorjs-field .ce-inline-toolbar {
+  --color-text-primary: rgb(229 231 235);
+}
+
+.editorjs-field:focus-within .editorjs-tools-header {
+  @apply border-ember-500/20;
+}
+
+.editorjs-field:focus-within .editorjs-wrapper {
+  @apply border-ember-500/30;
 }
 
 .editorjs-wrapper .codex-editor {
@@ -214,12 +331,20 @@ body {
   @apply text-white font-bold tracking-tight;
 }
 
+.editorjs-wrapper .ce-header[data-level="1"] {
+  @apply text-2xl md:text-3xl;
+}
+
 .editorjs-wrapper .ce-header[data-level="2"] {
   @apply text-xl md:text-2xl;
 }
 
 .editorjs-wrapper .ce-header[data-level="3"] {
   @apply text-lg md:text-xl text-ash-100;
+}
+
+.editorjs-wrapper .ce-header[data-level="4"] {
+  @apply text-base md:text-lg text-ash-200;
 }
 
 .editorjs-wrapper .cdx-quote {
@@ -230,22 +355,97 @@ body {
   @apply text-ash-200 italic;
 }
 
-.editorjs-wrapper .ce-inline-tool,
-.editorjs-wrapper .ce-toolbar__plus,
-.editorjs-wrapper .ce-toolbar__settings-btn {
-  @apply text-ash-400 hover:text-white hover:bg-ash-800;
+.editorjs-field .ce-toolbar__plus,
+.editorjs-field .ce-toolbar__settings-btn {
+  @apply text-ash-300;
 }
 
-.editorjs-wrapper .ce-popover {
-  @apply bg-ash-900 border border-ash-700 shadow-xl;
+@media (hover: hover) {
+  .editorjs-field .ce-toolbar__plus:hover,
+  .editorjs-field .ce-toolbar__settings-btn:hover,
+  .editorjs-field .ce-toolbar__plus--active,
+  .editorjs-field .ce-toolbar__settings-btn--active {
+    background-color: rgb(38 44 58) !important;
+  }
 }
 
-.editorjs-wrapper .ce-popover-item {
-  @apply text-ash-200 hover:bg-ash-800;
+.editorjs-field .ce-inline-tool {
+  @apply text-ash-200;
 }
 
-.editorjs-wrapper .ce-popover-item__icon {
+@media (hover: hover) {
+  .editorjs-field .ce-inline-tool:hover {
+    background-color: rgb(38 44 58) !important;
+  }
+}
+
+.editorjs-field .ce-inline-tool-input {
+  background-color: rgb(17 20 28) !important;
+  border-color: rgb(55 65 81) !important;
+  color: rgb(229 231 235) !important;
+}
+
+.editorjs-field .ce-inline-tool-input::placeholder {
+  color: rgb(107 114 128) !important;
+}
+
+.editorjs-field .ce-popover__container {
+  @apply border border-ash-700 shadow-2xl shadow-black/40;
+}
+
+.editorjs-field .ce-popover-item__icon {
   @apply bg-ash-800 text-ash-300;
+}
+
+.editorjs-field .ce-popover-header__text {
+  @apply text-white;
+}
+
+.editorjs-field .ce-popover__nothing-found-message {
+  color: rgb(156 163 175) !important;
+}
+
+.editorjs-field .codex-editor ::selection,
+.editorjs-field .codex-editor ::-moz-selection {
+  background-color: rgba(249, 115, 22, 0.28) !important;
+}
+
+.editorjs-field .ce-block--selected .ce-block__content {
+  background: rgba(249, 115, 22, 0.12) !important;
+}
+
+.editorjs-field .codex-editor [data-placeholder]:empty:before,
+.editorjs-field .codex-editor [data-placeholder][data-empty="true"]:before,
+.editorjs-field .codex-editor [data-placeholder-active]:empty:before,
+.editorjs-field .codex-editor [data-placeholder-active][data-empty="true"]:before {
+  color: rgb(107 114 128) !important;
+}
+
+/* Block tool panels (image URL, link, code, etc.) */
+.editorjs-field .cdx-input,
+.editorjs-field .cdx-textarea {
+  background-color: rgb(17 20 28) !important;
+  border-color: rgb(55 65 81) !important;
+  color: rgb(229 231 235) !important;
+}
+
+.editorjs-field .cdx-input::placeholder,
+.editorjs-field .cdx-textarea::placeholder {
+  color: rgb(107 114 128) !important;
+}
+
+.editorjs-field .cdx-button {
+  background-color: rgb(38 44 58) !important;
+  color: rgb(229 231 235) !important;
+}
+
+.editorjs-field .cdx-button:hover {
+  background-color: rgb(55 65 81) !important;
+}
+
+.editorjs-field .image-tool__caption,
+.editorjs-field .embed-tool__caption {
+  color: rgb(156 163 175) !important;
 }
 
 /* ============================================
