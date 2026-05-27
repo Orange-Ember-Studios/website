@@ -17,7 +17,12 @@ function portfolioCacheKey(lang: string) {
   return `portfolio:${lang}`;
 }
 
-/** EmberKit renders route HTML once; signal updates do not refresh JSX lists. */
+function portfolioGridChildCount(): number {
+  const grid = document.getElementById("portfolio-grid");
+  return grid?.children.length ?? 0;
+}
+
+/** EmberKit hydrates SSR HTML once; signal updates do not refresh JSX lists. */
 function refreshCurrentRoute() {
   const url =
     window.location.pathname + window.location.search + window.location.hash;
@@ -55,7 +60,13 @@ export function Portfolio(props: { lang?: string }) {
       }
 
       setProjects(list);
-      if (fetchedFromNetwork || (list.length > 0 && initialCache.length === 0)) {
+
+      // After SSR hydrate, the grid can stay empty even when cache/preload already has projects.
+      const domEmpty = portfolioGridChildCount() === 0;
+      if (
+        list.length > 0 &&
+        (domEmpty || fetchedFromNetwork || initialCache.length === 0)
+      ) {
         refreshCurrentRoute();
       }
     })();
@@ -88,7 +99,10 @@ export function Portfolio(props: { lang?: string }) {
             experiences, and state-of-the-art web applications.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+        <div
+          id="portfolio-grid"
+          className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12"
+        >
           {projects().map((project) => (
             <a
               key={project.id}
