@@ -2,8 +2,8 @@ import { defineConfig } from "vite";
 import { appVitePlugins } from "./vite.plugins.ts";
 
 /**
- * CI / fallback when `emberkit.config.ts` cannot be loaded.
- * Dev server uses `emberkit.config.ts` only (no duplicate config file load).
+ * CI / Vitest fallback when the CLI loads vite.config directly.
+ * Dev uses `emberkit.config.ts` only.
  */
 export default defineConfig({
   plugins: appVitePlugins,
