@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.30](https://github.com/Orange-Ember-Studios/website/compare/v0.0.29...v0.0.30) (2026-05-27)
+
+
+### Bug Fixes
+
+* **portfolio:** refresh route when SSR grid stays empty ([a106b47](https://github.com/Orange-Ember-Studios/website/commit/a106b47660a04f1a47314df49df33d01bc7a98f2))
+* rely on emberkitVitePlugin for dev API and sql raw ([b23b5d2](https://github.com/Orange-Ember-Studios/website/commit/b23b5d244d8ec26a1f120aee46fa7ddcb373342d))
+
 ### [0.0.29](https://github.com/Orange-Ember-Studios/website/compare/v0.0.28...v0.0.29) (2026-05-26)
 
 ### [0.0.28](https://github.com/Orange-Ember-Studios/website/compare/v0.0.27...v0.0.28) (2026-05-26)
