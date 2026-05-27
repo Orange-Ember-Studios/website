@@ -1,5 +1,17 @@
 import tailwindcss from "@tailwindcss/vite";
-import { emberkitVitePlugin, sqlRawPlugin } from "@emberkit/core/vite-plugin";
+import {
+  devApiPlugin,
+  emberkitVitePlugin,
+  sqlRawPlugin,
+} from "@emberkit/core/vite-plugin";
 
 /** Vite plugins shared by EmberKit, Vitest, and CI shims. */
-export const appVitePlugins = [sqlRawPlugin(), emberkitVitePlugin(), tailwindcss()];
+export const appVitePlugins = [
+  sqlRawPlugin(),
+  devApiPlugin({
+    handler: "./src/server/api-router.node.ts",
+    export: "handleApiRequestNode",
+  }),
+  emberkitVitePlugin(),
+  tailwindcss(),
+];

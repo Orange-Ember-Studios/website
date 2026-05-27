@@ -7,10 +7,6 @@ dotenv.config();
 
 export default defineConfig({
   mode: "ssr",
-  devApi: {
-    handler: "./src/server/api-router.node.ts",
-    export: "handleApiRequestNode",
-  },
   server: {
     port: 4321,
   },
