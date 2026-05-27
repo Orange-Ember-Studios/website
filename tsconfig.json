@@ -23,8 +23,7 @@
     "vitest.setup.ts",
     "emberkit.config.ts",
     "vite.config.ts",
-    "vite.plugins.ts",
-    "vite.dev-api-plugin.ts"
+    "vite.plugins.ts"
   ],
   "exclude": ["node_modules", "dist"]
 }
