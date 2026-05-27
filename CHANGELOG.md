@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.32](https://github.com/Orange-Ember-Studios/website/compare/v0.0.31...v0.0.32) (2026-05-27)
+
+
+### Bug Fixes
+
+* **build:** bundle SQL migrations for Wrangler deploy ([32cdce1](https://github.com/Orange-Ember-Studios/website/commit/32cdce1b7f06f557f0b5aa750b79940d0bf92c07))
+
 ### [0.0.31](https://github.com/Orange-Ember-Studios/website/compare/v0.0.30...v0.0.31) (2026-05-27)
 
 
