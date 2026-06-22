@@ -1,8 +1,8 @@
 import {
   handleApiRequest,
-  detectLangFromRequest,
   getAdminUserFromRequest,
 } from "./src/server/api-router";
+import { detectLangFromRequest } from "./src/lib/lang";
 import { SUPPORTED_LANGS, type SiteEnv } from "./src/server/site-env";
 
 export interface Env {

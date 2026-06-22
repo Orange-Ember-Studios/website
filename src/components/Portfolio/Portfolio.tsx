@@ -17,16 +17,33 @@ function portfolioCacheKey(lang: string) {
   return `portfolio:${lang}`;
 }
 
-function portfolioGridChildCount(): number {
-  const grid = document.getElementById("portfolio-grid");
-  return grid?.children.length ?? 0;
+function ProjectSkeleton() {
+  return (
+    <div className="relative overflow-hidden rounded-2xl aspect-4/3 md:aspect-video bg-gray-900/60 border border-white/5 shadow-2xl animate-pulse">
+      <div className="absolute inset-0 bg-white/5" />
+      <div className="absolute top-6 right-6 h-6 w-24 rounded-full bg-white/10" />
+      <div className="absolute bottom-0 left-0 right-0 p-8 lg:p-10 space-y-3">
+        <div className="h-3 w-20 rounded bg-white/10" />
+        <div className="h-8 w-3/4 rounded bg-white/10" />
+        <div className="h-4 w-full rounded bg-white/10" />
+        <div className="h-4 w-2/3 rounded bg-white/10" />
+      </div>
+    </div>
+  );
 }
 
-/** EmberKit hydrates SSR HTML once; signal updates do not refresh JSX lists. */
-function refreshCurrentRoute() {
-  const url =
-    window.location.pathname + window.location.search + window.location.hash;
-  history.replaceState(null, "", url);
+function PortfolioSkeleton() {
+  return (
+    <div
+      aria-hidden="true"
+      className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12"
+    >
+      <ProjectSkeleton />
+      <ProjectSkeleton />
+      <ProjectSkeleton />
+      <ProjectSkeleton />
+    </div>
+  );
 }
 
 export function Portfolio(props: { lang?: string }) {
@@ -34,8 +51,11 @@ export function Portfolio(props: { lang?: string }) {
   const initialCache =
     (getCached(portfolioCacheKey(initialLang)) as PortfolioProject[] | null) ??
     [];
+  const initiallyLoading = initialCache.length === 0;
+
   const [projects, setProjects] =
     createSignal<PortfolioProject[]>(initialCache);
+  const [loading, setLoading] = createSignal(initiallyLoading);
 
   createEffect(() => {
     const l = props.lang || getCurrentLanguage();
@@ -43,7 +63,6 @@ export function Portfolio(props: { lang?: string }) {
 
     void (async () => {
       let list = getCached(cacheKey) as PortfolioProject[] | null;
-      const fetchedFromNetwork = list === null;
       if (list === null) {
         try {
           const res = await fetch(
@@ -60,15 +79,7 @@ export function Portfolio(props: { lang?: string }) {
       }
 
       setProjects(list);
-
-      // After SSR hydrate, the grid can stay empty even when cache/preload already has projects.
-      const domEmpty = portfolioGridChildCount() === 0;
-      if (
-        list.length > 0 &&
-        (domEmpty || fetchedFromNetwork || initialCache.length === 0)
-      ) {
-        refreshCurrentRoute();
-      }
+      setLoading(false);
     })();
   });
 
@@ -99,54 +110,71 @@ export function Portfolio(props: { lang?: string }) {
             experiences, and state-of-the-art web applications.
           </p>
         </div>
+
         <div
-          id="portfolio-grid"
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12"
+          data-ek-bind={loading}
+          data-ek-show-when="true"
+          data-ek-hide-class="hidden"
+          className={initiallyLoading ? "" : "hidden"}
         >
-          {projects().map((project) => (
-            <a
-              key={project.id}
-              href={project.link || "#"}
-              target={project.isExternal ? "_blank" : "_self"}
-              rel={project.isExternal ? "noopener noreferrer" : undefined}
-              className={`group relative overflow-hidden rounded-2xl aspect-4/3 md:aspect-video bg-gray-900 shadow-2xl border border-white/5 transition-all duration-700 hover:border-ember-500/40 hover:shadow-[0_0_50px_rgba(255,91,13,0.15)] block ${!project.link ? "cursor-default" : "cursor-pointer"}`}
-            >
-              <img
-                src={project.image}
-                alt={`Project: ${project.title}`}
-                className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110 opacity-60 group-hover:opacity-100 mix-blend-luminosity group-hover:mix-blend-normal"
-              />
-              <div className="absolute inset-0 bg-linear-to-t from-ash-950 via-ash-950/60 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-80" />
-              <div className="absolute top-6 right-6">
-                <span
-                  className={`px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase shadow-lg border backdrop-blur-md
+          <PortfolioSkeleton />
+        </div>
+
+        <div
+          data-ek-bind={loading}
+          data-ek-show-when="false"
+          data-ek-hide-class="hidden"
+          className={initiallyLoading ? "hidden" : ""}
+        >
+          <div
+            id="portfolio-grid"
+            className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12"
+          >
+            {projects().map((project) => (
+              <a
+                key={project.id}
+                href={project.link || "#"}
+                target={project.isExternal ? "_blank" : "_self"}
+                rel={project.isExternal ? "noopener noreferrer" : undefined}
+                className={`group relative overflow-hidden rounded-2xl aspect-4/3 md:aspect-video bg-gray-900 shadow-2xl border border-white/5 transition-all duration-700 hover:border-ember-500/40 hover:shadow-[0_0_50px_rgba(255,91,13,0.15)] block ${!project.link ? "cursor-default" : "cursor-pointer"}`}
+              >
+                <img
+                  src={project.image}
+                  alt={`Project: ${project.title}`}
+                  className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110 opacity-60 group-hover:opacity-100 mix-blend-luminosity group-hover:mix-blend-normal"
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-ash-950 via-ash-950/60 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-80" />
+                <div className="absolute top-6 right-6">
+                  <span
+                    className={`px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase shadow-lg border backdrop-blur-md
               ${project.status === "Available Now" || project.status === "Early Access" ? "bg-green-500/20 text-green-300 border-green-500/30" : ""}
               ${project.status === "Coming Soon" || project.status === "Publishing" ? "bg-orange-500/20 text-orange-300 border-orange-500/30" : ""}
               ${project.status === "In Development" ? "bg-blue-500/20 text-blue-300 border-blue-500/30" : ""}
             `}
-                >
-                  {project.status}
-                </span>
-              </div>
-              <div className="absolute bottom-0 left-0 p-8 lg:p-10 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                <span className="text-ember-400 font-semibold tracking-[0.2em] uppercase text-xs md:text-sm mb-3 flex items-center gap-2">
-                  <span>{project.category}</span>
-                  {project.isExternal ? (
-                    <IconExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity -translate-x-2 group-hover:translate-x-0 duration-500" />
+                  >
+                    {project.status}
+                  </span>
+                </div>
+                <div className="absolute bottom-0 left-0 p-8 lg:p-10 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                  <span className="text-ember-400 font-semibold tracking-[0.2em] uppercase text-xs md:text-sm mb-3 flex items-center gap-2">
+                    <span>{project.category}</span>
+                    {project.isExternal ? (
+                      <IconExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity -translate-x-2 group-hover:translate-x-0 duration-500" />
+                    ) : null}
+                  </span>
+                  <h3 className="text-3xl md:text-4xl font-bold text-white mb-2">
+                    {project.title}
+                  </h3>
+                  {project.description ? (
+                    <p className="text-gray-400 text-sm md:text-base line-clamp-2 mt-3 group-hover:text-white transition-colors duration-500 delay-100 max-w-sm">
+                      {project.description}
+                    </p>
                   ) : null}
-                </span>
-                <h3 className="text-3xl md:text-4xl font-bold text-white mb-2">
-                  {project.title}
-                </h3>
-                {project.description ? (
-                  <p className="text-gray-400 text-sm md:text-base line-clamp-2 mt-3 group-hover:text-white transition-colors duration-500 delay-100 max-w-sm">
-                    {project.description}
-                  </p>
-                ) : null}
-              </div>
-              <div className="absolute inset-0 border-[3px] border-ember-400/0 group-hover:border-ember-400/20 rounded-2xl transition-colors duration-700 pointer-events-none" />
-            </a>
-          ))}
+                </div>
+                <div className="absolute inset-0 border-[3px] border-ember-400/0 group-hover:border-ember-400/20 rounded-2xl transition-colors duration-700 pointer-events-none" />
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </section>

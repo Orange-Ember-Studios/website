@@ -1,5 +1,5 @@
-import { render, setCache } from "@emberkit/core";
-import { routes } from "virtual:emberkit-routes";
+import { render } from "@emberkit/core";
+import { routes, notFoundRoute, errorRoute } from "virtual:emberkit-routes";
 import App from "./routes/_layout.tsx";
 import "./styles/global.css";
 import { getCurrentLanguage } from "./i18n/i18n.ts";
@@ -10,9 +10,12 @@ const root = document.getElementById("app");
 async function init() {
   if (!root) return;
 
-  // Preload critical content
+  // Preload critical content into the client cache before hydration so
+  // components don't refetch what the server already provided.
   try {
     const lang = getCurrentLanguage();
+    const { setCache } = await import("@emberkit/core");
+
     const portfolioPromise = fetch(
       `/api/portfolio/projects?lang=${encodeURIComponent(lang)}`,
     )
@@ -45,19 +48,9 @@ async function init() {
   }
 
   try {
-    render(App, root, { routes, viewTransitions: true });
-
-    // Remove the initial loader once EmberKit has rendered
-    requestAnimationFrame(() => {
-      const loader = document.getElementById("oe-loader");
-      if (loader) {
-        loader.classList.add("fade-out");
-        loader.addEventListener("transitionend", () => loader.remove(), {
-          once: true,
-        });
-      }
-      initPremiumSelects();
-    });
+    render(App, root, { routes, notFoundRoute, errorRoute, viewTransitions: true });
+    initPremiumSelects();
+    root.classList.add("ee-ready");
   } catch (error) {
     console.error("[entry] Render error:", error);
   }

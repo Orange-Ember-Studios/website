@@ -30,11 +30,11 @@ importers:
         specifier: ^2.7.6
         version: 2.7.6
       '@emberkit/core':
-        specifier: ^0.8.2
-        version: 0.8.2(@types/node@22.19.19)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.2)(tsx@4.22.0)(yaml@2.8.3)
+        specifier: ^0.11.0
+        version: 0.11.0(@types/node@22.19.19)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.2)(tsx@4.22.0)(yaml@2.8.3)
       '@emberkit/icons':
-        specifier: ^6.0.2
-        version: 6.0.2(@emberkit/core@0.8.2(@types/node@22.19.19)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.2)(tsx@4.22.0)(yaml@2.8.3))
+        specifier: ^9.0.0
+        version: 9.0.0(@emberkit/core@0.11.0(@types/node@22.19.19)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.2)(tsx@4.22.0)(yaml@2.8.3))
       '@libsql/client':
         specifier: ^0.17.3
         version: 0.17.3
@@ -52,11 +52,11 @@ importers:
         specifier: ^4.20260516.1
         version: 4.20260516.1
       '@emberkit/cli':
-        specifier: ^1.0.0
-        version: 1.0.0(@emberkit/core@0.8.2(@types/node@22.19.19)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.2)(tsx@4.22.0)(yaml@2.8.3))(@types/node@22.19.19)(vite@6.4.2(@types/node@22.19.19)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.22.0)(yaml@2.8.3))
+        specifier: ^4.0.0
+        version: 4.0.0(@emberkit/core@0.11.0(@types/node@22.19.19)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.2)(tsx@4.22.0)(yaml@2.8.3))(@types/node@22.19.19)(vite@6.4.2(@types/node@22.19.19)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.22.0)(yaml@2.8.3))
       '@emberkit/edge':
-        specifier: ^0.2.4
-        version: 0.2.4
+        specifier: ^0.3.0
+        version: 0.3.0
       '@tailwindcss/vite':
         specifier: ^4.3.0
         version: 4.3.0(vite@6.4.2(@types/node@22.19.19)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.22.0)(yaml@2.8.3))
@@ -267,23 +267,23 @@ packages:
   '@editorjs/quote@2.7.6':
     resolution: {integrity: sha512-D01KUMSDj2r+6Z+xjDkQqI+y6URpeHCvj0+P4pah+GtkG040lWjFb2H4pgHFXuol2cbfyAoraYSw85fuPheCvw==}
 
-  '@emberkit/cli@1.0.0':
-    resolution: {integrity: sha512-DmcA7m6wPVKzW/nbPLIiPhlSnO84VMwNVIIUI+W3HQXkErYC4kKSdiiDV0xLBUutcy3kd/a/1/AelpMj58zhPA==}
+  '@emberkit/cli@4.0.0':
+    resolution: {integrity: sha512-dFzlv5UXuk/vkf4YUaqvpYkMj36ZtzddHUwpc9eiEPTZOshYKuXa4vXBKN5nQAYr3Q2WIZ505qwIkliPfESiPw==}
     hasBin: true
     peerDependencies:
-      '@emberkit/core': ^0.8.0
+      '@emberkit/core': ^0.11.0
       vite: ^5.0.0 || ^6.0.0
 
-  '@emberkit/core@0.8.2':
-    resolution: {integrity: sha512-cVSMC9kHrpgWMZO0ByeUQ0ZDPgJR5EDusbsim5ZXSnPCsnqJymWqFmXzwGzmUIrci8nT2qN8FUlXFGOqXt0fqA==}
+  '@emberkit/core@0.11.0':
+    resolution: {integrity: sha512-EN62YztRfQGwSFlrXFUEZ3wudunc4ZzDa5dPPMfVruO3dhFz7Xre+8d+upAWKBinvrks5e7YKQx02Iqj7N865Q==}
 
-  '@emberkit/edge@0.2.4':
-    resolution: {integrity: sha512-xMQhEPbxuM9BiHWe9P0SIcZwBYroZUkDC748Y619DFXTjt24aBUYMBG8EmN7NhtPwaKTWnfRyIykKOMGGwCx3w==}
+  '@emberkit/edge@0.3.0':
+    resolution: {integrity: sha512-lZfuy80+JxxvRuoYrpHPWtWoLKUQQEXODVqE2Zg4kQ6oZATeCpo8fIdYDAk9SZuWJzg2B45BzBaOVvJQHfwWVQ==}
 
-  '@emberkit/icons@6.0.2':
-    resolution: {integrity: sha512-QtXRuMGU4OmEUnJESCOIHzm+iJ2aO2E2SimELDbbWDnrzlrHRAxQyL+1DKxvYrKD/cS3dvU4QdQgJKQix3btbg==}
+  '@emberkit/icons@9.0.0':
+    resolution: {integrity: sha512-h/2VsdfPCO3dIEV9uqt8+8OjtseW86lZ/doDvTk+H9hfHwGAQ+3pwPtGPIf49aSE+PKD3wg104Kf7kE0oWjmlQ==}
     peerDependencies:
-      '@emberkit/core': 0.8.2
+      '@emberkit/core': 0.11.0
 
   '@emnapi/runtime@1.10.0':
     resolution: {integrity: sha512-ewvYlk86xUoGI0zQRNq/mC+16R1QeDlKQy21Ki3oSYXNgLb45GV1P6A0M+/s6nyCuNDqe5VpaY84BzXGwVbwFA==}
@@ -3354,17 +3354,18 @@ snapshots:
       '@codexteam/icons': 0.3.3
       '@editorjs/dom': 0.0.5
 
-  '@emberkit/cli@1.0.0(@emberkit/core@0.8.2(@types/node@22.19.19)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.2)(tsx@4.22.0)(yaml@2.8.3))(@types/node@22.19.19)(vite@6.4.2(@types/node@22.19.19)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.22.0)(yaml@2.8.3))':
+  '@emberkit/cli@4.0.0(@emberkit/core@0.11.0(@types/node@22.19.19)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.2)(tsx@4.22.0)(yaml@2.8.3))(@types/node@22.19.19)(vite@6.4.2(@types/node@22.19.19)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.22.0)(yaml@2.8.3))':
     dependencies:
-      '@emberkit/core': 0.8.2(@types/node@22.19.19)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.2)(tsx@4.22.0)(yaml@2.8.3)
+      '@emberkit/core': 0.11.0(@types/node@22.19.19)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.2)(tsx@4.22.0)(yaml@2.8.3)
       inquirer: 9.3.8(@types/node@22.19.19)
       vite: 6.4.2(@types/node@22.19.19)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.22.0)(yaml@2.8.3)
     transitivePeerDependencies:
       - '@types/node'
 
-  '@emberkit/core@0.8.2(@types/node@22.19.19)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.2)(tsx@4.22.0)(yaml@2.8.3)':
+  '@emberkit/core@0.11.0(@types/node@22.19.19)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.2)(tsx@4.22.0)(yaml@2.8.3)':
     dependencies:
       '@mdx-js/mdx': 3.1.1
+      esbuild: 0.25.12
       pino: 10.3.1
       pino-http: 11.0.0
       remark-gfm: 4.0.1
@@ -3385,11 +3386,11 @@ snapshots:
       - tsx
       - yaml
 
-  '@emberkit/edge@0.2.4': {}
+  '@emberkit/edge@0.3.0': {}
 
-  '@emberkit/icons@6.0.2(@emberkit/core@0.8.2(@types/node@22.19.19)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.2)(tsx@4.22.0)(yaml@2.8.3))':
+  '@emberkit/icons@9.0.0(@emberkit/core@0.11.0(@types/node@22.19.19)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.2)(tsx@4.22.0)(yaml@2.8.3))':
     dependencies:
-      '@emberkit/core': 0.8.2(@types/node@22.19.19)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.2)(tsx@4.22.0)(yaml@2.8.3)
+      '@emberkit/core': 0.11.0(@types/node@22.19.19)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.2)(tsx@4.22.0)(yaml@2.8.3)
 
   '@emnapi/runtime@1.10.0':
     dependencies:

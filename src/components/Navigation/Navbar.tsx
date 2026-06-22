@@ -1,10 +1,7 @@
-import {
-  createEffect,
-  createSignal,
-} from "@emberkit/core";
+import { createEffect, createSignal } from "@emberkit/core";
 import { IconLogIn, IconMenu, IconUser, IconX } from "@emberkit/icons";
 import type { SupportedLanguage } from "../../i18n/i18n.ts";
-import PremiumLanguageSelector from "../LanguageSelector/PremiumLanguageSelector.tsx";
+import PremiumLanguageSelector from "../LanguageSelector/PremiumLanguageSelector";
 
 function useLangFromPath(): SupportedLanguage {
   if (typeof window === "undefined") return "en";
@@ -83,12 +80,15 @@ export function Navbar() {
         id="main-nav"
         data-ek-bind={scrolled}
         data-ek-active-when="true"
-        data-ek-active-class="bg-ash-950/50 backdrop-blur-xl py-4 border-b border-white/10"
+        data-ek-active-class="bg-ash-950/50 backdrop-blur-xl py-4"
         data-ek-inactive-class="py-6"
         className="fixed top-0 left-0 w-full z-50 transition-all duration-500 py-6"
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          <a href={`/${lang}/`} className="flex items-center gap-3 group">
+          <a
+            href={`/${lang}/`}
+            className="flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-ember-500 focus-visible:ring-offset-2 focus-visible:ring-offset-ash-950 rounded-lg"
+          >
             <div className="w-10 h-10 relative">
               <img
                 src="/Shield.svg"
@@ -105,7 +105,7 @@ export function Navbar() {
             <a
               href={`/${lang}/#portfolio`}
               data-i18n="nav.portfolio"
-              className="text-sm font-medium text-gray-300 hover:text-ember-400 transition-colors uppercase tracking-widest"
+              className="text-sm font-medium text-gray-300 hover:text-ember-400 transition-colors uppercase tracking-widest focus:outline-none focus-visible:ring-2 focus-visible:ring-ember-500 rounded"
               onClick={handleLinkClick}
             >
               Portfolio
@@ -113,7 +113,7 @@ export function Navbar() {
             <a
               href={`/${lang}/#services`}
               data-i18n="nav.services"
-              className="text-sm font-medium text-gray-300 hover:text-ember-400 transition-colors uppercase tracking-widest"
+              className="text-sm font-medium text-gray-300 hover:text-ember-400 transition-colors uppercase tracking-widest focus:outline-none focus-visible:ring-2 focus-visible:ring-ember-500 rounded"
               onClick={handleLinkClick}
             >
               Services
@@ -121,7 +121,7 @@ export function Navbar() {
             <a
               href={`/${lang}/#about`}
               data-i18n="nav.about"
-              className="text-sm font-medium text-gray-300 hover:text-ember-400 transition-colors uppercase tracking-widest"
+              className="text-sm font-medium text-gray-300 hover:text-ember-400 transition-colors uppercase tracking-widest focus:outline-none focus-visible:ring-2 focus-visible:ring-ember-500 rounded"
               onClick={handleLinkClick}
             >
               About
@@ -129,14 +129,14 @@ export function Navbar() {
             <a
               href={`/${lang}/blog`}
               data-i18n="nav.blog"
-              className="text-sm font-medium text-gray-300 hover:text-ember-400 transition-colors uppercase tracking-widest"
+              className="text-sm font-medium text-gray-300 hover:text-ember-400 transition-colors uppercase tracking-widest focus:outline-none focus-visible:ring-2 focus-visible:ring-ember-500 rounded"
             >
               Blog
             </a>
             <a
               href={`/${lang}/#contact`}
               data-i18n="nav.workWithUs"
-              className="px-6 py-2 border border-ember-500/30 rounded-full text-sm font-semibold text-white bg-void-500/20 hover:bg-ember-500 transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,91,13,0.3)]"
+              className="px-6 py-2 border border-ember-500/30 rounded-full text-sm font-semibold text-white bg-void-500/20 hover:bg-ember-500 transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,91,13,0.3)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ember-500"
               onClick={handleLinkClick}
             >
               Work with us
@@ -145,7 +145,7 @@ export function Navbar() {
               href="https://buymeacoffee.com/seobryn"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-amber-300 bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 hover:border-amber-500/50 transition-all duration-300"
+              className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-amber-300 bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 hover:border-amber-500/50 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-ember-500"
               title="Support us on Buy Me a Coffee"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -156,7 +156,7 @@ export function Navbar() {
             <PremiumLanguageSelector lang={lang} id="desktop-lang-selector" />
             <a
               href="/admin"
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-ember-400 hover:border-ember-500/50 transition-all duration-300 group/nav-login"
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-ember-400 hover:border-ember-500/50 transition-all duration-300 group/nav-login focus:outline-none focus-visible:ring-2 focus-visible:ring-ember-500"
               title="Admin"
             >
               <IconLogIn className="h-5 w-5 group-hover/nav-login:scale-110 transition-transform" />
@@ -168,7 +168,7 @@ export function Navbar() {
             type="button"
             aria-controls="mobile-menu"
             aria-expanded="false"
-            className="md:hidden text-white hover:text-ember-400 transition-colors z-50 relative"
+            className="md:hidden text-white hover:text-ember-400 transition-colors z-50 relative focus:outline-none focus-visible:ring-2 focus-visible:ring-ember-500 rounded"
             onClick={() => toggleMenu()}
           >
             <span id="menu-icon" className="block">
@@ -198,7 +198,7 @@ export function Navbar() {
               key={key}
               href={href}
               data-i18n={i18n}
-              className="mobile-link text-2xl font-bold text-white hover:text-ember-400 transition-colors uppercase tracking-widest"
+              className="mobile-link text-2xl font-bold text-white hover:text-ember-400 transition-colors uppercase tracking-widest focus:outline-none focus-visible:ring-2 focus-visible:ring-ember-500 rounded"
               onClick={handleLinkClick}
             >
               {key}
@@ -207,7 +207,7 @@ export function Navbar() {
           <a
             href={`/${lang}/#contact`}
             data-i18n="nav.workWithUs"
-            className="mobile-link px-8 py-3 mt-4 border border-ember-500/30 rounded-full text-lg font-bold text-white bg-void-500/20 hover:bg-ember-500 transition-all duration-300"
+            className="mobile-link px-8 py-3 mt-4 border border-ember-500/30 rounded-full text-lg font-bold text-white bg-void-500/20 hover:bg-ember-500 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-ember-500"
             onClick={handleLinkClick}
           >
             Work with us
@@ -216,7 +216,7 @@ export function Navbar() {
             href="https://buymeacoffee.com/seobryn"
             target="_blank"
             rel="noopener noreferrer"
-            className="mobile-link flex items-center gap-2 px-6 py-3 mt-4 rounded-full text-base font-semibold text-amber-300 bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 transition-all duration-300"
+            className="mobile-link flex items-center gap-2 px-6 py-3 mt-4 rounded-full text-base font-semibold text-amber-300 bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-ember-500"
             onClick={() => menuOpen() && toggleMenu()}
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -228,7 +228,7 @@ export function Navbar() {
             <PremiumLanguageSelector lang={lang} id="mobile-lang-selector" />
             <a
               href="/admin"
-              className="mobile-link flex items-center gap-3 text-lg font-medium text-gray-400 hover:text-ember-400 transition-colors"
+              className="mobile-link flex items-center gap-3 text-lg font-medium text-gray-400 hover:text-ember-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ember-500 rounded"
               onClick={() => menuOpen() && toggleMenu()}
             >
               <IconUser className="h-6 w-6" />

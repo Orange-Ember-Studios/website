@@ -14,7 +14,8 @@ import {
 import { getPostLikeStatus, likePost } from "../lib/post-likes.service.ts";
 import { mapPortfolioProjects } from "../lib/map-portfolio.ts";
 import { ensureDatabaseSchema } from "../lib/db-migrations.ts";
-import type { SiteEnv, SupportedLang } from "./site-env.ts";
+import { detectLangFromRequest } from "../lib/lang.ts";
+import type { SiteEnv } from "./site-env.ts";
 import { tursoCreds } from "./site-env.ts";
 
 const VISITOR_COOKIE = "blog_like_visitor";
@@ -504,17 +505,4 @@ export async function handleApiRequest(
   }
 
   return json({ error: "Not found" }, { status: 404 });
-}
-
-export function detectLangFromRequest(request: Request): SupportedLang {
-  const supported = ["en", "es", "fr"] as const;
-  const cookieHeader = request.headers.get("cookie");
-  const cookies = parseCookies(cookieHeader);
-  const cookieLang = cookies["x-language"] as SupportedLang | undefined;
-  if (cookieLang && supported.includes(cookieLang)) return cookieLang;
-
-  const acceptLang = request.headers.get("accept-language")?.toLowerCase() ?? "";
-  if (acceptLang.includes("es")) return "es";
-  if (acceptLang.includes("fr")) return "fr";
-  return "en";
 }

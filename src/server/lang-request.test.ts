@@ -2,7 +2,7 @@
  * @vitest-environment node
  */
 import { describe, it, expect } from "vitest";
-import { detectLangFromRequest } from "./api-router.ts";
+import { detectLangFromRequest } from "../lib/lang.ts";
 
 describe("detectLangFromRequest", () => {
   it("prefers x-language cookie when supported", () => {

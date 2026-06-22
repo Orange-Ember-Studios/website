@@ -70,7 +70,7 @@ export const PremiumSelect: FC<PremiumSelectProps> = ({
 
         <button
           type="button"
-          className={`select-trigger w-full flex items-center justify-between bg-white/5 border border-white/10 rounded-2xl text-white font-bold hover:bg-white/10 hover:border-orange-500/50 transition-all duration-300 shadow-xl ${isNavbar ? "px-4 py-2 min-h-[40px] text-xs" : "px-6 py-4 min-h-[60px] text-base"}`}
+          className={`select-trigger w-full flex items-center justify-between bg-white/5 border border-white/10 rounded-2xl text-white font-bold hover:bg-white/10 hover:border-orange-500/50 transition-all duration-300 shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-ember-500 ${isNavbar ? "px-4 py-2 min-h-[40px] text-xs" : "px-6 py-4 min-h-[60px] text-base"}`}
         >
           <span className="selected-label truncate" data-i18n={defaultLabelI18n}>
             {defaultLabel}
@@ -90,7 +90,7 @@ export const PremiumSelect: FC<PremiumSelectProps> = ({
               <button
                 key={option.id}
                 type="button"
-                className={`option-btn flex items-center w-full rounded-xl hover:bg-white/5 transition-all text-left group/opt ${isNavbar ? "px-3 py-2" : "px-6 py-4.5 rounded-[1.25rem]"}`}
+                className={`option-btn flex items-center w-full rounded-xl hover:bg-white/5 transition-all text-left group/opt focus:outline-none focus-visible:ring-2 focus-visible:ring-ember-500 ${isNavbar ? "px-3 py-2" : "px-6 py-4.5 rounded-[1.25rem]"}`}
                 data-value={option.id}
               >
                 <div

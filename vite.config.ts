@@ -10,4 +10,7 @@ export default defineConfig({
   esbuild: {
     jsxImportSource: "@emberkit/core",
   },
+  build: {
+    target: "esnext",
+  },
 });
