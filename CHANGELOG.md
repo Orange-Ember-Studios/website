@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.34](https://github.com/Orange-Ember-Studios/website/compare/v0.0.33...v0.0.34) (2026-06-22)
+
+
+### Features
+
+* upgrade EmberKit to v0.11.0 with SSR and fix rendering issues ([90bc530](https://github.com/Orange-Ember-Studios/website/commit/90bc530aebc6820ae37cf6160d8f48d1a20d93a1))
+
 ### [0.0.33](https://github.com/Orange-Ember-Studios/website/compare/v0.0.32...v0.0.33) (2026-06-17)
 
 ### [0.0.32](https://github.com/Orange-Ember-Studios/website/compare/v0.0.31...v0.0.32) (2026-05-27)
