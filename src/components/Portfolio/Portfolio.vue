@@ -160,7 +160,7 @@ function getStatusStyles(status: string): string {
         </a>
       </div>
       <div v-else class="text-center py-16">
-        <p class="text-gray-500 text-lg">No projects yet. Check back soon!</p>
+        <p class="text-gray-500 text-lg">{{ getTranslation('portfolio.noProjects', portfolioLang) }}</p>
       </div>
     </div>
   </section>
