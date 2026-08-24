@@ -1,16 +1,8 @@
 ---
-import Layout from "../../layouts/Layout.astro";
+import AdminLayout from "../../layouts/AdminLayout.astro";
 import LoginComponent from "../../components/Admin/Login.vue";
-
-if (Astro.locals.user) {
-  return Astro.redirect("/admin");
-}
 ---
 
-<Layout
-  title="CMS Login | Orange Ember"
-  noindex={true}
-  titleKey="admin.login.title"
->
+<AdminLayout title="CMS Login | Orange Ember">
   <LoginComponent client:only="vue" />
-</Layout>
+</AdminLayout>

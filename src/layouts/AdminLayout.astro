@@ -1,0 +1,41 @@
+---
+import "../styles/global.css";
+import { ClientRouter } from "astro:transitions";
+import { API_URLS } from "../constants/urls";
+
+interface Props {
+  title: string;
+  noindex?: boolean;
+}
+
+const { title, noindex = true } = Astro.props;
+const lang = "en";
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="author" content="Orange Ember Studios" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#18191f" />
+    <title>{title}</title>
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="preconnect" href={API_URLS.GOOGLE_FONTS} />
+    <link rel="preconnect" href={API_URLS.GOOGLE_GSTATIC} crossorigin />
+    <link
+      href={`${API_URLS.GOOGLE_FONTS}/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap`}
+      rel="stylesheet"
+    />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com; frame-src 'self' https://challenges.cloudflare.com; connect-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:;"
+    />
+    <ClientRouter />
+  </head>
+  <body class="bg-neutral-950 text-neutral-200 font-['Outfit',sans-serif] antialiased">
+    <slot />
+  </body>
+</html>

@@ -1,8 +1,8 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+import AdminLayout from '../../layouts/AdminLayout.astro';
 import DashboardApp from '../../components/Admin/Dashboard.vue';
 ---
 
-<Layout title="CMS Dashboard | Orange Ember" noindex={true} titleKey="admin.dashboard.title">
+<AdminLayout title="CMS Dashboard | Orange Ember">
   <DashboardApp client:only="vue" />
-</Layout>
+</AdminLayout>
