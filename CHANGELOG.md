@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.37](https://github.com/Orange-Ember-Studios/website/compare/v0.0.36...v0.0.37) (2026-08-24)
+
+
+### Bug Fixes
+
+* add missing portfolio.noProjects translation key ([9ab9917](https://github.com/Orange-Ember-Studios/website/commit/9ab9917cb4c9b01e4d6cfe91aa730e9fea117de9))
+
+### [0.0.36](https://github.com/Orange-Ember-Studios/website/compare/v0.0.35...v0.0.36) (2026-08-24)
+
+### [0.0.35](https://github.com/Orange-Ember-Studios/website/compare/v0.0.34...v0.0.35) (2026-08-24)
+
 ### [0.0.34](https://github.com/Orange-Ember-Studios/website/compare/v0.0.33...v0.0.34) (2026-06-22)
 
 

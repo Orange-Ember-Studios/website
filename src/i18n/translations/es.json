@@ -71,6 +71,7 @@
     "about": "Nosotros",
     "blog": "Blog",
     "workWithUs": "Trabaja con nosotros",
+    "donate": "Donar",
     "backToHome": "Volver al inicio"
   },
   "hero": {
@@ -85,6 +86,7 @@
     "title": "Nuestras",
     "titleHighlight": "Obras Maestras",
     "description": "Explora una selección curada de nuestros juegos de escritorio más ambiciosos, experiencias móviles y aplicaciones web de última generación.",
+    "noProjects": "Aún no hay proyectos. ¡Vuelve pronto!",
     "statusAvailable": "Disponible Ahora",
     "statusEarlyAccess": "Acceso Anticipado",
     "statusComingSoon": "Próximamente",

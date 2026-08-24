@@ -71,6 +71,7 @@
     "about": "About",
     "blog": "Blog",
     "workWithUs": "Work with us",
+    "donate": "Donate",
     "backToHome": "Back to Home"
   },
   "hero": {
@@ -85,6 +86,7 @@
     "title": "Our",
     "titleHighlight": "Masterpieces",
     "description": "Explore a curated selection of our most ambitious desktop games, mobile experiences, and state-of-the-art web applications.",
+    "noProjects": "No projects yet. Check back soon!",
     "statusAvailable": "Available Now",
     "statusEarlyAccess": "Early Access",
     "statusComingSoon": "Coming Soon",

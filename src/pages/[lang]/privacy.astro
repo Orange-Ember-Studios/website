@@ -1,0 +1,43 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Navbar from "../../components/Navigation/Navbar.astro";
+import Footer from "../../components/Navigation/Footer.astro";
+import { getTranslation } from "../../i18n/i18n";
+
+const { lang = "en" } = Astro.params;
+const t = (key: string) => getTranslation(key, lang as any);
+---
+
+<Layout
+  title={`${t("privacy.title")} | Orange Ember Studios`}
+  description={t("privacy.description")}
+>
+  <Navbar />
+  <main class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+    <h1 class="text-4xl md:text-5xl font-bold text-white mb-8" data-i18n="privacy.title">
+      {t("privacy.title")}
+    </h1>
+    <div class="prose prose-invert prose-lg max-w-none text-gray-300">
+      <p data-i18n="privacy.intro">{t("privacy.intro")}</p>
+
+      <h2 data-i18n="privacy.section1Title">{t("privacy.section1Title")}</h2>
+      <p data-i18n="privacy.section1Content">{t("privacy.section1Content")}</p>
+
+      <h2 data-i18n="privacy.section2Title">{t("privacy.section2Title")}</h2>
+      <p data-i18n="privacy.section2Content">{t("privacy.section2Content")}</p>
+
+      <h2 data-i18n="privacy.section3Title">{t("privacy.section3Title")}</h2>
+      <p data-i18n="privacy.section3Content">{t("privacy.section3Content")}</p>
+
+      <h2 data-i18n="privacy.section4Title">{t("privacy.section4Title")}</h2>
+      <p data-i18n="privacy.section4Content">{t("privacy.section4Content")}</p>
+
+      <h2 data-i18n="privacy.contactTitle">{t("privacy.contactTitle")}</h2>
+      <p>
+        <span data-i18n="privacy.contactContent">{t("privacy.contactContent")}</span>
+        <a href="mailto:hello@orangeember.com">hello@orangeember.com</a>.
+      </p>
+    </div>
+  </main>
+  <Footer />
+</Layout>

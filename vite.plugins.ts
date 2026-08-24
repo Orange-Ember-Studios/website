@@ -1,6 +1,5 @@
 import { readFileSync } from "node:fs";
 import tailwindcss from "@tailwindcss/vite";
-import { emberkitVitePlugin } from "@emberkit/core/vite-plugin";
 import type { Plugin } from "vite";
 
 /** Import `.sql` as a string (matches Wrangler Text module rules). */
@@ -15,5 +14,5 @@ export function sqlTextPlugin(): Plugin {
   };
 }
 
-/** Vite plugins shared by EmberKit, Vitest, and CI shims. */
-export const appVitePlugins = [sqlTextPlugin(), emberkitVitePlugin(), tailwindcss()];
+/** Vite plugins shared by Vitest and CI shims. */
+export const appVitePlugins = [sqlTextPlugin(), tailwindcss()];

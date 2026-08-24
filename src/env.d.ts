@@ -1,31 +1,12 @@
-/// <reference types="@emberkit/core" />
+/// <reference types="astro/client" />
+
+import type { SupportedLanguage } from "./src/i18n/i18n";
 
 declare global {
-  namespace JSX {
-    interface Element {
-      type: string;
-      props: Record<string, unknown>;
-    }
-    interface IntrinsicElements {
-      [elemName: string]: Record<string, unknown>;
+  namespace App {
+    interface Locals {
+      lang: SupportedLanguage;
+      user?: { userId: string; username: string };
     }
   }
 }
-
-declare module 'virtual:emberkit-routes' {
-  import type { RouteComponent } from '@emberkit/core';
-
-  type RouteModuleLoader = () => Promise<{ default: RouteComponent }>;
-
-  export const routes: Array<{ path: string; component: RouteModuleLoader }>;
-  export const notFoundRoute: RouteModuleLoader;
-  export const errorRoute: RouteModuleLoader;
-  export const rootLayout: RouteModuleLoader | null;
-}
-
-declare module 'virtual:emberkit-config' {
-  import type { EmberKitConfig } from '@emberkit/core';
-  export const config: EmberKitConfig;
-}
-
-export {};
