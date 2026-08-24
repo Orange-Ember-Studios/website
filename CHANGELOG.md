@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.38](https://github.com/Orange-Ember-Studios/website/compare/v0.0.37...v0.0.38) (2026-08-24)
+
+
+### Bug Fixes
+
+* wrangler config and API routes for deployment ([ba321a9](https://github.com/Orange-Ember-Studios/website/commit/ba321a95a2479d31b576253afe86111dc50476cd))
+
 ### [0.0.37](https://github.com/Orange-Ember-Studios/website/compare/v0.0.36...v0.0.37) (2026-08-24)
 
 
