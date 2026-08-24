@@ -1,9 +1,4 @@
 ---
-interface Props {
-  lang?: string;
-}
-
-const { lang = "en" } = Astro.props;
 ---
 
 <section class="relative w-full h-screen min-h-[600px] flex items-center justify-center text-white overflow-hidden">
@@ -32,7 +27,7 @@ const { lang = "en" } = Astro.props;
       >
         Orange Ember
       </span>
-      <span data-i18n="hero.studioSuffix">Studios</span>
+      <span data-i18n="hero.studioSuffix"> Studios</span>
     </h1>
     <p
       data-i18n="hero.description"

@@ -1,12 +1,12 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import Navbar from "../../components/Navigation/Navbar.astro";
 import Hero from "../../components/Hero/Hero.astro";
 import Services from "../../components/Services/Services.astro";
-import Portfolio from "../../components/Portfolio/Portfolio.astro";
 import About from "../../components/About/About.astro";
-import Contact from "../../components/Contact/Contact.astro";
 import Footer from "../../components/Navigation/Footer.astro";
+import Navbar from "../../components/Navigation/Navbar.vue";
+import Portfolio from "../../components/Portfolio/Portfolio.vue";
+import Contact from "../../components/Contact/Contact.astro";
 import { getTranslation } from "../../i18n/i18n";
 import { getPublishedPostsByType } from "../../lib/posts.service";
 
@@ -27,11 +27,11 @@ const recentPosts = posts
   description={getTranslation("meta.description", lang as any)}
   titleKey="meta.title"
 >
-  <Navbar />
-  <Hero lang={lang} />
-  <Services lang={lang} />
-  <Portfolio lang={lang} recentPosts={recentPosts} />
-  <About lang={lang} />
-  <Contact lang={lang} />
-  <Footer lang={lang} />
+  <Navbar lang={lang} client:load />
+  <Hero />
+  <Services />
+  <Portfolio lang={lang} client:load recentPosts={recentPosts} />
+  <About />
+  <Contact />
+  <Footer />
 </Layout>

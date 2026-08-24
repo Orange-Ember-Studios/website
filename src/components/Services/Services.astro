@@ -1,5 +1,5 @@
 ---
-import { Play, Phone, Layers, Grid } from '@lucide/astro';
+import { Grid, Layers, Phone, Play } from "@lucide/astro";
 
 const services = [
   {
@@ -38,7 +38,7 @@ const services = [
     Icon: Grid,
     iconClass: "text-ember-700",
   },
-];
+] as const;
 ---
 
 <section
@@ -75,6 +75,7 @@ const services = [
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
       {services.map((service) => (
         <article
+          key={service.titleKey}
           class="group relative p-8 md:p-10 rounded-3xl bg-gray-900 border border-white/5 overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(45,43,100,0.3)] hover:border-void-500/50 cursor-default"
         >
           <div class="absolute inset-0 bg-linear-to-br from-void-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

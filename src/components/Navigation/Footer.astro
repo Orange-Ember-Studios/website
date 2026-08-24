@@ -1,18 +1,9 @@
 ---
-import { X } from '@lucide/astro';
-import { getTranslation } from "../../i18n/i18n";
+import { X } from "@lucide/astro";
+import { SOCIAL_URLS } from "../../constants/urls.ts";
+import { getTranslation, getCurrentLanguage } from "../../i18n/i18n.ts";
 
-interface Props {
-  lang?: string;
-}
-
-const { lang = "en" } = Astro.props;
-const t = (key: string) => getTranslation(key, lang as any);
-
-const SOCIAL_URLS = {
-  GITHUB: "https://github.com/Orange-Ember-Studios",
-  TWITTER_X: "https://x.com/OrangeEmberSt",
-};
+const lang = getCurrentLanguage();
 ---
 
 <footer class="bg-[#0b0f19] border-t border-white/5 pt-20 pb-10 relative overflow-hidden">
@@ -36,7 +27,7 @@ const SOCIAL_URLS = {
           class="text-gray-400 max-w-sm text-lg leading-relaxed mb-8"
           data-i18n="hero.description"
         >
-          {t("hero.description")}
+          {getTranslation("hero.description", lang)}
         </p>
         <div class="flex gap-4">
           <a
@@ -66,7 +57,7 @@ const SOCIAL_URLS = {
           class="text-white font-bold mb-6 tracking-wider uppercase text-sm"
           data-i18n="footer.studio"
         >
-          {t("footer.studio")}
+          {getTranslation("footer.studio", lang)}
         </h3>
         <ul class="space-y-4">
           <li>
@@ -112,7 +103,7 @@ const SOCIAL_URLS = {
           class="text-white font-bold mb-6 tracking-wider uppercase text-sm"
           data-i18n="footer.legal"
         >
-          {t("footer.legal")}
+          {getTranslation("footer.legal", lang)}
         </h3>
         <ul class="space-y-4">
           <li>
@@ -129,9 +120,9 @@ const SOCIAL_URLS = {
     </div>
     <div class="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
       <p class="text-gray-500 text-sm">
-        &copy; {new Date().getFullYear()} Orange Ember Studios.
+        &copy; {new Date().getFullYear()} Orange Ember Studios.{" "}
         <span data-i18n="footer.allRightsReserved">
-          {t("footer.allRightsReserved")}
+          {getTranslation("footer.allRightsReserved", lang)}
         </span>
       </p>
       <div class="flex items-center gap-2">
@@ -140,7 +131,7 @@ const SOCIAL_URLS = {
           class="text-gray-500 text-sm tracking-wide uppercase"
           data-i18n="footer.ignitingSince"
         >
-          {t("footer.ignitingSince")}
+          {getTranslation("footer.ignitingSince", lang)}
         </span>
       </div>
     </div>

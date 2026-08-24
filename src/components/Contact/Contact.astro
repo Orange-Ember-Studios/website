@@ -1,12 +1,6 @@
 ---
-import { Mail, X } from '@lucide/astro';
-import ContactForm from "./ContactForm.astro";
-
-interface Props {
-  lang?: string;
-}
-
-const { lang = "en" } = Astro.props;
+import { Mail, X } from "@lucide/astro";
+import ContactForm from "./ContactForm.vue";
 ---
 
 <section
@@ -43,7 +37,7 @@ const { lang = "en" } = Astro.props;
     <div class="bg-[#13141a] border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl relative max-w-4xl mx-auto">
       <div class="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-ember-500/50 rounded-tl-3xl pointer-events-none" />
       <div class="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-ember-400/50 rounded-br-3xl pointer-events-none" />
-      <ContactForm />
+      <ContactForm client:load />
     </div>
     <div class="mt-16 flex flex-col md:flex-row justify-center items-center gap-8 text-gray-400">
       <a

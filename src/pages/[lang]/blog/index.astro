@@ -1,8 +1,8 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import Navbar from "../../../components/Navigation/Navbar.astro";
 import Footer from "../../../components/Navigation/Footer.astro";
-import PremiumSelect from "../../../components/ui/PremiumSelect.astro";
+import Navbar from "../../../components/Navigation/Navbar.vue";
+import PremiumSelect from "../../../components/ui/PremiumSelect.vue";
 import { getTranslation } from "../../../i18n/i18n";
 import { getPublishedPostsByType } from "../../../lib/posts.service";
 import { resolveImageUrl } from "../../../lib/images";
@@ -94,7 +94,7 @@ const t = (key: string) => getTranslation(key, lang as any);
   title={`${t("blog.indexTitlePrefix")}${t("blog.indexTitleHighlight")}${t("blog.indexTitleSuffix")} | Orange Ember Studios`}
   description={t("blog.indexDescription")}
 >
-  <Navbar />
+  <Navbar lang={lang} client:load />
 
   <main class="pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
     <header class="mb-20 text-center animate-fade-in">
@@ -128,6 +128,7 @@ const t = (key: string) => getTranslation(key, lang as any);
         defaultLabelI18n="blog.allTopics"
         class="w-full md:w-auto"
         containerId="tag-filter-container"
+        client:load
       />
 
       <div class="flex flex-col sm:flex-row items-end gap-6 w-full md:w-auto">
@@ -160,6 +161,7 @@ const t = (key: string) => getTranslation(key, lang as any);
           defaultLabelI18n={sortOrder === "desc" ? "blog.newest" : "blog.oldest"}
           class="w-full sm:w-64"
           containerId="sort-filter-container"
+          client:load
         />
       </div>
     </div>

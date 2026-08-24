@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { getTranslation } from '../../i18n/i18n';
+import { getTranslation } from '@/i18n/i18n';
 
 const username = ref('');
 const password = ref('');

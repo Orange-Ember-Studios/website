@@ -1,9 +1,10 @@
-import { defineConfig, mergeConfig, type UserConfig } from "vite";
-import { appVitePlugins } from "./vite.plugins.ts";
+import { defineConfig, mergeConfig } from "vite";
+import tailwindcss from "@tailwindcss/vite";
+import { sqlTextPlugin } from "./vite.plugins.ts";
 
 export default mergeConfig(
   defineConfig({
-    plugins: appVitePlugins,
+    plugins: [sqlTextPlugin(), tailwindcss()],
   }),
   defineConfig({
     test: {
