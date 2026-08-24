@@ -1,0 +1,405 @@
+---
+import { Loader, Send } from '@lucide/astro';
+---
+
+<form
+  id="contact-form"
+  class="flex flex-col gap-6 w-full max-w-2xl mx-auto relative z-10"
+>
+  <div
+    class="sr-only opacity-0 absolute -left-[9999px] -top-[9999px]"
+    aria-hidden="true"
+  >
+    <input
+      type="text"
+      name="address_ext"
+      tabIndex="-1"
+      autoComplete="off"
+      id="honeypot"
+    />
+  </div>
+  <div class="flex flex-col md:flex-row gap-6">
+    <div class="flex-1 group">
+      <label
+        for="name"
+        data-i18n="contact.labelName"
+        class="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-ember-400 transition-colors"
+      >
+        Name
+      </label>
+      <input
+        id="name"
+        name="name"
+        type="text"
+        data-i18n="contact.placeholderName"
+        data-i18n-attr="placeholder"
+        placeholder="Jane Doe"
+        class="w-full bg-ash-950 border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300 border-white/10 focus:border-ember-400 focus:ring-ember-400/30 hover:border-white/30"
+      />
+      <span
+        id="name-error"
+        data-i18n="contact.errorName"
+        class="hidden text-red-500 text-xs mt-2 block tracking-wide"
+      >
+        ● Name is required
+      </span>
+    </div>
+    <div class="flex-1 group">
+      <label
+        for="email"
+        data-i18n="contact.labelEmail"
+        class="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-ember-400 transition-colors"
+      >
+        Email
+      </label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        data-i18n="contact.placeholderEmail"
+        data-i18n-attr="placeholder"
+        placeholder="jane@example.com"
+        class="w-full bg-ash-950 border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300 border-white/10 focus:border-ember-400 focus:ring-ember-400/30 hover:border-white/30"
+      />
+      <span
+        id="email-error"
+        data-i18n="contact.errorEmail"
+        class="hidden text-red-500 text-xs mt-2 block tracking-wide"
+      >
+        ● Email is required
+      </span>
+    </div>
+  </div>
+  <div class="group">
+    <label
+      for="subject"
+      data-i18n="contact.labelSubject"
+      class="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-ember-400 transition-colors"
+    >
+      Subject
+    </label>
+    <input
+      id="subject"
+      name="subject"
+      type="text"
+      data-i18n="contact.placeholderSubject"
+      data-i18n-attr="placeholder"
+      placeholder="Game Partnership Inquiry"
+      class="w-full bg-ash-950 border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300 border-white/10 focus:border-ember-400 focus:ring-ember-400/30 hover:border-white/30"
+    />
+    <span
+      id="subject-error"
+      data-i18n="contact.errorSubject"
+      class="hidden text-red-500 text-xs mt-2 block tracking-wide"
+    >
+      ● Subject is required
+    </span>
+  </div>
+  <div class="group">
+    <label
+      for="message"
+      data-i18n="contact.labelMessage"
+      class="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-ember-400 transition-colors"
+    >
+      Message
+    </label>
+    <textarea
+      id="message"
+      name="message"
+      rows="5"
+      data-i18n="contact.placeholderMessage"
+      data-i18n-attr="placeholder"
+      placeholder="Tell us about your next big idea..."
+      class="w-full bg-ash-950 border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 transition-all duration-300 resize-none border-white/10 focus:border-ember-400 focus:ring-ember-400/30 hover:border-white/30"
+    ></textarea>
+    <span
+      id="message-error"
+      data-i18n="contact.errorMessage"
+      class="hidden text-red-500 text-xs mt-2 block tracking-wide"
+    >
+      ● Message is required
+    </span>
+  </div>
+  <div class="mt-6 flex justify-center">
+    <div id="turnstile-widget" class="min-h-[65px]"></div>
+  </div>
+  <button
+    id="contact-submit-btn"
+    type="submit"
+    disabled
+    aria-busy="false"
+    class="w-full md:w-auto px-10 py-4 bg-linear-to-r from-ember-500 to-ember-700 hover:from-ember-400 hover:to-ember-500 text-white font-bold rounded-xl transition-all duration-400 transform hover:scale-[1.02] shadow-[0_0_20px_rgba(255,91,13,0.3)] hover:shadow-[0_0_35px_rgba(255,91,13,0.5)] mt-4 flex items-center justify-center gap-3 mx-auto disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 group"
+  >
+    <span id="contact-submit-ts-loading">
+      <span class="inline-flex items-center justify-center" aria-hidden="true">
+        <Loader class="animate-spin h-5 w-5 text-white" />
+      </span>
+    </span>
+    <span id="contact-submit-ready-wrap" class="hidden">
+      <span class="inline-flex items-center justify-center gap-3">
+        <span
+          id="contact-submit-ready"
+          data-i18n="contact.submitButton"
+          class="tracking-widest uppercase text-sm"
+        >
+          Ignite Conversation
+        </span>
+        <Send class="w-5 h-5 transition-transform group-hover:translate-x-1" />
+      </span>
+    </span>
+    <span id="contact-submit-sending-wrap" class="hidden">
+      <span class="inline-flex items-center justify-center gap-3">
+        <span
+          id="contact-submit-sending"
+          data-i18n="contact.sending"
+          class="tracking-widest uppercase text-sm"
+        >
+          Sending...
+        </span>
+        <Loader class="animate-spin h-5 w-5 text-white" />
+      </span>
+    </span>
+  </button>
+  <div
+    id="contact-success-banner"
+    role="status"
+    data-i18n="contact.successMessage"
+    class="hidden mt-4 p-4 rounded-xl bg-green-500/10 border border-green-500/30 text-green-400 text-center font-medium shadow-lg animate-fade-in"
+  >
+    Message sent successfully!
+  </div>
+  <div
+    id="contact-error-banner"
+    role="alert"
+    class="hidden mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-500 text-center font-medium shadow-lg animate-fade-in"
+  ></div>
+</form>
+
+<script>
+  import { getTranslation, getCurrentLanguage } from "../../i18n/i18n";
+
+  declare global {
+    interface Window {
+      turnstile?: {
+        render: (el: HTMLElement, opts: Record<string, unknown>) => string;
+        remove: (id: string) => void;
+        reset: (id: string) => void;
+      };
+    }
+  }
+
+  let turnstileToken = "";
+  let isSubmitting = false;
+  let isBotDetected = false;
+
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function getEl(id: string) {
+    return document.getElementById(id);
+  }
+
+  function showError(id: string, show: boolean) {
+    const el = getEl(id);
+    if (el) el.classList.toggle("hidden", !show);
+  }
+
+  function validate(): boolean {
+    const name = (getEl("name") as HTMLInputElement)?.value.trim();
+    const email = (getEl("email") as HTMLInputElement)?.value.trim();
+    const subject = (getEl("subject") as HTMLInputElement)?.value.trim();
+    const message = (getEl("message") as HTMLTextAreaElement)?.value.trim();
+
+    let valid = true;
+
+    if (!name) {
+      showError("name-error", true);
+      valid = false;
+    } else {
+      showError("name-error", false);
+    }
+
+    if (!email) {
+      showError("email-error", true);
+      valid = false;
+    } else if (!emailPattern.test(email)) {
+      showError("email-error", true);
+      valid = false;
+    } else {
+      showError("email-error", false);
+    }
+
+    if (!subject) {
+      showError("subject-error", true);
+      valid = false;
+    } else {
+      showError("subject-error", false);
+    }
+
+    if (!message) {
+      showError("message-error", true);
+      valid = false;
+    } else {
+      showError("message-error", false);
+    }
+
+    return valid;
+  }
+
+  function updateSubmitUI() {
+    const btn = getEl("contact-submit-btn") as HTMLButtonElement;
+    const tsLoading = getEl("contact-submit-ts-loading");
+    const tsReady = getEl("contact-submit-ready-wrap");
+    const tsSending = getEl("contact-submit-sending-wrap");
+
+    const awaitingTurnstile = !isSubmitting && turnstileToken.length === 0 && !isBotDetected;
+    const showReadyCta = !isSubmitting && turnstileToken.length > 0;
+    const showSending = isSubmitting;
+
+    if (btn) {
+      btn.disabled = turnstileToken.length === 0 || isSubmitting;
+      btn.setAttribute("aria-busy", isSubmitting || awaitingTurnstile ? "true" : "false");
+    }
+
+    tsLoading?.classList.toggle("hidden", !awaitingTurnstile);
+    tsReady?.classList.toggle("hidden", !showReadyCta);
+    tsSending?.classList.toggle("hidden", !showSending);
+  }
+
+  function showBanner(type: "success" | "error", message: string) {
+    const successEl = getEl("contact-success-banner");
+    const errorEl = getEl("contact-error-banner");
+
+    if (type === "success" && successEl) {
+      successEl.textContent = message;
+      successEl.classList.remove("hidden");
+      errorEl?.classList.add("hidden");
+    } else if (type === "error" && errorEl) {
+      errorEl.textContent = message;
+      errorEl.classList.remove("hidden");
+      successEl?.classList.add("hidden");
+    }
+  }
+
+  async function initTurnstile() {
+    const widget = getEl("turnstile-widget");
+    if (!widget || widget.getAttribute("data-rendered") === "true") return;
+
+    const lang = getCurrentLanguage();
+    const siteKey = "1x00000000000000000000AA";
+
+    await new Promise<void>((resolve) => {
+      let attempts = 0;
+      const maxAttempts = 100;
+      const check = () => {
+        if (window.turnstile || attempts >= maxAttempts) {
+          resolve();
+          return;
+        }
+        attempts++;
+        setTimeout(check, 100);
+      };
+      check();
+    });
+
+    if (!window.turnstile) return;
+
+    try {
+      const widgetId = window.turnstile.render(widget, {
+        sitekey: siteKey,
+        theme: "dark",
+        callback: (token: string) => {
+          turnstileToken = token;
+          updateSubmitUI();
+        },
+        "expired-callback": () => {
+          turnstileToken = "";
+          updateSubmitUI();
+        },
+        "error-callback": () => {
+          turnstileToken = "";
+          updateSubmitUI();
+        },
+      });
+
+      if (widgetId) {
+        widget.setAttribute("data-widget-id", widgetId);
+        widget.setAttribute("data-rendered", "true");
+      }
+    } catch (e) {
+      console.error("Turnstile render error:", e);
+    }
+  }
+
+  document.addEventListener("astro:page-load", () => {
+    const form = getEl("contact-form");
+    if (!form) return;
+
+    initTurnstile();
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const hp = (getEl("honeypot") as HTMLInputElement)?.value;
+      if (hp !== "") {
+        isBotDetected = true;
+        return;
+      }
+
+      if (!validate()) return;
+
+      if (!turnstileToken) {
+        showBanner("error", getTranslation("contact.securityCheck"));
+        return;
+      }
+
+      isSubmitting = true;
+      updateSubmitUI();
+
+      const name = (getEl("name") as HTMLInputElement)?.value;
+      const email = (getEl("email") as HTMLInputElement)?.value;
+      const subject = (getEl("subject") as HTMLInputElement)?.value;
+      const message = (getEl("message") as HTMLTextAreaElement)?.value;
+
+      try {
+        const response = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name,
+            email,
+            subject,
+            message,
+            token: turnstileToken,
+          }),
+        });
+
+        if (response.ok) {
+          showBanner("success", getTranslation("contact.successMessage"));
+          (getEl("name") as HTMLInputElement).value = "";
+          (getEl("email") as HTMLInputElement).value = "";
+          (getEl("subject") as HTMLInputElement).value = "";
+          (getEl("message") as HTMLTextAreaElement).value = "";
+
+          const widgetId = widget?.getAttribute("data-widget-id");
+          if (widgetId && window.turnstile?.reset) {
+            window.turnstile.reset(widgetId);
+          }
+          turnstileToken = "";
+        } else {
+          const data = await response.json();
+          showBanner("error", data.error || getTranslation("contact.genericError"));
+        }
+      } catch {
+        showBanner("error", getTranslation("contact.genericError"));
+      } finally {
+        isSubmitting = false;
+        updateSubmitUI();
+      }
+
+      setTimeout(() => {
+        getEl("contact-success-banner")?.classList.add("hidden");
+        getEl("contact-error-banner")?.classList.add("hidden");
+      }, 5000);
+    });
+  });
+</script>

@@ -1,0 +1,18 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="404 - Page Not Found | Orange Ember" noindex={true}>
+  <main class="min-h-screen bg-[#0b0f19] flex items-center justify-center px-6">
+    <div class="text-center">
+      <h1 class="text-8xl font-bold text-ember-500 mb-4">404</h1>
+      <p class="text-2xl text-white mb-8">Page not found</p>
+      <a
+        href="/en/"
+        class="inline-flex items-center gap-2 px-8 py-4 bg-linear-to-r from-ember-500 to-ember-700 hover:from-ember-400 hover:to-ember-500 text-white font-semibold rounded-full transition-all duration-300"
+      >
+        Go Home
+      </a>
+    </div>
+  </main>
+</Layout>

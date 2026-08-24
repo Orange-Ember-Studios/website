@@ -1,4 +1,3 @@
-/** DOM behavior for `.premium-select-container` (from legacy Astro script). */
 export function initPremiumSelects(): void {
   const containers = document.querySelectorAll(".premium-select-container");
 
@@ -78,7 +77,6 @@ export function initPremiumSelects(): void {
         dropdown?.classList.remove("hidden");
         setTimeout(() => {
           dropdown?.classList.remove("scale-95", "opacity-0");
-          dropdown?.classList.add("scale-100", "opacity-100");
         }, 0);
         arrow?.classList.add("rotate-180");
       } else {
