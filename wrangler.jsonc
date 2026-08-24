@@ -2,9 +2,9 @@
 	"compatibility_date": "2026-04-03",
 	"compatibility_flags": ["global_fetch_strictly_public", "nodejs_compat"],
 	"name": "website",
-	"main": "worker.ts",
+	"main": "dist/_worker.js/index.js",
 	"assets": {
-		"directory": "./dist",
+		"directory": "dist/_worker.js/pages",
 		"binding": "ASSETS",
 		"not_found_handling": "single-page-application"
 	},

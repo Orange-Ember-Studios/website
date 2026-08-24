@@ -1,8 +1,17 @@
 import type { APIRoute } from 'astro';
 import { getPublishedPostBySlug } from '../../../../lib/posts.service';
+import { tursoCreds } from '../../../../server/site-env';
+import type { SiteEnv } from '../../../../server/site-env';
+import { ensureDatabaseSchema } from '../../../../lib/db-migrations';
 
-export const GET: APIRoute = async ({ params }) => {
+export const GET: APIRoute = async ({ params, locals }) => {
   try {
+    const env = locals as SiteEnv;
+    await ensureDatabaseSchema({
+      TURSO_DATABASE_URL: env.TURSO_DATABASE_URL,
+      TURSO_AUTH_TOKEN: env.TURSO_AUTH_TOKEN,
+    });
+
     const { lang, slug } = params;
 
     if (!lang || !slug) {
@@ -12,7 +21,8 @@ export const GET: APIRoute = async ({ params }) => {
       });
     }
 
-    const post = await getPublishedPostBySlug(slug, lang);
+    const tc = tursoCreds(env);
+    const post = await getPublishedPostBySlug(slug, lang, tc);
 
     if (!post) {
       return new Response(JSON.stringify({ error: 'Post not found' }), {
