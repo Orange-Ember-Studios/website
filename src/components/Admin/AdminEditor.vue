@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
-import { ChevronDown, ChevronLeft } from 'lucide-vue-next';
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
+import { Check, ChevronDown, ChevronLeft } from 'lucide-vue-next';
 import EditorJsField from './EditorJsField.vue';
-import { flushEditorContent } from './EditorJsField.vue';
 import type { OutputData } from '@editorjs/editorjs';
-import { parseStoredContentToEditorJs } from '../../lib/editorjs-content.ts';
+import { flushEditorContent } from '../../lib/editorjs-content.ts';
+import {
+  cloneAdminPostDraft,
+  setDraftTranslationPublished,
+} from '../../lib/admin-post-draft.ts';
 import { getTranslation } from '@/i18n/i18n.ts';
 import { resolveImageUrl } from '../../lib/images.ts';
 
@@ -28,15 +31,49 @@ const props = defineProps<{
   post: AdminPostDraft;
   onClose: () => void;
   onSaved: () => void;
+  section?: string;
 }>();
 
 const LANGS = ['en', 'es', 'fr'] as const;
 type Lang = (typeof LANGS)[number];
 
-const draft = ref<AdminPostDraft>(structuredClone(props.post) as AdminPostDraft);
+const draft = ref<AdminPostDraft>(cloneAdminPostDraft(props.post));
 const activeLang = ref<string>('en');
 const saving = ref(false);
 const saveError = ref('');
+const dirty = ref(false);
+const justSaved = ref(false);
+let savedTimer: ReturnType<typeof setTimeout> | null = null;
+
+const sectionSlug = computed(() => props.section || draft.value.type);
+const sectionLabel = computed(() => {
+  const labels: Record<string, string> = {
+    blog: 'Blog Posts',
+    project: 'Projects',
+    case_study: 'Case Studies',
+  };
+  return labels[sectionSlug.value] ?? 'Content';
+});
+
+function markDirty() {
+  dirty.value = true;
+  justSaved.value = false;
+}
+
+function warnBeforeUnload(event: BeforeUnloadEvent) {
+  if (!dirty.value) return;
+  event.preventDefault();
+  event.returnValue = '';
+}
+
+onMounted(() => {
+  window.addEventListener('beforeunload', warnBeforeUnload);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('beforeunload', warnBeforeUnload);
+  if (savedTimer) clearTimeout(savedTimer);
+});
 
 const contentSaveRef = ref<(() => Promise<OutputData>) | null>(null);
 const descriptionSaveRefs = ref<Record<string, (() => Promise<OutputData>) | null>>({
@@ -103,6 +140,13 @@ const contentInitial = computed(() => activeTranslation.value.content || '{"bloc
 const descriptionInitial = computed(() => projectMeta.value.description);
 
 function handleClose() {
+  if (
+    dirty.value &&
+    !window.confirm('You have unsaved changes. Discard them and leave the editor?')
+  ) {
+    return;
+  }
+  dirty.value = false;
   props.onClose();
 }
 
@@ -110,7 +154,22 @@ function switchLang(lang: string) {
   activeLang.value = lang;
 }
 
-async function handleSaveClick() {
+const isPublished = computed(() => activeTranslation.value.published);
+
+function togglePublished(published: boolean) {
+  draft.value = setDraftTranslationPublished(
+    draft.value,
+    activeLang.value,
+    published,
+  );
+  markDirty();
+}
+
+function isLangPublished(lang: string): boolean {
+  return Boolean(draft.value.translations.find((t) => t.lang === lang)?.published);
+}
+
+async function handleSaveClick(closeAfterSave = false) {
   saving.value = true;
   saveError.value = '';
 
@@ -198,12 +257,39 @@ async function handleSaveClick() {
     });
 
     if (!res.ok) {
+      if (res.status === 401) {
+        window.location.href = '/admin/login';
+        return;
+      }
       const errBody = (await res.json().catch(() => ({}))) as { error?: string };
       saveError.value = errBody.error || `Save failed (${res.status})`;
       return;
     }
 
-    props.onSaved();
+    const savedPost = (await res.json().catch(() => null)) as { id?: string } | null;
+    dirty.value = false;
+
+    // A brand new post becomes an existing one: keep editing it under its real
+    // URL so the next save updates instead of creating a duplicate.
+    if (d.id === 'new' && savedPost?.id) {
+      draft.value = { ...draft.value, id: String(savedPost.id) };
+      window.history.replaceState(
+        {},
+        '',
+        `/admin/${sectionSlug.value}/${encodeURIComponent(String(savedPost.id))}`,
+      );
+    }
+
+    if (closeAfterSave) {
+      props.onSaved();
+      return;
+    }
+
+    justSaved.value = true;
+    if (savedTimer) clearTimeout(savedTimer);
+    savedTimer = setTimeout(() => {
+      justSaved.value = false;
+    }, 3000);
   } catch (e) {
     saveError.value = e instanceof Error ? e.message : 'Network error while saving';
   } finally {
@@ -214,21 +300,25 @@ async function handleSaveClick() {
 
 <template>
   <div class="fixed inset-0 z-50 bg-neutral-950/90 backdrop-blur-md flex items-center justify-center md:p-4">
-    <div class="bg-neutral-900 border border-neutral-800 md:rounded-2xl w-full md:max-w-5xl h-full md:h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+    <div class="bg-neutral-900 border border-neutral-800 md:rounded-2xl w-full md:w-[96vw] md:max-w-[1600px] h-full md:h-[94vh] flex flex-col shadow-2xl overflow-hidden">
       <form
         id="admin-editor-form"
         class="flex flex-col h-full"
         method="POST"
+        @input="markDirty"
+        @change="markDirty"
       >
         <div class="px-4 py-3 md:px-6 md:py-4 border-b border-neutral-800 flex flex-col md:flex-row md:justify-between md:items-center bg-neutral-900 gap-4">
-          <div class="flex items-center gap-2 w-full md:max-w-3xl">
+          <div class="flex items-center gap-2 w-full md:max-w-5xl">
             <button
               type="button"
               @click="handleClose"
-              class="md:hidden p-2 -ml-2 text-neutral-400 hover:text-white transition-colors"
-              aria-label="Back"
+              class="flex items-center gap-1 p-2 -ml-2 shrink-0 text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-neutral-800"
+              :aria-label="`Back to ${sectionLabel}`"
+              :title="`Back to ${sectionLabel}`"
             >
-              <ChevronLeft class="w-6 h-6" />
+              <ChevronLeft class="w-6 h-6 md:w-5 md:h-5" />
+              <span class="hidden lg:inline text-sm">{{ sectionLabel }}</span>
             </button>
             <div class="grid grid-cols-2 md:flex md:gap-4 items-center flex-1 gap-3">
               <input
@@ -295,10 +385,39 @@ async function handleSaveClick() {
               </div>
             </div>
           </div>
-          <div class="flex gap-3 justify-end border-t border-neutral-800 md:border-none pt-3 md:pt-0">
+          <div class="flex gap-3 justify-end items-center border-t border-neutral-800 md:border-none pt-3 md:pt-0">
+            <label
+              class="flex items-center gap-2 text-xs md:text-sm cursor-pointer select-none px-3 py-2 rounded-lg border transition-colors"
+              :class="isPublished
+                ? 'border-orange-500/40 bg-orange-500/10 text-orange-400'
+                : 'border-neutral-700 bg-neutral-800 text-neutral-400 hover:text-neutral-200'"
+              :title="`Publish the ${activeLang.toUpperCase()} translation`"
+            >
+              <input
+                type="checkbox"
+                class="accent-orange-500"
+                :checked="isPublished"
+                @change="togglePublished(($event.target as HTMLInputElement).checked)"
+              />
+              <span>{{ isPublished ? 'Published' : 'Draft' }} ({{ activeLang.toUpperCase() }})</span>
+            </label>
             <p v-if="saveError" class="text-red-400 text-xs self-center max-w-[200px] md:max-w-md text-right">
               {{ saveError }}
             </p>
+            <span
+              v-if="justSaved"
+              class="flex items-center gap-1.5 text-xs md:text-sm text-green-400 self-center"
+              role="status"
+            >
+              <Check class="w-4 h-4" />
+              Saved
+            </span>
+            <span
+              v-else-if="dirty"
+              class="hidden sm:inline text-xs text-neutral-500 self-center"
+            >
+              Unsaved changes
+            </span>
             <button
               type="button"
               @click="handleClose"
@@ -309,7 +428,15 @@ async function handleSaveClick() {
             <button
               type="button"
               :disabled="saving"
-              @click="handleSaveClick"
+              @click="handleSaveClick(true)"
+              class="hidden sm:inline-block border border-neutral-700 hover:border-neutral-500 text-neutral-200 px-4 py-2 rounded-lg text-xs md:text-sm font-medium disabled:opacity-50 transition-all"
+            >
+              Save &amp; close
+            </button>
+            <button
+              type="button"
+              :disabled="saving"
+              @click="handleSaveClick(false)"
               class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-xs md:text-sm font-medium shadow-lg disabled:opacity-50 transition-all"
             >
               {{ saving ? getTranslation('admin.editor.saving') : getTranslation('admin.editor.savePost') }}
@@ -329,11 +456,16 @@ async function handleSaveClick() {
               : 'border-transparent text-neutral-500 hover:text-neutral-300'"
           >
             {{ lang.toUpperCase() }}
+            <span
+              class="ml-1.5 inline-block w-1.5 h-1.5 rounded-full align-middle"
+              :class="isLangPublished(lang) ? 'bg-orange-500' : 'bg-neutral-600'"
+              :title="isLangPublished(lang) ? 'Published' : 'Draft'"
+            />
           </button>
         </div>
 
-        <div class="flex-1 overflow-y-auto p-4 md:p-8 relative bg-neutral-950 custom-scrollbar">
-          <div class="max-w-3xl mx-auto">
+        <div class="flex-1 overflow-y-auto p-4 md:px-10 md:py-8 relative bg-neutral-950 custom-scrollbar">
+          <div class="max-w-5xl mx-auto">
             <input
               type="text"
               name="post-title"
@@ -382,7 +514,7 @@ async function handleSaveClick() {
                   :lang-key="`project-description-${activeLang}`"
                   :initial-content="descriptionInitial"
                   :minimal="true"
-                  :on-content-change="(json) => { projectMeta.description = json; }"
+                  :on-content-change="(json) => { projectMeta.description = json; markDirty(); }"
                   :register-save="(fn) => { descriptionSaveRefs[activeLang] = fn; }"
                 />
               </div>
@@ -409,6 +541,7 @@ async function handleSaveClick() {
                 if (idx >= 0) {
                   draft.translations[idx] = { ...draft.translations[idx], content: json };
                 }
+                markDirty();
               }"
               :register-save="(fn) => { contentSaveRef = fn; }"
             />
