@@ -1,8 +1,13 @@
 ---
 import AdminLayout from '../../layouts/AdminLayout.astro';
 import DashboardApp from '../../components/Admin/Dashboard.vue';
+import { parseAdminPath } from '../../lib/admin-route.ts';
+
+export const prerender = false;
+
+const { section, postId } = parseAdminPath(Astro.params.path);
 ---
 
 <AdminLayout title="CMS Dashboard | Orange Ember">
-  <DashboardApp client:only="vue" />
+  <DashboardApp section={section} postId={postId} client:only="vue" />
 </AdminLayout>

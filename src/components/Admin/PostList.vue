@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
-import { Plus } from 'lucide-vue-next';
+import { FileText, Pencil, Plus } from 'lucide-vue-next';
 
 interface Post {
   id: string;
@@ -24,103 +24,58 @@ const SECTION_LABELS: Record<string, string> = {
 };
 
 function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString('en-US', {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return '';
+  return date.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
   });
 }
 
-function escHtml(s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/"/g, '&quot;');
-}
-
 const label = computed(() => SECTION_LABELS[props.section] ?? props.section);
-const rootId = computed(() => `postlist-grid-${props.section}`);
+const labelLower = computed(() => label.value.toLowerCase());
 
 const loading = ref(true);
+const loadError = ref('');
 const posts = ref<Post[]>([]);
 
-onMounted(async () => {
+function editHref(post: Post): string {
+  return `/admin/${encodeURIComponent(props.section)}/${encodeURIComponent(post.id)}`;
+}
+
+const newHref = computed(() => `/admin/${encodeURIComponent(props.section)}/new`);
+
+async function loadPosts() {
+  loading.value = true;
+  loadError.value = '';
   try {
     const res = await fetch(
       `/api/admin/posts?type=${encodeURIComponent(props.postType)}`,
-      {
-        credentials: 'include',
-      },
+      { credentials: 'include' },
     );
+    if (res.status === 401) {
+      window.location.href = '/admin/login';
+      return;
+    }
     if (!res.ok) {
-      console.error('PostList: failed to fetch posts', res.status);
+      loadError.value = `Could not load ${labelLower.value}s (${res.status}).`;
       posts.value = [];
       return;
     }
-    const data: Post[] = await res.json();
+    const data = (await res.json()) as Post[];
     posts.value = Array.isArray(data)
       ? data.filter((p) => String(p.type ?? '').trim() === props.postType)
       : [];
-  } catch (e) {
-    console.error('PostList: error fetching posts', e);
+  } catch {
+    loadError.value = `Network error while loading ${labelLower.value}s.`;
     posts.value = [];
   } finally {
     loading.value = false;
   }
-});
-
-function renderPosts() {
-  const root = document.getElementById(rootId.value);
-  if (!root) return;
-
-  if (posts.value.length === 0) {
-    root.innerHTML = `
-      <div class="flex flex-col items-center justify-center py-20 border-2 border-dashed border-neutral-700 rounded-2xl text-center px-4">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-neutral-600 mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/>
-          <line x1="12" y1="18" x2="12" y2="12"/>
-          <line x1="9" y1="15" x2="15" y2="15"/>
-        </svg>
-        <p class="text-neutral-500 mb-1 text-base font-medium">No ${escHtml(label.value.toLowerCase())}s yet</p>
-        <p class="text-neutral-400 text-sm mb-5">Create your first ${escHtml(label.value.toLowerCase())} to get started.</p>
-        <a href="/admin/${encodeURIComponent(props.section)}/new"
-           class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium shadow-lg shadow-orange-500/20 transition-all hover:-translate-y-0.5">
-          Create ${escHtml(label.value)}
-        </a>
-      </div>`;
-    return;
-  }
-
-  const cards = posts.value
-    .map(
-      (post) => `
-      <a href="/admin/${encodeURIComponent(props.section)}/${encodeURIComponent(post.id)}"
-         class="bg-neutral-900 border border-neutral-800 rounded-xl hover:border-orange-500/40 transition-colors p-5 flex flex-col gap-3 group cursor-pointer">
-        <div class="flex justify-between items-start">
-          <span class="px-2.5 py-1 text-xs font-semibold uppercase tracking-wider rounded-md bg-orange-500/10 text-orange-400">
-            ${escHtml(label.value)}
-          </span>
-          <span class="text-xs text-neutral-400">
-            ${escHtml(formatDate(post.created_at))}
-          </span>
-        </div>
-        <h3 class="text-base font-medium text-neutral-200 line-clamp-2 group-hover:text-orange-400 transition-colors">
-          ${escHtml(post.slug)}
-        </h3>
-        <div class="flex items-center gap-2 mt-auto pt-2 border-t border-neutral-800 text-xs text-neutral-500 group-hover:text-orange-400 transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-          </svg>
-          <span>Edit</span>
-        </div>
-      </a>`,
-    )
-    .join('');
-
-  root.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">${cards}</div>`;
 }
+
+onMounted(loadPosts);
 </script>
 
 <template>
@@ -130,7 +85,7 @@ function renderPosts() {
         {{ label }}s
       </h2>
       <a
-        :href="`/admin/${props.section}/new`"
+        :href="newHref"
         class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-lg shadow-orange-500/20 transition-all hover:-translate-y-0.5"
       >
         <Plus class="w-4 h-4" />
@@ -149,6 +104,62 @@ function renderPosts() {
       </div>
     </div>
 
-    <div v-else :id="rootId" />
+    <div
+      v-else-if="loadError"
+      class="flex flex-col items-center justify-center py-16 border border-red-500/30 bg-red-500/5 rounded-2xl text-center px-4"
+    >
+      <p class="text-red-400 text-sm mb-4">{{ loadError }}</p>
+      <button
+        type="button"
+        @click="loadPosts"
+        class="inline-flex items-center gap-2 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+      >
+        Retry
+      </button>
+    </div>
+
+    <div
+      v-else-if="posts.length === 0"
+      class="flex flex-col items-center justify-center py-20 border-2 border-dashed border-neutral-700 rounded-2xl text-center px-4"
+    >
+      <FileText class="w-12 h-12 text-neutral-600 mb-4" />
+      <p class="text-neutral-500 mb-1 text-base font-medium">
+        No {{ labelLower }}s yet
+      </p>
+      <p class="text-neutral-400 text-sm mb-5">
+        Create your first {{ labelLower }} to get started.
+      </p>
+      <a
+        :href="newHref"
+        class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium shadow-lg shadow-orange-500/20 transition-all hover:-translate-y-0.5"
+      >
+        Create {{ label }}
+      </a>
+    </div>
+
+    <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <a
+        v-for="post in posts"
+        :key="post.id"
+        :href="editHref(post)"
+        class="bg-neutral-900 border border-neutral-800 rounded-xl hover:border-orange-500/40 transition-colors p-5 flex flex-col gap-3 group cursor-pointer"
+      >
+        <div class="flex justify-between items-start">
+          <span class="px-2.5 py-1 text-xs font-semibold uppercase tracking-wider rounded-md bg-orange-500/10 text-orange-400">
+            {{ label }}
+          </span>
+          <span class="text-xs text-neutral-400">
+            {{ formatDate(post.created_at) }}
+          </span>
+        </div>
+        <h3 class="text-base font-medium text-neutral-200 line-clamp-2 group-hover:text-orange-400 transition-colors">
+          {{ post.slug }}
+        </h3>
+        <div class="flex items-center gap-2 mt-auto pt-2 border-t border-neutral-800 text-xs text-neutral-500 group-hover:text-orange-400 transition-colors">
+          <Pencil class="w-3.5 h-3.5" />
+          <span>Edit</span>
+        </div>
+      </a>
+    </div>
   </div>
 </template>

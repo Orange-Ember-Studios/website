@@ -12,7 +12,8 @@ import {
   resolveImageInsertData,
 } from '../../lib/editorjs-tools.ts';
 import { attachEditorJsMarkdownPaste } from '../../lib/editorjs-paste.ts';
-import { EditorJsToolsHeader } from './EditorJsToolsHeader.vue';
+import { CodeBlockTool } from '../../lib/editorjs-code-tool.ts';
+import EditorJsToolsHeader from './EditorJsToolsHeader.vue';
 
 const props = defineProps<{
   rootId: string;
@@ -36,7 +37,6 @@ async function createEditorInstance(
     { default: Header },
     { default: List },
     { default: Quote },
-    { default: Code },
     { default: Image },
     { default: Delimiter },
   ] = await Promise.all([
@@ -44,7 +44,6 @@ async function createEditorInstance(
     import('@editorjs/header'),
     import('@editorjs/list'),
     import('@editorjs/quote'),
-    import('@editorjs/code'),
     import('@editorjs/image'),
     import('@editorjs/delimiter'),
   ]);
@@ -62,7 +61,7 @@ async function createEditorInstance(
   };
 
   if (!props.minimal) {
-    tools.code = Code;
+    tools.code = CodeBlockTool;
     tools.image = {
       class: Image,
       config: {
@@ -218,18 +217,6 @@ function handleInlineFormat(format: EditorJsInlineHintId) {
   const holder = document.getElementById(props.rootId);
   if (!holder) return;
   applyEditorJsInlineFormat(holder, format);
-}
-
-export async function flushEditorContent(
-  save: (() => Promise<OutputData>) | null | undefined,
-): Promise<string | undefined> {
-  if (!save) return undefined;
-  try {
-    const saved = await save();
-    return serializeEditorJs(saved);
-  } catch {
-    return undefined;
-  }
 }
 </script>
 

@@ -38,10 +38,6 @@ function ToolIcon(props: { toolId: string }) {
 }
 </script>
 
-<script lang="ts">
-export const EDITOR_JS_INLINE_HINTS = EDITOR_JS_INLINE_HINTS;
-</script>
-
 <template>
   <div class="editorjs-tools-header" role="toolbar" aria-label="Editor blocks and formatting">
     <div class="editorjs-tools-header__row">
@@ -55,7 +51,7 @@ export const EDITOR_JS_INLINE_HINTS = EDITOR_JS_INLINE_HINTS;
           :title="tool.title"
           :aria-label="tool.label"
           :disabled="!ready"
-          @click="$emit('insertBlock', tool)"
+          @click="onInsertBlock(tool)"
           v-html="'<span class=\'editorjs-tool-btn__icon\'>' + ToolIcon({ toolId: tool.id }) + '</span><span class=\'editorjs-tool-btn__label hidden sm:inline\'>' + tool.label + '</span>'"
         />
       </div>
@@ -72,7 +68,7 @@ export const EDITOR_JS_INLINE_HINTS = EDITOR_JS_INLINE_HINTS;
           :title="tool.title"
           :aria-label="tool.label"
           :disabled="!ready"
-          @click="$emit('insertBlock', tool)"
+          @click="onInsertBlock(tool)"
           v-html="'<span class=\'editorjs-tool-btn__icon\'>' + ToolIcon({ toolId: tool.id }) + '</span><span class=\'editorjs-tool-btn__label hidden sm:inline\'>' + tool.label + '</span>'"
         />
       </div>
@@ -92,7 +88,7 @@ export const EDITOR_JS_INLINE_HINTS = EDITOR_JS_INLINE_HINTS;
           :title="`${hint.label} (${hint.shortcut})`"
           :aria-label="hint.label"
           :disabled="!ready"
-          @click="$emit('inlineFormat', hint.id)"
+          @click="onInlineFormat(hint.id)"
         >
           <span class="editorjs-inline-hint__mark">{{ hint.shortLabel }}</span>
           <span class="editorjs-inline-hint__shortcut hidden lg:inline">{{ hint.shortcut }}</span>
