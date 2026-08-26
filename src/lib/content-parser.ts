@@ -1,4 +1,9 @@
 import { createHighlighter, createJavaScriptRegexEngine } from 'shiki';
+import {
+  CODE_LANGUAGES,
+  codeLanguageLabel,
+  normalizeCodeLanguage,
+} from './editorjs-code-languages.ts';
 
 let highlighter: any;
 
@@ -6,11 +11,18 @@ async function getHighlighter() {
   if (!highlighter) {
     highlighter = await createHighlighter({
       themes: ['github-dark'],
-      langs: ['javascript', 'typescript', 'vue', 'astro', 'html', 'css', 'json', 'markdown', 'bash', 'yaml', 'csharp', 'cpp', 'python', 'sql', 'gdscript'],
+      langs: CODE_LANGUAGES.map((l) => l.id).filter((id) => id !== 'text'),
       engine: createJavaScriptRegexEngine()
     });
   }
   return highlighter;
+}
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
 function processText(text: string): string {
@@ -57,17 +69,23 @@ export async function parseEditorJsBlocks(blocks: any[]): Promise<string> {
         }
         break;
       case 'code':
-        const language = block.data.language || 'javascript';
+        const language = normalizeCodeLanguage(block.data.language);
         const code = block.data.code || '';
-        const highlighted = highlighter.codeToHtml(code, {
-          lang: language,
-          theme: 'github-dark'
-        });
+        let highlighted: string;
+        try {
+          highlighted = highlighter.codeToHtml(code, {
+            lang: language,
+            theme: 'github-dark'
+          });
+        } catch {
+          // Never let an unsupported language break the whole post.
+          highlighted = `<pre><code>${escapeHtml(code)}</code></pre>`;
+        }
         
         html += `
           <div class="code-block-wrapper my-8 group relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-[#0d1117]">
             <div class="flex items-center justify-between px-6 py-3 bg-white/5 border-b border-white/10">
-              <span class="text-xs font-mono text-gray-400 font-medium uppercase tracking-wider">${language}</span>
+              <span class="text-xs font-mono text-gray-400 font-medium uppercase tracking-wider">${codeLanguageLabel(language)}</span>
               <button 
                 class="copy-button p-2 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition-all duration-200 flex items-center gap-2 group/btn"
                 data-code="${encodeURIComponent(code)}"

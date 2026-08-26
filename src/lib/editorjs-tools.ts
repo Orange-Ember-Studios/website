@@ -1,4 +1,5 @@
 /** Toolbar block actions for the admin Editor.js field. */
+import { DEFAULT_CODE_LANGUAGE } from "./editorjs-code-languages.ts";
 
 export type EditorJsToolbarToolId =
   | "header-1"
@@ -94,7 +95,7 @@ const CODE: EditorJsToolbarTool = {
   shortLabel: "</>",
   title: "Insert a code block",
   blockType: "code",
-  defaultData: { code: "" },
+  defaultData: { code: "", language: DEFAULT_CODE_LANGUAGE },
 };
 
 const IMAGE: EditorJsToolbarTool = {

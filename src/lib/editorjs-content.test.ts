@@ -47,11 +47,19 @@ describe("serializeEditorJs", () => {
 });
 
 describe("markdownToEditorJs", () => {
-  it("maps code fences to code blocks", () => {
+  it("maps code fences to code blocks, normalizing the language", () => {
     const data = markdownToEditorJs("```ts\nconst x = 1\n```");
     expect(data.blocks?.[0]).toMatchObject({
       type: "code",
-      data: { code: "const x = 1", language: "ts" },
+      data: { code: "const x = 1", language: "typescript" },
+    });
+  });
+
+  it("defaults fences without a language to GDScript", () => {
+    const data = markdownToEditorJs("```\nfunc _ready():\n```");
+    expect(data.blocks?.[0]).toMatchObject({
+      type: "code",
+      data: { code: "func _ready():", language: "gdscript" },
     });
   });
 

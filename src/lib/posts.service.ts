@@ -2,6 +2,10 @@ import { getDbClient, type TursoCredentials } from "./db.ts";
 import { marked } from "marked";
 import { createHighlighter, createJavaScriptRegexEngine } from "shiki";
 import { parseEditorJsBlocks } from "./content-parser.ts";
+import {
+  CODE_LANGUAGES,
+  normalizeCodeLanguage,
+} from "./editorjs-code-languages.ts";
 
 const EMPTY_EDITOR_JS = '{"blocks":[]}';
 
@@ -21,19 +25,7 @@ function normalizeTranslationRow(t: {
 
 const highlighter = await createHighlighter({
   themes: ["github-dark"],
-  langs: [
-    "gdscript",
-    "javascript",
-    "typescript",
-    "vue",
-    "astro",
-    "bash",
-    "cpp",
-    "csharp",
-    "python",
-    "sql",
-    "yaml",
-  ],
+  langs: CODE_LANGUAGES.map((l) => l.id).filter((id) => id !== "text"),
   engine: createJavaScriptRegexEngine(),
 });
 
@@ -45,7 +37,7 @@ marked.use({
       if (!lang) return `<pre><code>${text}</code></pre>`;
       try {
         return highlighter.codeToHtml(text, {
-          lang,
+          lang: normalizeCodeLanguage(lang),
           theme: "github-dark",
         });
       } catch {

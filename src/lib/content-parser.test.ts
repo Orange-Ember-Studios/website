@@ -34,7 +34,7 @@ describe('content-parser', () => {
 
     const html = await parseEditorJsBlocks(blocks);
     
-    expect(html).toContain('gdscript');
+    expect(html).toContain('GDScript');
     expect(html).toContain('func');
     expect(html).toContain('_ready');
     expect(html).toContain('print');
@@ -53,5 +53,38 @@ describe('content-parser', () => {
     const html = await parseEditorJsBlocks(blocks);
     expect(html).toContain('<code');
     expect(html).toContain('bg-neutral-800'); // Check current implementation style
+  });
+});
+
+describe('content-parser code languages', () => {
+  it('labels the block with the selected language', async () => {
+    const html = await parseEditorJsBlocks([
+      { type: 'code', data: { code: 'var x := 1', language: 'gdscript' } },
+    ]);
+    expect(html).toContain('GDScript');
+  });
+
+  it('defaults legacy blocks without a language to GDScript', async () => {
+    const html = await parseEditorJsBlocks([
+      { type: 'code', data: { code: 'func _ready():' } },
+    ]);
+    expect(html).toContain('GDScript');
+    expect(html).toContain('shiki');
+  });
+
+  it('normalizes aliased languages', async () => {
+    const html = await parseEditorJsBlocks([
+      { type: 'code', data: { code: 'int main(){}', language: 'c++' } },
+    ]);
+    expect(html).toContain('C++');
+  });
+
+  it('does not break the post when the language is unsupported', async () => {
+    const html = await parseEditorJsBlocks([
+      { type: 'code', data: { code: '<script>x</script>', language: 'klingon' } },
+      { type: 'paragraph', data: { text: 'Still rendered' } },
+    ]);
+    expect(html).toContain('Still rendered');
+    expect(html).not.toContain('<script>x</script>');
   });
 });

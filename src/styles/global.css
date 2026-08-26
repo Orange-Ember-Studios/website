@@ -197,6 +197,38 @@ body {
   @apply flex flex-col;
 }
 
+.editorjs-code-block {
+  @apply overflow-hidden rounded-xl border border-ash-800/60 bg-ash-900/60;
+}
+
+.editorjs-code-block__header {
+  @apply flex items-center justify-between gap-3 border-b border-ash-800/60 bg-ash-900/80 px-3 py-2;
+}
+
+.editorjs-code-block__label {
+  @apply text-[10px] font-bold uppercase tracking-widest text-ash-500;
+}
+
+.editorjs-code-block__language {
+  @apply rounded-md border border-ash-700 bg-ash-950 px-2 py-1 text-xs text-ash-200;
+}
+
+.editorjs-code-block__language:focus {
+  @apply outline-none ring-1 ring-ember-500;
+}
+
+.editorjs-code-block__code {
+  @apply block w-full min-h-32 resize-y bg-transparent px-4 py-3 font-mono text-sm leading-relaxed text-ash-200;
+}
+
+.editorjs-code-block__code:focus {
+  @apply outline-none;
+}
+
+.editorjs-code-block__code::placeholder {
+  @apply text-ash-600;
+}
+
 .editorjs-tools-header {
   @apply relative z-10 rounded-t-2xl border border-b-0 border-ash-800/50 bg-ash-900/90 px-3 py-3 md:px-4 md:py-3.5 backdrop-blur-sm;
 }

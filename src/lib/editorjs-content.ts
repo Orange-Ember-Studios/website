@@ -1,5 +1,6 @@
 import type { OutputData } from "@editorjs/editorjs";
 import { markdownInlineToHtml } from "./markdown-inline.ts";
+import { normalizeCodeLanguage } from "./editorjs-code-languages.ts";
 import { editorJsToMarkdown } from "./markdown-migrator.ts";
 
 export const EMPTY_EDITOR_JS = '{"blocks":[]}';
@@ -68,7 +69,7 @@ export function markdownToEditorJs(markdown: string): OutputData {
 
     const codeFence = trimmed.match(/^```(\w*)/);
     if (codeFence) {
-      const lang = codeFence[1] || "javascript";
+      const lang = normalizeCodeLanguage(codeFence[1]);
       const codeLines: string[] = [];
       i += 1;
       while (i < lines.length && !lines[i].trim().startsWith("```")) {
@@ -167,4 +168,19 @@ export function editorJsJsonToMarkdown(json: string): string {
     /* fall through */
   }
   return json;
+}
+
+/**
+ * Saves the current Editor.js state through a registered save callback and
+ * returns it serialized, or `undefined` when unavailable.
+ */
+export async function flushEditorContent(
+  save: (() => Promise<OutputData>) | null | undefined,
+): Promise<string | undefined> {
+  if (!save) return undefined;
+  try {
+    return serializeEditorJs(await save());
+  } catch {
+    return undefined;
+  }
 }
