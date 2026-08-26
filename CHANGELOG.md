@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.39](https://github.com/Orange-Ember-Studios/website/compare/v0.0.37...v0.0.39) (2026-08-26)
+
+
+### Features
+
+* **admin:** CMS API endpoints, routing, listing and publish toggle ([98502cd](https://github.com/Orange-Ember-Studios/website/commit/98502cd23e54a8342986a2450c8ff6a3a6afc6b1))
+* **admin:** editor back/cancel/save flow with dirty state guard ([a5904a8](https://github.com/Orange-Ember-Studios/website/commit/a5904a8b51f80439f2c0d36f2669817d378e8e39))
+* **cms:** GDScript code block with language selector ([a1ca9bb](https://github.com/Orange-Ember-Studios/website/commit/a1ca9bb6b2e8666c79f71c86b6d21293b092b7d1))
+
+
+### Bug Fixes
+
+* admin layout and middleware auth ([f8bc33f](https://github.com/Orange-Ember-Studios/website/commit/f8bc33fd92b88df25bb10ad0c8b1d84204a129db))
+* AdminShell layout structure for proper sidebar + content ([84a2ed7](https://github.com/Orange-Ember-Studios/website/commit/84a2ed78c88ceed2eca74222953b71afb07640c3))
+* **portfolio:** render Editor.js descriptions as plain text ([e5b6e2c](https://github.com/Orange-Ember-Studios/website/commit/e5b6e2c6d4cd306fa9d8c5271767219825f41d73))
+* wrangler assets directory to dist instead of dist/_astro ([2316d2c](https://github.com/Orange-Ember-Studios/website/commit/2316d2c53ee3a3a81f127f9f73013792adc0bb13))
+* wrangler config and API routes for deployment ([af03227](https://github.com/Orange-Ember-Studios/website/commit/af03227492f07bbcf8b53c5dae71cd923c06b058))
+
 ### [0.0.38](https://github.com/Orange-Ember-Studios/website/compare/v0.0.37...v0.0.38) (2026-08-24)
 
 
