@@ -1,5 +1,32 @@
 import { resolveImageUrl } from "./images.ts";
 
+/**
+ * The CMS stores project descriptions as Editor.js JSON, so they must be
+ * flattened to plain text before rendering them on portfolio cards.
+ */
+function descriptionToPlainText(value: string): string {
+  const raw = String(value ?? "").trim();
+  if (!raw) return "";
+
+  let blocks: Array<{ type?: string; data?: { text?: string } }> | undefined;
+  try {
+    blocks = (JSON.parse(raw) as { blocks?: typeof blocks }).blocks;
+  } catch {
+    return raw;
+  }
+  if (!Array.isArray(blocks)) return raw;
+
+  return blocks
+    .map((b) => String(b?.data?.text ?? ""))
+    .filter(Boolean)
+    .join(" ")
+    .replace(/<[^>]*>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 export type PortfolioPostRow = {
   id: string;
   data: {
@@ -55,7 +82,7 @@ export function mapPortfolioProjects(rows: PortfolioPostRow[], lang: string) {
       return {
         id: p.id,
         title: p.data.title,
-        description: meta?.description || cleanDesc,
+        description: descriptionToPlainText(meta?.description || "") || cleanDesc,
         titleKey: null as string | null,
         category,
         categoryKey: null as string | null,

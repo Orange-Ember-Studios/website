@@ -34,7 +34,10 @@ onMounted(async () => {
   let list: PortfolioProject[] | null = null;
 
   try {
-    list = JSON.parse(sessionStorage.getItem(cacheKey) || 'null') as PortfolioProject[] | null;
+    const cached = JSON.parse(
+      sessionStorage.getItem(cacheKey) || 'null',
+    ) as PortfolioProject[] | null;
+    list = Array.isArray(cached) && cached.length > 0 ? cached : null;
   } catch {
     list = null;
   }
@@ -52,7 +55,13 @@ onMounted(async () => {
       list = [];
     }
     try {
-      sessionStorage.setItem(cacheKey, JSON.stringify(list));
+      // Never cache an empty result: it would keep the "no projects" message
+      // for the rest of the session even after content is published.
+      if (list.length > 0) {
+        sessionStorage.setItem(cacheKey, JSON.stringify(list));
+      } else {
+        sessionStorage.removeItem(cacheKey);
+      }
     } catch {
       // sessionStorage not available
     }
