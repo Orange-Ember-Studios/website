@@ -54,11 +54,10 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
-    // Config de envío: mientras el dominio no está verificado en Resend (modo testing),
-    // FROM debe ser onboarding@resend.dev y TO tu Gmail de la cuenta (Resend lo exige).
-    // Tras verificar orangeember.com: env CONTACT_FROM=hello@orangeember.com y CONTACT_TO=hello@orangeember.com.
-    const from = EnvManager.CONTACT_FROM || 'Orange Ember <onboarding@resend.dev>';
-    const to = EnvManager.CONTACT_TO || 'ing.jose.joya@gmail.com';
+    // El dominio orangeember.com está verificado en Resend (desde 2026-04):
+    // from debe usar ese dominio. CONTACT_FROM/CONTACT_TO permiten override por env.
+    const from = EnvManager.CONTACT_FROM || 'Orange Ember <hello@orangeember.com>';
+    const to = EnvManager.CONTACT_TO || 'hello@orangeember.com';
     const resendResponse = await fetch(API_URLS.RESEND_EMAILS, {
       method: 'POST',
       headers: {
