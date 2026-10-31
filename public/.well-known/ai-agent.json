@@ -1,0 +1,10 @@
+{
+  "name": "Orange Ember Studios Website Agent",
+  "description": "Public agent manifest for orangeember.com. Provides the studio's sitemap, llms.txt, and primary contact endpoint.",
+  "version": "2026-10-31",
+  "url": "https://orangeember.com",
+  "sitemapUrl": "https://orangeember.com/sitemap-index.xml",
+  "llmsTxtUrl": "https://orangeember.com/llms.txt",
+  "contactUrl": "https://orangeember.com/en/#contact",
+  "contactEmail": "hello@orangeember.com"
+}

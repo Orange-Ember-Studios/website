@@ -34,6 +34,15 @@ const fullImageUrl = resolvedImage.startsWith("http")
 
 const lang = Astro.locals.lang || "en";
 
+const contactAction = {
+  "@type": "CommunicateAction",
+  name: "Contact Orange Ember Studios",
+  target: {
+    "@type": "EntryPoint",
+    urlTemplate: `${SITE_URLS.BASE}/#contact`,
+  },
+};
+
 const organizationSchema = {
   "@context": EXTERNAL_URLS.SCHEMA_ORG,
   "@type": "Organization",
@@ -42,6 +51,7 @@ const organizationSchema = {
   logo: `${SITE_URLS.BASE}/favicon.svg`,
   description: description,
   sameAs: [SOCIAL_URLS.GITHUB, SOCIAL_URLS.TWITTER_X],
+  potentialAction: contactAction,
 };
 
 const breadcrumbSchema = {
@@ -74,6 +84,7 @@ const websiteSchema = {
   "@type": "WebSite",
   name: "Orange Ember Studios",
   url: SITE_URLS.BASE,
+  potentialAction: contactAction,
 };
 ---
 

@@ -1,0 +1,33 @@
+# Orange Ember Studios
+
+> Crafting extraordinary digital experiences. We forge premium video games, web, and mobile applications.
+
+## About
+
+Orange Ember Studios is a game and app studio focused on polished, high-end interactive experiences. We build desktop games, mobile games, web applications, and mobile apps for clients and our own IP.
+
+## Main pages
+
+- Home (EN): https://orangeember.com/en/
+- Home (ES): https://orangeember.com/es/
+- Home (FR): https://orangeember.com/fr/
+- Blog (EN): https://orangeember.com/en/blog
+- Blog (ES): https://orangeember.com/es/blog
+- Blog (FR): https://orangeember.com/fr/blog
+- Privacy Policy (EN): https://orangeember.com/en/privacy
+- Privacy Policy (ES): https://orangeember.com/es/privacy
+- Privacy Policy (FR): https://orangeember.com/fr/privacy
+
+## Contact
+
+- Email: hello@orangeember.com
+- Contact form (EN): https://orangeember.com/en/#contact
+- Contact form (ES): https://orangeember.com/es/#contact
+- Contact form (FR): https://orangeember.com/fr/#contact
+- X / Twitter: https://x.com/OrangeEmberSt
+- GitHub: https://github.com/Orange-Ember-Studios
+
+## AI / agent resources
+
+- AI agent manifest: https://orangeember.com/.well-known/ai-agent.json
+- Sitemap: https://orangeember.com/sitemap-index.xml
