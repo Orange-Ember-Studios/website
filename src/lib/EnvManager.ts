@@ -39,6 +39,14 @@ export class EnvManager {
     return this.getVar("RESEND_API_KEY", false) ?? "";
   }
 
+  static get CONTACT_FROM(): string {
+    return this.getVar("CONTACT_FROM", false) ?? "";
+  }
+
+  static get CONTACT_TO(): string {
+    return this.getVar("CONTACT_TO", false) ?? "";
+  }
+
   static get TURSO_DATABASE_URL(): string {
     return this.getVar("TURSO_DATABASE_URL", false) ?? "";
   }
