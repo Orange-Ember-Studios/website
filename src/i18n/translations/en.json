@@ -148,6 +148,7 @@
     "sending": "Sending...",
     "invalidEmail": "Invalid email address",
     "securityCheck": "Please complete the security check.",
+    "turnstileTimeout": "We couldn't verify that you're human. Please refresh the page and try again.",
     "genericError": "Something went wrong. Please try again later."
   },
   "privacy": {

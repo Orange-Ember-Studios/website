@@ -148,6 +148,7 @@
     "sending": "Enviando...",
     "invalidEmail": "Dirección de correo no válida",
     "securityCheck": "Por favor, completa la comprobación de seguridad.",
+    "turnstileTimeout": "No fue posible verificar que eres humano. Refresca la página e intenta de nuevo.",
     "genericError": "Algo salió mal. Por favor, inténtalo de nuevo más tarde."
   },
   "privacy": {

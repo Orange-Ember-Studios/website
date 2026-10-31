@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { Loader2, Send } from 'lucide-vue-next';
 import { API_URLS } from '../../constants/urls.ts';
 import { getTranslation } from '@/i18n/i18n.ts';
@@ -11,6 +11,7 @@ declare global {
       render: (el: HTMLElement, opts: Record<string, unknown>) => string;
       remove: (id: string) => void;
       reset: (id: string) => void;
+      getResponse: (id: string) => string | undefined;
     };
   }
 }
@@ -31,19 +32,59 @@ const isBotDetected = ref(false);
 const isSubmitting = ref(false);
 const successMsg = ref('');
 const errorMsg = ref('');
+const turnstileError = ref(false);
+const turnstileLoading = ref(true);
 
 const siteKey = EnvManager.PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA';
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const showAwaitingTurnstile = computed(() => !isSubmitting.value && turnstileToken.value.length === 0 && !isBotDetected.value);
-const showReadyCta = computed(() => !isSubmitting.value && turnstileToken.value.length > 0);
+const showAwaitingTurnstile = computed(
+  () =>
+    turnstileLoading.value &&
+    !isSubmitting.value &&
+    turnstileToken.value.length === 0 &&
+    !isBotDetected.value &&
+    !turnstileError.value,
+);
+const showReadyCta = computed(
+  () => !isSubmitting.value && (turnstileToken.value.length > 0 || turnstileError.value),
+);
 const showSending = computed(() => isSubmitting.value);
 
+let turnstileTimeoutId: ReturnType<typeof setTimeout> | null = null;
+
 onMounted(async () => {
+  startTurnstileTimeout();
   await initializeTurnstile();
-  syncSubmitUi();
 });
+
+onUnmounted(() => {
+  if (turnstileTimeoutId) {
+    clearTimeout(turnstileTimeoutId);
+  }
+});
+
+watch([turnstileToken, isSubmitting, isBotDetected, turnstileError, turnstileLoading], syncSubmitUi, {
+  immediate: true,
+});
+watch([successMsg, errorMsg], syncFeedbackBanners, { immediate: true });
+
+function startTurnstileTimeout() {
+  turnstileTimeoutId = setTimeout(() => {
+    if (turnstileToken.value.length > 0 || isBotDetected.value || isSubmitting.value) return;
+    turnstileError.value = true;
+    turnstileLoading.value = false;
+    errorMsg.value = getTranslation('contact.turnstileTimeout');
+  }, 15000);
+}
+
+function clearTurnstileTimeout() {
+  if (turnstileTimeoutId) {
+    clearTimeout(turnstileTimeoutId);
+    turnstileTimeoutId = null;
+  }
+}
 
 async function waitForElement(selector: string, timeout = 8000): Promise<HTMLElement | null> {
   return new Promise((resolve) => {
@@ -89,9 +130,24 @@ async function waitForTurnstile(): Promise<boolean> {
   return false;
 }
 
+function setTurnstileFailure(messageKey: string) {
+  turnstileError.value = true;
+  turnstileLoading.value = false;
+  errorMsg.value = getTranslation(messageKey);
+  clearTurnstileTimeout();
+}
+
 async function initializeTurnstile() {
   const el = await waitForElement('#turnstile-widget');
-  if (!el || !siteKey) return;
+  if (!el) {
+    setTurnstileFailure('contact.turnstileTimeout');
+    return;
+  }
+
+  if (!siteKey) {
+    setTurnstileFailure('contact.turnstileTimeout');
+    return;
+  }
 
   if (el.getAttribute('data-rendered') === 'true') return;
   if (el.getAttribute('data-turnstile-loading') === '1') return;
@@ -99,13 +155,8 @@ async function initializeTurnstile() {
   el.setAttribute('data-turnstile-loading', '1');
   try {
     const hasLoaded = await waitForTurnstile();
-    if (!hasLoaded) {
-      errorMsg.value = getTranslation('contact.securityCheck');
-      return;
-    }
-
-    if (!window.turnstile) {
-      errorMsg.value = getTranslation('contact.securityCheck');
+    if (!hasLoaded || !window.turnstile) {
+      setTurnstileFailure('contact.turnstileTimeout');
       return;
     }
 
@@ -116,13 +167,19 @@ async function initializeTurnstile() {
       theme: 'dark',
       callback: (token: string) => {
         turnstileToken.value = token;
+        turnstileError.value = false;
+        turnstileLoading.value = false;
+        clearTurnstileTimeout();
       },
       'expired-callback': () => {
         turnstileToken.value = '';
+        turnstileLoading.value = false;
+        turnstileError.value = true;
+        errorMsg.value = getTranslation('contact.turnstileTimeout');
       },
       'error-callback': () => {
         turnstileToken.value = '';
-        errorMsg.value = getTranslation('contact.securityCheck');
+        setTurnstileFailure('contact.turnstileTimeout');
       },
     });
 
@@ -132,7 +189,7 @@ async function initializeTurnstile() {
     }
   } catch (e) {
     console.error('Turnstile render error:', e);
-    errorMsg.value = getTranslation('contact.securityCheck');
+    setTurnstileFailure('contact.turnstileTimeout');
   } finally {
     el.removeAttribute('data-turnstile-loading');
   }
@@ -141,7 +198,7 @@ async function initializeTurnstile() {
 function syncSubmitUi() {
   const btn = document.getElementById('contact-submit-btn') as HTMLButtonElement | null;
   if (btn) {
-    const locked = (turnstileToken.value.length === 0 && !isBotDetected.value) || isSubmitting.value;
+    const locked = !showReadyCta.value || isSubmitting.value;
     btn.disabled = locked;
     btn.setAttribute('aria-busy', isSubmitting.value || showAwaitingTurnstile.value ? 'true' : 'false');
   }
@@ -198,7 +255,9 @@ async function handleSubmit(e: Event) {
   if (!runValidation()) return;
 
   if (!turnstileToken.value) {
-    errorMsg.value = getTranslation('contact.securityCheck');
+    errorMsg.value = turnstileError.value
+      ? getTranslation('contact.turnstileTimeout')
+      : getTranslation('contact.securityCheck');
     return;
   }
 
@@ -235,6 +294,9 @@ async function handleSubmit(e: Event) {
         }
       }
       turnstileToken.value = '';
+      turnstileLoading.value = true;
+      startTurnstileTimeout();
+      await initializeTurnstile();
     } else {
       errorMsg.value = result.error || getTranslation('contact.genericError');
     }
@@ -245,12 +307,6 @@ async function handleSubmit(e: Event) {
     syncSubmitUi();
     syncFeedbackBanners();
   }
-
-  setTimeout(() => {
-    successMsg.value = '';
-    errorMsg.value = '';
-    syncFeedbackBanners();
-  }, 5000);
 }
 
 function handleInput(field: 'name' | 'email' | 'subject' | 'message' | 'hp', value: string) {

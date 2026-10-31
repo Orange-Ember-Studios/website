@@ -148,6 +148,7 @@
     "sending": "Envoi en cours...",
     "invalidEmail": "Adresse e-mail invalide",
     "securityCheck": "Veuillez compléter le contrôle de sécurité.",
+    "turnstileTimeout": "Nous n'avons pas pu vérifier que vous êtes humain. Veuillez actualiser la page et réessayer.",
     "genericError": "Quelque chose s'est mal passé. Veuillez réessayer plus tard."
   },
   "privacy": {
