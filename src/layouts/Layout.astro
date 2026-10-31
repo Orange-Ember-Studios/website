@@ -34,6 +34,13 @@ const fullImageUrl = resolvedImage.startsWith("http")
 
 const lang = Astro.locals.lang || "en";
 
+// Exponer env público al cliente (el Turnstile widget del form lo lee)
+const publicTurnstileSiteKey =
+  Astro.locals?.runtime?.env?.PUBLIC_TURNSTILE_SITE_KEY ?? "";
+const cfEnvJson = JSON.stringify(
+  publicTurnstileSiteKey ? { PUBLIC_TURNSTILE_SITE_KEY: publicTurnstileSiteKey } : {},
+);
+
 const contactAction = {
   "@type": "CommunicateAction",
   name: "Contact Orange Ember Studios",
@@ -92,6 +99,7 @@ const websiteSchema = {
 <html lang={lang} class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
+    <script is:inline set:html={`window.__CF_ENV__ = ${cfEnvJson};`}></script>
     <meta name="author" content="Orange Ember Studios" />
     <meta name="publisher" content="Orange Ember Studios" />
     <meta name="generator" content={Astro.generator} />
