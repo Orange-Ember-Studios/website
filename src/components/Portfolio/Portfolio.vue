@@ -22,6 +22,40 @@ function portfolioCacheKey(lang: string) {
   return `portfolio:${lang}`;
 }
 
+/** TTL del caché de sessionStorage: 10 min. Sin expira => datos viejos
+ *  tras cambios del CMS (p.ej. después de publicar/despublicar un proyecto). */
+const PORTFOLIO_CACHE_TTL_MS = 10 * 60 * 1000;
+
+interface CachePayload {
+  ts: number;
+  list: PortfolioProject[];
+}
+
+function readCache(lang: string): CachePayload | null {
+  try {
+    const cached = JSON.parse(
+      sessionStorage.getItem(portfolioCacheKey(lang)) || 'null',
+    ) as CachePayload | null;
+    if (!cached) return null;
+    // Entradas antiguas sin ts: expiran de una vez.
+    if (!Array.isArray(cached.list)) return null;
+    if (typeof cached.ts !== 'number' || Date.now() - cached.ts > PORTFOLIO_CACHE_TTL_MS) {
+      return null;
+    }
+    return cached;
+  } catch {
+    return null;
+  }
+}
+
+function writeCache(lang: string, list: PortfolioProject[]) {
+  try {
+    sessionStorage.setItem(portfolioCacheKey(lang), JSON.stringify({ ts: Date.now(), list }));
+  } catch {
+    // sessionStorage not available
+  }
+}
+
 const initialLang = computed(() => props.lang || getCurrentLanguage());
 const portfolioLang = computed(() => initialLang.value as 'en' | 'es' | 'fr');
 const cachedProjects = ref<PortfolioProject[]>([]);
@@ -30,17 +64,10 @@ const loading = ref(true);
 const initiallyLoading = computed(() => cachedProjects.value.length === 0);
 
 onMounted(async () => {
-  const cacheKey = portfolioCacheKey(initialLang.value);
   let list: PortfolioProject[] | null = null;
+  const cacheKey = portfolioCacheKey(initialLang.value);
 
-  try {
-    const cached = JSON.parse(
-      sessionStorage.getItem(cacheKey) || 'null',
-    ) as PortfolioProject[] | null;
-    list = Array.isArray(cached) && cached.length > 0 ? cached : null;
-  } catch {
-    list = null;
-  }
+  list = readCache(initialLang.value);
 
   if (list === null) {
     try {
@@ -58,7 +85,7 @@ onMounted(async () => {
       // Never cache an empty result: it would keep the "no projects" message
       // for the rest of the session even after content is published.
       if (list.length > 0) {
-        sessionStorage.setItem(cacheKey, JSON.stringify(list));
+        writeCache(initialLang.value, list);
       } else {
         sessionStorage.removeItem(cacheKey);
       }
