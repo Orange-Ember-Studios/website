@@ -77,7 +77,12 @@ export function mapPortfolioProjects(rows: PortfolioPostRow[], lang: string) {
       const slug = p.id.split("/").pop()!;
       const externalLink = meta?.link || "";
       const isExternal = externalLink.startsWith("http");
-      const link = isExternal ? externalLink : `/${lang}/projects/${slug}`;
+      // "#" es el placeholder del CMS para "sin destino todavía": se conserva
+      // tal cual y la tarjeta se renderiza NO clicable, en vez de fabricar la
+      // ficha interna /<lang>/projects/<slug> que no existe (404).
+      const link = externalLink === "#" ? "#"
+        : isExternal ? externalLink
+        : `/${lang}/projects/${slug}`;
 
       return {
         id: p.id,

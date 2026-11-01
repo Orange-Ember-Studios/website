@@ -1,5 +1,5 @@
 ---
-import { ExternalLink } from '@lucide/astro';
+import { ExternalLink } from "@lucide/astro";
 
 interface Props {
   lang?: string;
@@ -9,6 +9,9 @@ const { lang = "en" } = Astro.props;
 
 const response = await fetch(`${Astro.url.origin}/api/portfolio/projects?lang=${lang}`);
 const projects = response.ok ? await response.json() : [];
+
+/** "#" = Sin destino (placeholder del CMS): tarjeta no clicable. */
+const hasLink = (project: { link: string }) => project.link && project.link !== "#";
 ---
 
 <section
@@ -44,10 +47,10 @@ const projects = response.ok ? await response.json() : [];
     >
       {projects.map((project: any) => (
         <a
-          href={project.link || "#"}
+          href={hasLink(project) ? project.link : undefined}
           target={project.isExternal ? "_blank" : "_self"}
           rel={project.isExternal ? "noopener noreferrer" : undefined}
-          class={`group relative overflow-hidden rounded-2xl aspect-4/3 md:aspect-video bg-gray-900 shadow-2xl border border-white/5 transition-all duration-700 hover:border-ember-500/40 hover:shadow-[0_0_50px_rgba(255,91,13,0.15)] block ${!project.link ? "cursor-default" : "cursor-pointer"}`}
+          class={`group relative overflow-hidden rounded-2xl aspect-4/3 md:aspect-video bg-gray-900 shadow-2xl border border-white/5 transition-all duration-700 hover:border-ember-500/40 hover:shadow-[0_0_50px_rgba(255,91,13,0.15)] block ${!hasLink(project) ? "cursor-default" : "cursor-pointer"}`}
         >
           <img
             src={project.image}

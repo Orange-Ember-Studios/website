@@ -83,6 +83,11 @@ function getStatusStyles(status: string): string {
   }
   return 'bg-gray-500/20 text-gray-300 border-gray-500/30';
 }
+
+/** "#" = Sin destino (placeholder del CMS): tarjeta no clicable. */
+function hasLink(project: PortfolioProject): boolean {
+  return Boolean(project.link) && project.link !== '#';
+}
 </script>
 
 <template>
@@ -127,11 +132,11 @@ function getStatusStyles(status: string): string {
         <a
           v-for="project in cachedProjects"
           :key="project.id"
-          :href="project.link || '#'"
+          :href="hasLink(project) ? project.link : undefined"
           :target="project.isExternal ? '_blank' : '_self'"
           :rel="project.isExternal ? 'noopener noreferrer' : undefined"
           class="group relative overflow-hidden rounded-2xl aspect-4/3 md:aspect-video bg-gray-900 shadow-2xl border border-white/5 transition-all duration-700 hover:border-ember-500/40 hover:shadow-[0_0_50px_rgba(255,91,13,0.15)] block"
-          :class="{ 'cursor-default': !project.link, 'cursor-pointer': !!project.link }"
+          :class="{ 'cursor-default': !hasLink(project), 'cursor-pointer': hasLink(project) }"
         >
           <img
             :src="project.image"

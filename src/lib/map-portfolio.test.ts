@@ -45,6 +45,23 @@ describe("mapPortfolioProjects", () => {
     expect(mapped[0].id).toBe("es/ember-quest");
     expect(mapped[0].link).toBe("/es/projects/ember-quest");
   });
+
+  it("keeps the # placeholder as a non-link instead of the internal route", () => {
+    const mapped = mapPortfolioProjects(
+      [
+        {
+          id: "es/ember-quest",
+          data: {
+            title: "Ember Quest",
+            meta: { category: "Desktop Game", status: "Coming Soon", link: "#" },
+          },
+        },
+      ],
+      "es",
+    );
+    expect(mapped[0].link).toBe("#");
+    expect(mapped[0].isExternal).toBe(false);
+  });
 });
 
 describe("mapPortfolioProjects descriptions", () => {
