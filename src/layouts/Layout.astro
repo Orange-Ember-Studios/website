@@ -21,7 +21,7 @@ interface Props {
 const {
   title,
   description = "Orange Ember Studios. Crafting extraordinary digital experiences. We forge premium video games, web, and mobile applications.",
-  image = "/Shield.svg",
+  image = "/og/orangeember-og.png",
   noindex = false,
   titleKey = "meta.title",
   extraSchema = [],
@@ -33,6 +33,27 @@ const fullImageUrl = resolvedImage.startsWith("http")
   : new URL(resolvedImage, SITE_URLS.BASE).toString();
 
 const lang = Astro.locals.lang || "en";
+
+// SEO/social: locale por idioma, URL real de la página (no siempre "/") y
+// alternates hreflang de las rutas homólogas en los 3 idiomas.
+const OG_LOCALES: Record<string, string> = { en: "en_US", es: "es_ES", fr: "fr_FR" };
+const ogLocale = OG_LOCALES[lang] || "en_US";
+const otherLocales = Object.entries(OG_LOCALES).filter(([c]) => c !== lang).map(([, v]) => v);
+
+const currentPath = Astro.url.pathname;
+const pageUrl = `${SITE_URLS.BASE}${currentPath === "/" ? "" : currentPath}`;
+const segments = currentPath.split("/").filter(Boolean);
+const supportedLangs = Object.keys(OG_LOCALES);
+// La ruta canonical/hreflang se construye reemplazando solo el primer segmento
+// si es un idioma soportado (rutas tipo /es/blog/... → /en/blog/...).
+const hreflangBase = segments.length && (supportedLangs as string[]).includes(segments[0])
+  ? segments.slice(1).join("/")
+  : currentPath.split("/").filter(Boolean).join("/");
+const hreflangUrls = supportedLangs.map((lg) => ({
+  hreflang: lg,
+  href: `/${lg === "en" ? "" : lg + "/"}${hreflangBase}`.replace(/\/$/, "") || "/",
+}));
+const hreflangCanonical = hreflangUrls.find((u) => u.hreflang === lang)?.href || pageUrl;
 
 // Exponer env público al cliente (el Turnstile widget del form lo lee)
 const publicTurnstileSiteKey =
@@ -115,13 +136,21 @@ const websiteSchema = {
     <title data-i18n={titleKey}>{title}</title>
 
     {noindex && <meta name="robots" content="noindex, nofollow" />}
-    <link rel="canonical" href={SITE_URLS.BASE + "/"} />
+    <link rel="canonical" href={`${SITE_URLS.BASE}${hreflangCanonical}`} />
+    {hreflangUrls.map((u) => (
+      <link
+        rel="alternate"
+        hreflang={u.hreflang}
+        href={`${SITE_URLS.BASE}${u.href}`}
+      />
+    ))}
 
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={SITE_URLS.BASE + "/"} />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:locale:alternate" content="es_ES" />
-    <meta property="og:locale:alternate" content="fr_FR" />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:locale" content={ogLocale} />
+    {otherLocales.map((loc) => (
+      <meta property="og:locale:alternate" content={loc} />
+    ))}
     <meta
       property="og:title"
       content={title}
@@ -140,7 +169,7 @@ const websiteSchema = {
     <meta property="og:logo" content={`${SITE_URLS.BASE}/favicon.svg`} />
 
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={SITE_URLS.BASE + "/"} />
+    <meta property="twitter:url" content={pageUrl} />
     <meta property="twitter:site" content="@OrangeEmberSt" />
     <meta property="twitter:creator" content="@OrangeEmberSt" />
     <meta

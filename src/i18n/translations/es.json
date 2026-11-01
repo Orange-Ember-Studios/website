@@ -162,11 +162,13 @@
     "securityTitle": "Seguridad",
     "securityDesc": "Implementamos medidas de seguridad estándar de la industria, incluida la protección de Cloudflare, para proteger sus datos de accesos no autorizados.",
     "contactTitle": "Contáctenos",
-    "contactDesc": "Si tiene alguna pregunta sobre esta Política de Privacidad, contáctenos en privacy@orangeember.com."
+    "contactDesc": "Si tiene alguna pregunta sobre esta Política de Privacidad, contáctenos en privacy@orangeember.com.",
+    "description": "Política de Privacidad de Orange Ember Studios: cómo manejamos datos, cookies y seguridad cuando usas nuestro sitio y servicios."
   },
   "meta": {
     "title": "Orange Ember - Estudio de Juegos y Aplicaciones",
-    "description": "Orange Ember Studios. Creando experiencias digitales extraordinarias. Forjamos videojuegos premium, aplicaciones web y móviles."
+    "description": "Orange Ember Studios. Creando experiencias digitales extraordinarias. Forjamos videojuegos premium, aplicaciones web y móviles.",
+    "titleSuffix": "Estudio de Juegos y Apps"
   },
   "blog": {
     "noPostsTitle": "No se encontraron entradas",

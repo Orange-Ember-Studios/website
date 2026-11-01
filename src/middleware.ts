@@ -1,6 +1,14 @@
 import { defineMiddleware } from "astro:middleware";
 import type { SupportedLanguage } from "./i18n/i18n";
 
+// Headers de seguridad para TODO lo que sirve el Worker. El archivo
+// public/_headers solo aplica a assets estáticos, no al HTML SSR.
+const SECURITY_HEADERS: Record<string, string> = {
+  "X-Frame-Options": "DENY",
+  "X-Content-Type-Options": "nosniff",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+};
+
 export const onRequest = defineMiddleware(async (context, next) => {
   const supported: SupportedLanguage[] = ["en", "es", "fr"];
   const { pathname } = context.url;
@@ -46,6 +54,9 @@ export const onRequest = defineMiddleware(async (context, next) => {
   context.locals.lang = lang as SupportedLanguage;
   const response = await next();
   response.headers.set("X-Language", lang);
+  for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
+    if (!response.headers.has(name)) response.headers.set(name, value);
+  }
 
   return response;
 });
