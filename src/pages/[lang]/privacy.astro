@@ -14,28 +14,28 @@ const t = (key: string) => getTranslation(key, lang as any);
 >
   <Navbar />
   <main class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-    <h1 class="text-4xl md:text-5xl font-bold text-white mb-8" data-i18n="privacy.title">
+    <h1 class="text-4xl md:text-5xl font-bold text-white mb-4" data-i18n="privacy.title">
       {t("privacy.title")}
     </h1>
+    <p class="text-gray-500 mb-10" data-i18n="privacy.lastUpdated">
+      {t("privacy.lastUpdated")}
+    </p>
     <div class="prose prose-invert prose-lg max-w-none text-gray-300">
       <p data-i18n="privacy.intro">{t("privacy.intro")}</p>
 
-      <h2 data-i18n="privacy.section1Title">{t("privacy.section1Title")}</h2>
-      <p data-i18n="privacy.section1Content">{t("privacy.section1Content")}</p>
+      <h2 data-i18n="privacy.dataCollectionTitle">{t("privacy.dataCollectionTitle")}</h2>
+      <p data-i18n="privacy.dataCollectionDesc">{t("privacy.dataCollectionDesc")}</p>
 
-      <h2 data-i18n="privacy.section2Title">{t("privacy.section2Title")}</h2>
-      <p data-i18n="privacy.section2Content">{t("privacy.section2Content")}</p>
+      <h2 data-i18n="privacy.cookiesTitle">{t("privacy.cookiesTitle")}</h2>
+      <p data-i18n="privacy.cookiesDesc">{t("privacy.cookiesDesc")}</p>
 
-      <h2 data-i18n="privacy.section3Title">{t("privacy.section3Title")}</h2>
-      <p data-i18n="privacy.section3Content">{t("privacy.section3Content")}</p>
-
-      <h2 data-i18n="privacy.section4Title">{t("privacy.section4Title")}</h2>
-      <p data-i18n="privacy.section4Content">{t("privacy.section4Content")}</p>
+      <h2 data-i18n="privacy.securityTitle">{t("privacy.securityTitle")}</h2>
+      <p data-i18n="privacy.securityDesc">{t("privacy.securityDesc")}</p>
 
       <h2 data-i18n="privacy.contactTitle">{t("privacy.contactTitle")}</h2>
       <p>
-        <span data-i18n="privacy.contactContent">{t("privacy.contactContent")}</span>
-        <a href="mailto:hello@orangeember.com">hello@orangeember.com</a>.
+        <span data-i18n="privacy.contactDesc">{t("privacy.contactDesc")}</span>
+        <a href="mailto:privacy@orangeember.com">privacy@orangeember.com</a>.
       </p>
     </div>
   </main>
