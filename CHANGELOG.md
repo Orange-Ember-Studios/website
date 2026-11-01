@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.41](https://github.com/Orange-Ember-Studios/website/compare/v0.0.39...v0.0.41) (2026-11-01)
+
+
+### Features
+
+* **seo:** agentic-readiness llms.txt, ai-agent.json and schema CommunicateAction ([4e926db](https://github.com/Orange-Ember-Studios/website/commit/4e926db59dcbd7407cef6ce1ecb46b7a15616471))
+* **seo:** sitemap.xml SSR dinamico — sustituye @astrojs/sitemap (prerender solo / y /admin/login: fuga de ruta admin y sin rutas reales) ([9e3117a](https://github.com/Orange-Ember-Studios/website/commit/9e3117a5c0e63305c2d697f8d4a25b36a6562320))
+
+
+### Bug Fixes
+
+* **contact:** from/to con dominio verificado de Resend por defecto (hello@orangeember.com), overrides via env ([83943b3](https://github.com/Orange-Ember-Studios/website/commit/83943b362c59ae888fda99edbcbf66df59f90eca))
+* **contact:** inyecta window.__CF_ENV__ con PUBLIC_TURNSTILE_SITE_KEY en el SSR (nadie lo inyectaba y el widget caia siempre a la llave de prueba) ([ca09e37](https://github.com/Orange-Ember-Studios/website/commit/ca09e373c8b9ad60be8f247dd24b63481564da01))
+* **contact:** remitente/destino configurables por env (CONTACT_FROM/CONTACT_TO) y reply-to del cliente — modo testing de Resend manda al Gmail del CEO ([70ed8a0](https://github.com/Orange-Ember-Studios/website/commit/70ed8a03c13100072cdb176c23c4b67480842263))
+* **contact:** robust Turnstile handling and submit states ([3ae0d03](https://github.com/Orange-Ember-Studios/website/commit/3ae0d033940ba733d34a35e111a4e7235f28a203))
+* **ssr:** guards de document/window en ContactForm (watch immediate corria el syncSubmitUi/syncFeedbackBanners en pre-mount) ([e426eeb](https://github.com/Orange-Ember-Studios/website/commit/e426eebcb1889ae3a7cfec3019b9d21e6be4afe9))
+
 ### [0.0.39](https://github.com/Orange-Ember-Studios/website/compare/v0.0.37...v0.0.39) (2026-08-26)
 
 
