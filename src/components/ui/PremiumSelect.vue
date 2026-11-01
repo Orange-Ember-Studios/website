@@ -127,10 +127,15 @@ const currentLabel = computed(() => {
       </button>
 
       <div
-        class="select-dropdown flex-col absolute top-full mt-4 bg-[#0d0d0d]/98 border border-white/10 rounded-3xl shadow-[0_45px_100px_rgba(0,0,0,0.95)] z-[110] transition-all duration-500 origin-top scale-95 opacity-0 w-max overflow-x-hidden backdrop-blur-3xl pointer-events-none"
+        class="select-dropdown flex-col absolute top-full mt-4 bg-[#0d0d0d]/98 border border-white/10 rounded-3xl shadow-[0_45px_100px_rgba(0,0,0,0.95)] z-[110] transition-all duration-500 origin-top w-max overflow-x-hidden backdrop-blur-3xl"
         :class="[
           isNavbar ? 'right-0 max-w-[180px]' : 'left-0 max-w-[250px]',
-          { 'opacity-100 scale-100 pointer-events-auto': isOpen }
+          // Estados EXCLUYENTES: antes opacity-0/scale-95/pointer-events-none
+          // eran estáticos y open-age añadía las opuestas => dropdown invisible
+          // (doble opacity-0+opacity-100 en el DOM, ganaba opacity-0 por orden CSS)
+          isOpen
+            ? 'opacity-100 scale-100 pointer-events-auto'
+            : 'opacity-0 scale-95 pointer-events-none'
         ]"
       >
         <div
