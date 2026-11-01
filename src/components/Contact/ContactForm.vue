@@ -196,6 +196,7 @@ async function initializeTurnstile() {
 }
 
 function syncSubmitUi() {
+  if (typeof document === 'undefined') return;
   const btn = document.getElementById('contact-submit-btn') as HTMLButtonElement | null;
   if (btn) {
     const locked = !showReadyCta.value || isSubmitting.value;
@@ -209,6 +210,7 @@ function syncSubmitUi() {
 }
 
 function syncFeedbackBanners() {
+  if (typeof document === 'undefined') return;
   const okEl = document.getElementById('contact-success-banner');
   const errEl = document.getElementById('contact-error-banner');
   if (okEl) {
