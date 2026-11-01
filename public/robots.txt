@@ -23,4 +23,4 @@ User-agent: Claude-Web
 Allow: /
 Disallow: /admin/
 
-Sitemap: https://orangeember.com/sitemap-index.xml
+Sitemap: https://orangeember.com/sitemap.xml
